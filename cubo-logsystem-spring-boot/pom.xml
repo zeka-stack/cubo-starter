@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.dong4j</groupId>
+        <artifactId>cubo-starter</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>cubo-logsystem-spring-boot</artifactId>
+    <packaging>pom</packaging>
+    <name>Cubo Log System</name>
+    <description>日志框架组件</description>
+
+    <modules>
+        <module>cubo-logsystem-spring-boot-core</module>
+        <module>cubo-logsystem-spring-boot-autoconfigure</module>
+        <module>cubo-logsystem-spring-boot-starter</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 使用 log4j2 日志框架 (删除所有依赖，在 cubo-logsystem-spring-boot 模块中升级 log4j 版本以修复漏洞) -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

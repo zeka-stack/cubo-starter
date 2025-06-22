@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.dong4j</groupId>
+        <artifactId>arco-dependencies-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>cubo-boot-dependencies</artifactId>
+    <packaging>pom</packaging>
+    <name>Cubo Boot Dependencies</name>
+    <description>Cubo Boot 项目依赖库</description>
+
+    <!-- 统一管理版本 -->
+    <properties>
+        <cubo-boot-dependencies.version>${global.version}</cubo-boot-dependencies.version>
+    </properties>
+
+    <!-- 统一管理依赖 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 引入核心包依赖(这个是给业务端用的, 这样只需要引入  cubo-boot-dependencies 即可 -->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>blen-kernel-dependencies</artifactId>
+                <!-- 使用不了 blen-dependencies.version, 因为定义在 arco-project-dependencies, 所以只能使用 arco-supreme global.version -->
+                <version>${global.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--region logsystem-->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-common</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-simple</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-log4j2</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-record</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-log4j2-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-logsystem-record-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
+
+            <!--region launcher -->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-launcher-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-launcher-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-launcher-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
+        </dependencies>
+    </dependencyManagement>
+
+</project>
