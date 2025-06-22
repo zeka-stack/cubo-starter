@@ -92,9 +92,6 @@
 
     <properties>
         <revision>0.0.1-SNAPSHOT</revision>
-        <maven.install.skip>true</maven.install.skip>
-        <maven.deploy.skip>true</maven.deploy.skip>
-
         <disruptor.version>3.3.4</disruptor.version>
     </properties>
 
