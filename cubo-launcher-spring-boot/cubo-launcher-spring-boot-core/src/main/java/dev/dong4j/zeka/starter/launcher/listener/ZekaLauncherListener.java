@@ -58,7 +58,7 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
         ZekaApplicationListener.Runner.executeAtFirst(this.key(event, this.getClass()), () -> {
             // 关闭默认的 banner
             event.getSpringApplication().setBannerMode(Banner.Mode.OFF);
-            if (StringUtils.isBlank(System.getProperty(App.START_ZEKA_APPLICATION))
+            if (StringUtils.isBlank(System.getProperty(App.START_APPLICATION))
                 && !App.START_JUNIT.equals(System.getProperty(App.START_TYPE))) {
                 log.warn("请使用 ZekaApplication 启动或者继承 ZekaStarter, 用于加载组件默认配置\n\n"
                     + "Sample: \n"
@@ -90,10 +90,10 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
         System.setProperty(App.APP_TYPE, event.getSpringApplication().getWebApplicationType().name());
         // 只有初始化之后, 才能使用此类(在 Spring Boot 的环境未准备好之前, 只能使用此类从 Java 环境变量中获取信息)
         ConfigKit.init(environment);
-        if (!Boolean.parseBoolean(environment.getProperty(ConfigKey.ZEKA_ENABLE_BANNER))) {
+        if (!Boolean.parseBoolean(environment.getProperty(ConfigKey.ENABLE_BANNER))) {
             // 打印 banner
             ZekaApplicationListener.Runner.executeAtFirst(this.key(event, this.getClass()), () -> {
-                log.info("application starting.... see more information: https://zeka.dong4j.dev");
+                log.info("application starting.... see more information: {}", ConfigKit.getProperty(ConfigKey.WIKI));
                 new BannerPrinter().print();
             });
         }

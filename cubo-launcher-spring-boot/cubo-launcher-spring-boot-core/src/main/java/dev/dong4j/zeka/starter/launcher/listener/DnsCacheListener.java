@@ -18,6 +18,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @date 2020.06.09 18:14
  * @since 1.5.0
  */
+@Deprecated
 public class DnsCacheListener implements ZekaApplicationListener {
     /**
      * 优先级最高

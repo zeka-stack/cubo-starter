@@ -133,7 +133,7 @@ public final class ZekaApplication {
                                                      ApplicationType applicationType,
                                                      String... args) {
         // 设置是否使用 ZekaApplication 启动标识
-        System.setProperty(App.START_ZEKA_APPLICATION, App.START_ZEKA_APPLICATION);
+        System.setProperty(App.START_APPLICATION, App.START_APPLICATION);
         ConfigurableApplicationContext context;
         // 优先使用启动类中设置的 application name
         MAIN_PROPERTIES.setProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME, appName);

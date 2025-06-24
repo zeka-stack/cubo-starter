@@ -22,6 +22,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,47 +49,49 @@ public class SubLauncherInitiation implements LauncherInitiation {
      */
     @SneakyThrows
     @Override
-    @SuppressWarnings(value = {"rawtypes", "unchecked"})
+    @SuppressWarnings(value = {"rawtypes"})
     public void advance(String appName) {
-        // 查找 SerializeEnum 的实现类
-        ConfigurationBuilder build = ConfigurationBuilder.build(ConfigDefaultValue.BASE_PACKAGES,
-            new SubTypesScanner(false));
-        build.setExpandSuperTypes(false);
-        Reflections reflections = new Reflections(build);
+        // 构建 Reflections 扫描器，仅扫描指定包下的子类
+        Reflections reflections = new Reflections(
+            new ConfigurationBuilder()
+                .forPackages(ConfigDefaultValue.BASE_PACKAGES)
+                .setScanners(new SubTypesScanner(false))
+                .setExpandSuperTypes(false)
+        );
 
-        Set<Class<? extends SerializeEnum>> subTypesOf = reflections.getSubTypesOf(SerializeEnum.class);
-        if (subTypesOf != null) {
-            for (Class<? extends SerializeEnum> klass : subTypesOf) {
-                if (klass.isInterface() || !klass.isEnum()) {
-                    continue;
-                }
-                Class<Enum> aClass = (Class<Enum>) Class.forName(klass.getName());
-                // 获取所有枚举实例
-                Enum[] enumConstants = aClass.getEnumConstants();
-                // 根据方法名获取方法
-                Method getValue = aClass.getMethod(SerializeEnum.VALUE_METHOD_NAME);
-
-                if (enumConstants.length <= 1) {
-                    return;
-                }
-
-                for (int i = 0; i < enumConstants.length - 1; i++) {
-                    for (int j = 1; j < enumConstants.length; j++) {
-                        if (i == j) {
-                            continue;
-                        }
-                        if (getValue.invoke(enumConstants[i]).equals(getValue.invoke(enumConstants[j]))) {
-                            throw new IllegalArgumentException(
-                                StringUtils.format("存在相同的枚举 value: [{}: {}.value = {}.value]",
-                                    aClass.getName(),
-                                    enumConstants[i],
-                                    enumConstants[j]));
-                        }
-                    }
-                }
-            }
+        Set<Class<? extends SerializeEnum>> enumClasses = reflections.getSubTypesOf(SerializeEnum.class);
+        if (enumClasses == null || enumClasses.isEmpty()) {
+            return;
         }
 
+        for (Class<? extends SerializeEnum> enumClass : enumClasses) {
+            if (!enumClass.isEnum()) {
+                continue;
+            }
+
+            try {
+                Method getValueMethod = enumClass.getMethod(SerializeEnum.VALUE_METHOD_NAME);
+                Object[] enumConstants = enumClass.getEnumConstants();
+
+                if (enumConstants == null || enumConstants.length <= 1) {
+                    continue;
+                }
+
+                Map<Object, Object> valueMap = new HashMap<>();
+                for (Object constant : enumConstants) {
+                    Object value = getValueMethod.invoke(constant);
+                    Object existing = valueMap.putIfAbsent(value, constant);
+                    if (existing != null) {
+                        throw new IllegalArgumentException(String.format(
+                            "存在相同的枚举 value: [%s: %s.value = %s.value]",
+                            enumClass.getName(), constant, existing
+                        ));
+                    }
+                }
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("处理枚举类失败: " + enumClass.getName(), e);
+            }
+        }
     }
 
     /**
@@ -108,7 +111,8 @@ public class SubLauncherInitiation implements LauncherInitiation {
             // 启动后新增一个 app.pid 文本文件, 写入当前应用的 PID
             .put(ConfigKey.SpringConfigKey.PID_FILE, ConfigDefaultValue.PROP_PID_FILE)
             // 配置加密密钥
-            .put(ConfigKey.JASYPT_ENCRYPTOR_PASSWORD, ConfigDefaultValue.DEFAULT_ENCRYPTOR_PASSWORD);
+            .put(ConfigKey.JASYPT_ENCRYPTOR_PASSWORD, ConfigDefaultValue.DEFAULT_ENCRYPTOR_PASSWORD)
+            .put(ConfigKey.WIKI, ConfigDefaultValue.WIKI);
 
         // 本地开发时, 读取 arco-maven-plugin/profile/spring.profiles.active
         if (isLocalLaunch) {

@@ -29,9 +29,9 @@ public class AutowiredAnnotationExtend extends AutowiredAnnotationBeanPostProces
      * @since 1.0.0
      */
     @Override
-    public PropertyValues postProcessProperties(@NotNull PropertyValues pvs,
-                                                @NotNull Object bean,
-                                                @NotNull String beanName) throws BeanCreationException {
+    public @NotNull PropertyValues postProcessProperties(@NotNull PropertyValues pvs,
+                                                         @NotNull Object bean,
+                                                         @NotNull String beanName) throws BeanCreationException {
         try {
             pvs = super.postProcessProperties(pvs, bean, beanName);
         } catch (Throwable e) {

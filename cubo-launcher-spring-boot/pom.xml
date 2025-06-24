@@ -12,7 +12,7 @@
 
     <artifactId>cubo-launcher-spring-boot</artifactId>
     <packaging>pom</packaging>
-    <name>Cubo Launcher</name>
+    <name>Cubo Launcher Spring Boot</name>
     <description>应用启动器</description>
 
     <modules>

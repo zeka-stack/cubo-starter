@@ -12,7 +12,7 @@
 
     <artifactId>cubo-logsystem-spring-boot</artifactId>
     <packaging>pom</packaging>
-    <name>Cubo Log System</name>
+    <name>Cubo Logsystem Spring Boot</name>
     <description>日志框架组件</description>
 
     <modules>

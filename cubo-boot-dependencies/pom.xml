@@ -33,6 +33,43 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--mark-->
+
+            <!--region mybatis -->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-mybatis-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-mybatis-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-mybatis-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
+
+            <!--region rest -->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
 
             <!--region logsystem-->
             <dependency>
@@ -91,7 +128,43 @@
                 <version>${cubo-boot-dependencies.version}</version>
             </dependency>
             <!--endregion-->
+
+            <!--region messaging-->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-common</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-kafka</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-rocketmq</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
         </dependencies>
     </dependencyManagement>
 
 </project>
+
+
+

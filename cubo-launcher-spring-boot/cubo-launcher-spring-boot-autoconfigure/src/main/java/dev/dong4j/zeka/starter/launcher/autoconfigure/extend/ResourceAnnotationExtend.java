@@ -38,9 +38,8 @@ public class ResourceAnnotationExtend extends CommonAnnotationBeanPostProcessor 
      * @throws BeansException beans exception
      * @since 1.0.0
      */
-    @NotNull
     @Override
-    protected Object autowireResource(BeanFactory factory, LookupElement element, String requestingBeanName) throws BeansException {
+    protected @NotNull Object autowireResource(BeanFactory factory, LookupElement element, String requestingBeanName) throws BeansException {
         Object obj = null;
         try {
             obj = super.autowireResource(factory, element, requestingBeanName);
