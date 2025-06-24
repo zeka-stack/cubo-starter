@@ -35,6 +35,14 @@
             </dependency>
             <!--mark-->
 
+            <!--region combiner -->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-framework-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <!--endregion-->
+
             <!--region mybatis -->
             <dependency>
                 <groupId>dev.dong4j</groupId>
