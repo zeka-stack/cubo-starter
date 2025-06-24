@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.launcher.spi;
 
+import com.google.common.collect.Maps;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
@@ -11,6 +12,10 @@ import dev.dong4j.zeka.kernel.common.util.FileUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.launcher.constant.Launcher;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +24,6 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * <p>Description:  </p>
@@ -77,7 +76,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
                     continue;
                 }
 
-                Map<Object, Object> valueMap = new HashMap<>();
+                Map<Object, Object> valueMap = Maps.newHashMapWithExpectedSize(64);
                 for (Object constant : enumConstants) {
                     Object value = getValueMethod.invoke(constant);
                     Object existing = valueMap.putIfAbsent(value, constant);
