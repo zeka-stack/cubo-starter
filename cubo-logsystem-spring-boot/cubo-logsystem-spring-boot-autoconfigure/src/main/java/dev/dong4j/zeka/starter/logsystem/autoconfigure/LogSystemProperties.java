@@ -1,16 +1,17 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.starter.logsystem.Constants;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
 import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
 import dev.dong4j.zeka.starter.logsystem.entity.Pattern;
-import lombok.Data;
+import java.util.List;
+import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.logging.LogLevel;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>Description: 日志配置, 此类并没有被使用到, 这里只是为了生成配置的元数据, 方便在配置时进行提示 </p>
@@ -21,9 +22,10 @@ import java.util.Map;
  * @date 2020.01.27 14:47
  * @since 1.0.0
  */
-@Data
+@Getter
+@Setter
 @ConfigurationProperties(prefix = LogSystemProperties.PREFIX)
-public class LogSystemProperties {
+public class LogSystemProperties extends ZekaProperties {
 
     /** PREFIX */
     public static final String PREFIX = "zeka-stack.logging";

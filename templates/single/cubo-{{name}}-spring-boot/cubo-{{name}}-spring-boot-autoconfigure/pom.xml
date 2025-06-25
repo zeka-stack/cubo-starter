@@ -3,29 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-messaging-spring-boot-core</artifactId>
+        <artifactId>cubo-{{name}}-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>cubo-messaging-kafka</artifactId>
-    <name>Cubo Messaging Kafka</name>
+    <artifactId>cubo-{{name}}-spring-boot-autoconfigure</artifactId>
+    <name>Cubo {{Name}} Spring Boot Autoconfigure</name>
 
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-messaging-common</artifactId>
+            <artifactId>blen-kernel-autoconfigure</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-{{name}}-spring-boot-core</artifactId>
+            <optional>true</optional>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-logsystem-simple</artifactId>
         </dependency>
     </dependencies>
 </project>

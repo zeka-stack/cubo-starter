@@ -1,6 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.autoconfigure;
 
-import lombok.Data;
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -12,9 +14,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2025.06.25 00:14
  * @since 1.0.0
  */
-@Data
+@Getter
+@Setter
 @ConfigurationProperties(prefix = MybatisProperties.PREFIX)
-public class MybatisProperties {
+public class MybatisProperties extends ZekaProperties {
     /** PREFIX */
     public static final String PREFIX = "zeka-stack.mybatis";
 }

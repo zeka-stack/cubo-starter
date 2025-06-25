@@ -1,4 +1,4 @@
-package dev.dong4j.zeka.starter.mybatis.autoconfigure;
+package dev.dong4j.zeka.starter.{{name}}.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
@@ -13,16 +13,20 @@ import org.springframework.context.annotation.Configuration;
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
- * @date 2025.06.25 00:14
+ * @date {{date}}
  * @since 1.0.0
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = MybatisProperties.PREFIX, name = ZekaProperties.ENABLE, havingValue = ZekaProperties.ON, matchIfMissing = true)
-@EnableConfigurationProperties(MybatisProperties.class)
-public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
+@ConditionalOnProperty(
+    prefix = {{Name}}Properties.PREFIX,
+    name = ZekaProperties.ENABLE,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
+@EnableConfigurationProperties({{Name}}Properties.class)
+public class {{Name}}AutoConfiguration implements ZekaAutoConfiguration {
 
-    public MybatisAutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", MybatisAutoConfiguration.class);
+    public {{Name}}AutoConfiguration() {
+        log.info("[{}] start autoconfiguration....", {{Name}}AutoConfiguration.class);
     }
 }

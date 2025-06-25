@@ -35,6 +35,7 @@
             </dependency>
             <!--mark-->
 
+
             <!--region combiner -->
             <dependency>
                 <groupId>dev.dong4j</groupId>
@@ -165,10 +166,16 @@
             </dependency>
             <dependency>
                 <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-messaging-spring-boot-starter</artifactId>
+                <artifactId>cubo-messaging-rocketmq-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-messaging-kafka-spring-boot-starter</artifactId>
                 <version>${cubo-boot-dependencies.version}</version>
             </dependency>
             <!--endregion-->
+
         </dependencies>
     </dependencyManagement>
 

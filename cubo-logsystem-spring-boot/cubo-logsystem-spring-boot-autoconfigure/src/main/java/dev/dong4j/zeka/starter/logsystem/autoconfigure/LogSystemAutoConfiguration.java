@@ -1,17 +1,18 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactory;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactoryAdapter;
 import dev.dong4j.zeka.starter.logsystem.handler.AutoChangeLogLevelEventHandler;
 import dev.dong4j.zeka.starter.logsystem.handler.ManualChangeLogLevelEventHandler;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,10 +28,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@AllArgsConstructor
 @ConditionalOnClass(LogPrintStream.class)
+@ConditionalOnProperty(prefix = LogSystemProperties.PREFIX, name = ZekaProperties.ENABLE, havingValue = ZekaProperties.ON, matchIfMissing = true)
 @EnableConfigurationProperties(LogSystemProperties.class)
 public class LogSystemAutoConfiguration implements ZekaAutoConfiguration {
+
+    public LogSystemAutoConfiguration() {
+        log.info("[{}] start autoconfiguration....", LogSystemAutoConfiguration.class);
+    }
 
     /**
      * 当环境配置改变时 自动检查是否需要修改日志等级

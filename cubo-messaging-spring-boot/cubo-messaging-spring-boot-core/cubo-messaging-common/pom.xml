@@ -12,5 +12,10 @@
     <artifactId>cubo-messaging-common</artifactId>
     <name>Cubo Messaging Common</name>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>blen-kernel-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>

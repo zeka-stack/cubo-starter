@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure;
 
-import lombok.Data;
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
-
-import java.util.Map;
 
 /**
  * <p>Description: </p>
@@ -15,9 +16,10 @@ import java.util.Map;
  * @date 2020.01.27 14:54
  * @since 1.0.0
  */
-@Data
+@Getter
+@Setter
 @ConfigurationProperties(prefix = LauncherProperties.PREFIX)
-public class LauncherProperties {
+public class LauncherProperties extends ZekaProperties {
 
     /** PREFIX */
     public static final String PREFIX = "zeka-stack.app";
