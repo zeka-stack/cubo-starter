@@ -18,7 +18,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = RestProperties.PREFIX, name = ZekaProperties.ENABLE, havingValue = ZekaProperties.ON, matchIfMissing = true)
+@ConditionalOnProperty(
+    prefix = RestProperties.PREFIX,
+    name = ZekaProperties.ENABLE,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true
+)
 @EnableConfigurationProperties(RestProperties.class)
 public class RestAutoConfiguration implements ZekaAutoConfiguration {
 

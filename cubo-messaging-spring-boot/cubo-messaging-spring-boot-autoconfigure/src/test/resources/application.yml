@@ -1,0 +1,53 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  kafka:
+    bootstrap-servers: kafka.server:9092
+    consumer:
+      group-id: test-group
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+rocketmq:
+  name-server: rocketmq.server:9876
+  producer:
+    group: test-producer-group
+  consumer:
+    group: test-consumer-group
+
+
+
+zeka-stack:
+  messaging:
+    # 启用/禁用自动检测 (默认: true)
+    auto-detect: true
+    # 指定禁用MQ类型 (逗号分隔)
+    disabled-types: ROCKETMQ,TONGHTP
+    # 多MQ环境下强制指定的默认类型
+    default-type: KAFKA
+    # Kafka检测类覆盖 (自定义检测逻辑)
+    kafka:
+      detection-class: com.company.custom.KafkaDetector
+      # 启用/禁用特定MQ类型 (覆盖disabled-types)
+      enabled: true
+    # RocketMQ检测类覆盖
+    rocketmq:
+      detection-class: com.company.custom.RocketMQDetector
+      # 启用/禁用特定MQ类型 (覆盖disabled-types)
+      enabled: false
+    # TongHTP检测类覆盖
+    tonghtp:
+      detection-class: com.company.custom.TongHtpDetector
+    # 类检测超时时间 (毫秒, 默认: 500)
+    class-detect-timeout: 1000
+    # 启用类检测缓存 (默认: true)
+    enable-cache: true
+    # 缓存过期时间 (秒, 默认: 300)
+    cache-expiration: 600

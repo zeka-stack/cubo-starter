@@ -29,7 +29,12 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(LogPrintStream.class)
-@ConditionalOnProperty(prefix = LogSystemProperties.PREFIX, name = ZekaProperties.ENABLE, havingValue = ZekaProperties.ON, matchIfMissing = true)
+@ConditionalOnProperty(
+    prefix = LogSystemProperties.PREFIX,
+    name = ZekaProperties.ENABLE,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true
+)
 @EnableConfigurationProperties(LogSystemProperties.class)
 public class LogSystemAutoConfiguration implements ZekaAutoConfiguration {
 

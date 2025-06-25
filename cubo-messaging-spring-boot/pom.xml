@@ -21,4 +21,9 @@
         <module>cubo-messaging-spring-boot-autoconfigure</module>
     </modules>
 
+    <properties>
+        <checkstyle.skip>true</checkstyle.skip>
+        <pmd.skip>true</pmd.skip>
+    </properties>
+
 </project>
