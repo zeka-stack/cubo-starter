@@ -199,9 +199,9 @@ func processSingleModule(reader *bufio.Reader, step int) {
 
 	fmt.Println("\n" + successBox("🎉 模块创建成功！"))
 	fmt.Println("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓")
-	fmt.Printf("┃ 🏷️  模块名称:   %-34s         ┃\n", data.Name)
-	fmt.Printf("┃ 📁  模块目录:   %-34s         ┃\n", outputDir)
-	fmt.Printf("┃ 🕒  创建时间:   %-34s         ┃\n", time.Now().Format("2006-01-02 15:04:05"))
+	fmt.Printf("  🏷️  模块名称:   %-34s          \n", data.Name)
+	fmt.Printf("  📁  模块目录:   %-34s          \n", outputDir)
+	fmt.Printf("  🕒  创建时间:   %-34s          \n", time.Now().Format("2006-01-02 15:04:05"))
 	fmt.Println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛")
 	fmt.Println("\n📋 请检查以下文件是否已正确更新:")
 	fmt.Printf("   📦 依赖文件: %s\n", dependenciesPom)
