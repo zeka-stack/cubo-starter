@@ -288,9 +288,10 @@ func processModulesTag(content string, data TemplateData) string {
         }
         var moduleTags []string
         for _, module := range modules {
-            moduleTags = append(moduleTags, fmt.Sprintf("        <module>%s</module>", module))
+            moduleTags = append(moduleTags, fmt.Sprintf("        <module>%s</module>", module)) // 8空格
         }
-        return fmt.Sprintf("    <modules>\n%s\n    </modules>", strings.Join(moduleTags, "\n"))
+        // 4空格开头
+        return fmt.Sprintf("<modules>\n%s\n    </modules>", strings.Join(moduleTags, "\n"))
     })
 }
 
@@ -311,7 +312,11 @@ func processDependenciesTag(content string, data TemplateData) string {
                 newDeps = append(newDeps, dep)
             }
         }
-        return fmt.Sprintf("    <dependencies>\n%s\n    </dependencies>", strings.Join(newDeps, "\n"))
+        for i, dep := range newDeps {
+            newDeps[i] = "        " + strings.TrimSpace(dep) // 8空格
+        }
+        // 4空格开头
+        return fmt.Sprintf("<dependencies>\n%s\n    </dependencies>", strings.Join(newDeps, "\n"))
     })
 }
 
@@ -410,17 +415,17 @@ func insertMultiDependencies(data TemplateData) error {
             <dependency>
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-%s-spring-boot-core</artifactId>
-                <version>${project.version}</version>
+                <version>${cubo-boot-dependencies.version}</version>
             </dependency>
             <dependency>
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-%s-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
+                <version>${cubo-boot-dependencies.version}</version>
             </dependency>
             <dependency>
                 <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-%s-combiner-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
+                <artifactId>cubo-%s-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
             </dependency>`, data.Name, data.Name, data.Name, data.Name))
 
 	// 添加 core 模块下的子模块依赖
@@ -428,7 +433,7 @@ func insertMultiDependencies(data TemplateData) error {
             <dependency>
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-%s-common</artifactId>
-                <version>${project.version}</version>
+                <version>${cubo-boot-dependencies.version}</version>
             </dependency>`, data.Name))
 
 	for _, module := range data.Modules {
@@ -436,7 +441,7 @@ func insertMultiDependencies(data TemplateData) error {
             <dependency>
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-%s-%s</artifactId>
-                <version>${project.version}</version>
+                <version>${cubo-boot-dependencies.version}</version>
             </dependency>`, data.Name, module))
 	}
 
