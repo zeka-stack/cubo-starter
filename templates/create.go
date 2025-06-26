@@ -229,15 +229,15 @@ func processMultiModule() {
 	
 	// 构建多模块脚本路径
 	scriptDir := filepath.Dir(executable)
-	multiScriptPath := filepath.Join(scriptDir, "create_multi")
+	multiScriptPath := filepath.Join(scriptDir, "creates")
 	
 	// 检查多模块脚本是否存在
 	if _, err := os.Stat(multiScriptPath); os.IsNotExist(err) {
 		// 如果可执行文件不存在，尝试 .exe 扩展名（Windows）
-		multiScriptPath = filepath.Join(scriptDir, "create_multi.exe")
+		multiScriptPath = filepath.Join(scriptDir, "creates.exe")
 		if _, err := os.Stat(multiScriptPath); os.IsNotExist(err) {
-			printError("多模块生成脚本不存在，请先编译 create_multi.go")
-			log.Fatal("请运行: go build -o create_multi create_multi.go")
+			printError("多模块生成脚本不存在，请先编译 creates.go")
+			log.Fatal("请运行: go build -o creates creates.go")
 		}
 	}
 	

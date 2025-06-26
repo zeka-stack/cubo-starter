@@ -59,24 +59,41 @@ func main() {
 		descriptionInput = fmt.Sprintf("Cubo %s module", nameInput)
 	}
 
-	// 获取子模块列表
-	fmt.Print("> 请输入子模块名称 (用逗号分隔，如: a,b,c): ")
-	modulesInput, _ := reader.ReadString('\n')
-	modulesInput = strings.TrimSpace(modulesInput)
-	if modulesInput == "" {
-		printError("子模块名称不能为空")
-		log.Fatal("请提供至少一个子模块名称")
-	}
-
-	// 解析子模块
-	modules := strings.Split(modulesInput, ",")
-	for i, module := range modules {
-		modules[i] = strings.TrimSpace(module)
-		if modules[i] == "" {
-			printError("子模块名称不能为空")
-			log.Fatal("请检查子模块名称输入")
+	// 获取子模块列表（多行输入，空行结束）
+	fmt.Println("> 请输入子模块名称（每行一个，回车继续，空行结束）:")
+	modules := []string{}
+	for {
+		fmt.Print("> ")
+		moduleInput, _ := reader.ReadString('\n')
+		moduleInput = strings.TrimSpace(moduleInput)
+		if moduleInput == "" {
+			break
+		}
+		// 校验合法性
+		if strings.Contains(moduleInput, " ") {
+			printWarning("子模块名称不能包含空格，已自动去除")
+			moduleInput = strings.ReplaceAll(moduleInput, " ", "")
+		}
+		if moduleInput == "" {
+			continue
+		}
+		// 去重
+		exists := false
+		for _, m := range modules {
+			if m == moduleInput {
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			modules = append(modules, moduleInput)
 		}
 	}
+	if len(modules) == 0 {
+		printError("子模块名称不能为空")
+		log.Fatal("请至少输入一个子模块名称")
+	}
+	printInfo(fmt.Sprintf("已输入子模块: %s", strings.Join(modules, ", ")))
 
 	// 生成首字母大写的模块名
 	upperModules := make([]string, len(modules))
