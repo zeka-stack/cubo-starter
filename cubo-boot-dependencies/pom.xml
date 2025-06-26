@@ -34,48 +34,6 @@
                 <scope>import</scope>
             </dependency>
             <!--mark-->
-            <!--region ab-->
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-spring-boot-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-combiner-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-a</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-b</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-a-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-ab-b-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!--endregion-->
 
 
             <!--region combiner -->
