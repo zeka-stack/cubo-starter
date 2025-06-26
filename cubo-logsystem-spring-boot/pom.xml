@@ -15,6 +15,10 @@
     <name>Cubo Logsystem Spring Boot</name>
     <description>日志框架组件</description>
 
+    <properties>
+        <disruptor.version>3.3.4</disruptor.version>
+    </properties>
+
     <modules>
         <module>cubo-logsystem-spring-boot-core</module>
         <module>cubo-logsystem-spring-boot-autoconfigure</module>
@@ -34,6 +38,13 @@
                         <artifactId>*</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <!-- 日志异步依赖 -->
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

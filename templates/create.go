@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -47,19 +48,21 @@ func main() {
 	templateTypeInput, _ := reader.ReadString('\n')
 	templateTypeInput = strings.TrimSpace(templateTypeInput)
 
-	var templateType string
 	switch templateTypeInput {
 	case "1":
-		templateType = "single"
-		printInfo("选择了 single 模板")
+		// 单模块处理
+		processSingleModule(reader, step)
 	case "2":
-		templateType = "multi"
-		printInfo("选择了 multi 模板")
+		// 多模块处理
+		processMultiModule()
 	default:
 		printError(fmt.Sprintf("无效的输入: %s", templateTypeInput))
 		log.Fatal("请重新运行程序并输入1或2")
 	}
+}
 
+// 处理单模块创建
+func processSingleModule(reader *bufio.Reader, step int) {
 	step++
 	printStatus(fmt.Sprintf("步骤 %d: 输入模块信息", step))
 
@@ -93,7 +96,7 @@ func main() {
 	printInfo(fmt.Sprintf("模块描述: %s", data.Description))
 
 	// 构建路径
-	templateDir := filepath.Join(templateRoot, templateType)
+	templateDir := filepath.Join(templateRoot, "single")
 	rawTemplateDir := filepath.Join(templateDir, "cubo-{{name}}-spring-boot")
 	moduleDirName := fmt.Sprintf("cubo-%s-spring-boot", data.Name)
 	outputDir := filepath.Join(outputRoot, moduleDirName)
@@ -200,7 +203,7 @@ func main() {
 	fmt.Printf("┃ 📁  模块目录:   %-34s         ┃\n", outputDir)
 	fmt.Printf("┃ 🕒  创建时间:   %-34s         ┃\n", time.Now().Format("2006-01-02 15:04:05"))
 	fmt.Println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛")
-	fmt.Println("\n�� 请检查以下文件是否已正确更新:")
+	fmt.Println("\n📋 请检查以下文件是否已正确更新:")
 	fmt.Printf("   📦 依赖文件: %s\n", dependenciesPom)
 	fmt.Printf("      👉 (在标记 %s 之后添加了依赖)\n", marker)
 	fmt.Printf("   🗂️  主POM文件: %s\n", mainPom)
@@ -211,6 +214,44 @@ func main() {
 	fmt.Println("   3️⃣  更新模块文档")
 	fmt.Println("   4️⃣  测试模块功能")
 	fmt.Println("\n💡 祝您开发顺利！✨\n")
+}
+
+// 处理多模块创建
+func processMultiModule() {
+	printInfo("正在启动多模块生成工具...")
+	
+	// 获取当前脚本的路径
+	executable, err := os.Executable()
+	if err != nil {
+		printError("无法获取可执行文件路径")
+		log.Fatal(err)
+	}
+	
+	// 构建多模块脚本路径
+	scriptDir := filepath.Dir(executable)
+	multiScriptPath := filepath.Join(scriptDir, "create_multi")
+	
+	// 检查多模块脚本是否存在
+	if _, err := os.Stat(multiScriptPath); os.IsNotExist(err) {
+		// 如果可执行文件不存在，尝试 .exe 扩展名（Windows）
+		multiScriptPath = filepath.Join(scriptDir, "create_multi.exe")
+		if _, err := os.Stat(multiScriptPath); os.IsNotExist(err) {
+			printError("多模块生成脚本不存在，请先编译 create_multi.go")
+			log.Fatal("请运行: go build -o create_multi create_multi.go")
+		}
+	}
+	
+	// 执行多模块脚本
+	cmd := exec.Command(multiScriptPath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	
+	printInfo("启动多模块生成工具...")
+	if err := cmd.Run(); err != nil {
+		printError(fmt.Sprintf("多模块生成失败: %v", err))
+		log.Fatal("请检查多模块脚本是否正确")
+	}
 }
 
 // UI 增强功能 =========================================================================

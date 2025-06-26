@@ -97,7 +97,6 @@
 
     <properties>
         <revision>0.0.1-SNAPSHOT</revision>
-        <disruptor.version>3.3.4</disruptor.version>
     </properties>
 
     <dependencyManagement>
@@ -119,13 +118,6 @@
                 <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <!-- 日志异步依赖 -->
-            <dependency>
-                <groupId>com.lmax</groupId>
-                <artifactId>disruptor</artifactId>
-                <version>${disruptor.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
