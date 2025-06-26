@@ -20,9 +20,10 @@
         </dependency>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-{{name}}-{{module}}</artifactId>
+            <artifactId>cubo-{{name}}-{{module...}}</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-logsystem-simple</artifactId>

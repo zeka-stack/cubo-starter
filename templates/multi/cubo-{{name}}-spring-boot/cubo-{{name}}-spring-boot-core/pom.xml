@@ -16,7 +16,7 @@
 
     <modules>
         <module>cubo-{{name}}-common</module>
-        <module>cubo-{{name}}-{{module}}</module>
+        <module>cubo-{{name}}-{{module...}}</module>
     </modules>
 
     <dependencies>

@@ -16,10 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-{{name}}-spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
             <artifactId>cubo-{{name}}-{{module}}</artifactId>
         </dependency>
     </dependencies>

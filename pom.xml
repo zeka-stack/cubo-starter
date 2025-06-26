@@ -93,6 +93,7 @@
         <module>cubo-mybatis-spring-boot</module>
         <module>cubo-combiner-spring-boot</module>
         <!--mark-->
+        <module>cubo-ab-spring-boot</module>
     </modules>
 
     <properties>

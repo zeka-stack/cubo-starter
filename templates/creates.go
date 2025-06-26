@@ -259,10 +259,10 @@ func processPomXml(content string, data TemplateData) string {
 	// 替换基本占位符
 	content = replacePlaceholders(content, data)
 
-	// 处理 <modules> 标签 (向主目录中的 pom.xml 添加新模块)
+	// 处理 <modules> 标签
 	content = processModulesTag(content, data)
 
-	// 处理 <dependencies> 标签 (向 cubo-boot-dependencies pom.xml 中添加依赖)
+	// 处理 <dependencies> 标签
 	content = processDependenciesTag(content, data)
 
 	return content
@@ -270,63 +270,49 @@ func processPomXml(content string, data TemplateData) string {
 
 // 处理 <modules> 标签
 func processModulesTag(content string, data TemplateData) string {
-    // 匹配 <modules> 标签及其内容
     modulesRegex := regexp.MustCompile(`<modules>\s*((?:<module>[^<]+</module>\s*)*)</modules>`)
-
     return modulesRegex.ReplaceAllStringFunc(content, func(match string) string {
-        // 提取现有的模块
         moduleRegex := regexp.MustCompile(`<module>([^<]+)</module>`)
         matches := moduleRegex.FindAllStringSubmatch(match, -1)
-
         var modules []string
         for _, m := range matches {
             moduleName := m[1]
-            // 如果是模板占位符，替换为实际的模块名
-            if strings.Contains(moduleName, "{{module}}") {
+            if strings.Contains(moduleName, "{{module...}}") {
                 for _, module := range data.Modules {
-                    actualModule := strings.ReplaceAll(moduleName, "{{module}}", module)
+                    actualModule := strings.ReplaceAll(moduleName, "{{module...}}", module)
                     modules = append(modules, actualModule)
                 }
             } else {
                 modules = append(modules, moduleName)
             }
         }
-
-        // 生成新的 modules 标签
         var moduleTags []string
         for _, module := range modules {
             moduleTags = append(moduleTags, fmt.Sprintf("        <module>%s</module>", module))
         }
-
         return fmt.Sprintf("    <modules>\n%s\n    </modules>", strings.Join(moduleTags, "\n"))
     })
 }
 
 // 处理 <dependencies> 标签
 func processDependenciesTag(content string, data TemplateData) string {
-	// 匹配 <dependencies> 标签及其内容
-	depsRegex := regexp.MustCompile(`<dependencies>\s*((?:<dependency>[\s\S]*?</dependency>\s*)*)</dependencies>`)
-
-	return depsRegex.ReplaceAllStringFunc(content, func(match string) string {
-		// 提取现有的依赖
-		depRegex := regexp.MustCompile(`<dependency>[\s\S]*?</dependency>`)
-		deps := depRegex.FindAllString(match, -1)
-
-		var newDeps []string
-		for _, dep := range deps {
-			// 如果是模板占位符，替换为实际的依赖
-			if strings.Contains(dep, "{{module}}") {
-				for _, module := range data.Modules {
-					actualDep := strings.ReplaceAll(dep, "{{module}}", module)
-					newDeps = append(newDeps, actualDep)
-				}
-			} else {
-				newDeps = append(newDeps, dep)
-			}
-		}
-
-		return fmt.Sprintf("    <dependencies>\n%s\n    </dependencies>", strings.Join(newDeps, "\n"))
-	})
+    depsRegex := regexp.MustCompile(`<dependencies>\s*((?:<dependency>[\s\S]*?</dependency>\s*)*)</dependencies>`)
+    return depsRegex.ReplaceAllStringFunc(content, func(match string) string {
+        depRegex := regexp.MustCompile(`<dependency>[\s\S]*?</dependency>`)
+        deps := depRegex.FindAllString(match, -1)
+        var newDeps []string
+        for _, dep := range deps {
+            if strings.Contains(dep, "{{module...}}") {
+                for _, module := range data.Modules {
+                    actualDep := strings.ReplaceAll(dep, "{{module...}}", module)
+                    newDeps = append(newDeps, actualDep)
+                }
+            } else {
+                newDeps = append(newDeps, dep)
+            }
+        }
+        return fmt.Sprintf("    <dependencies>\n%s\n    </dependencies>", strings.Join(newDeps, "\n"))
+    })
 }
 
 // UI 增强功能 =========================================================================
@@ -414,7 +400,7 @@ func replacePlaceholders(input string, data TemplateData) string {
 	return result
 }
 
-// 为多模块项目插入依赖
+// 为多模块项目插入依赖 (向 cubo-boot-dependencies pom.xml 中添加依赖)
 func insertMultiDependencies(data TemplateData) error {
 	var deps []string
 
@@ -433,7 +419,7 @@ func insertMultiDependencies(data TemplateData) error {
             </dependency>
             <dependency>
                 <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-%s-spring-boot-starter</artifactId>
+                <artifactId>cubo-%s-combiner-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>`, data.Name, data.Name, data.Name, data.Name))
 
@@ -471,6 +457,7 @@ func insertMultiDependencies(data TemplateData) error {
 	return insertAfterMarker(dependenciesPom, marker, depContent, data.Name)
 }
 
+// 向主目录中的 pom.xml 添加新模块
 func insertModule(moduleName string) error {
 	mod := fmt.Sprintf(`
         <module>cubo-%s-spring-boot</module>`, moduleName)
