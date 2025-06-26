@@ -3,9 +3,9 @@ package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
-import dev.dong4j.zeka.starter.messaging.template.KafkaTemplateAdapter;
-import dev.dong4j.zeka.starter.messaging.template.RocketMQTemplateAdapter;
-import dev.dong4j.zeka.starter.messaging.template.adapter.TemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.KafkaMessagingTemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.RocketMQMessagingTemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapter;
 import dev.dong4j.zeka.starter.messaging.template.core.DefaultMessagingTemplate;
 import java.util.List;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -26,26 +26,26 @@ public class MessagingTemplateAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(KafkaTemplate.class)
-    public TemplateAdapter kafkaTemplateAdapter(KafkaTemplate<?, ?> kafkaTemplate) {
+    public MessagingTemplateAdapter kafkaTemplateAdapter(KafkaTemplate<?, ?> kafkaTemplate) {
         // noinspection unchecked
-        return new KafkaTemplateAdapter((KafkaTemplate<String, Object>) kafkaTemplate);
+        return new KafkaMessagingTemplateAdapter((KafkaTemplate<String, Object>) kafkaTemplate);
     }
 
     @Bean
     @ConditionalOnBean(RocketMQTemplate.class)
-    public TemplateAdapter rocketMQTemplateAdapter(RocketMQTemplate rocketMQTemplate) {
-        return new RocketMQTemplateAdapter(rocketMQTemplate);
+    public MessagingTemplateAdapter rocketMQTemplateAdapter(RocketMQTemplate rocketMQTemplate) {
+        return new RocketMQMessagingTemplateAdapter(rocketMQTemplate);
     }
 
     @Bean
-    public DefaultMessagingTemplate unifiedMessageTemplate(List<TemplateAdapter> availableAdapters) {
+    public DefaultMessagingTemplate unifiedMessageTemplate(List<MessagingTemplateAdapter> availableAdapters) {
 
         DefaultMessagingTemplate template = new DefaultMessagingTemplate();
 
-        for (TemplateAdapter adapter : availableAdapters) {
-            if (adapter instanceof KafkaTemplateAdapter) {
+        for (MessagingTemplateAdapter adapter : availableAdapters) {
+            if (adapter instanceof KafkaMessagingTemplateAdapter) {
                 template.registerAdapter(MessagingType.KAFKA, adapter);
-            } else if (adapter instanceof RocketMQTemplateAdapter) {
+            } else if (adapter instanceof RocketMQMessagingTemplateAdapter) {
                 template.registerAdapter(MessagingType.ROCKETMQ, adapter);
             }
         }

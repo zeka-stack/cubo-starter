@@ -2,17 +2,17 @@
 package dev.dong4j.zeka.starter.messaging.template;
 
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.adapter.TemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapter;
 import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 import java.util.concurrent.CompletableFuture;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.concurrent.ListenableFuture;
 
-public class KafkaTemplateAdapter implements TemplateAdapter {
+public class KafkaMessagingTemplateAdapter implements MessagingTemplateAdapter {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public KafkaTemplateAdapter(KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaMessagingTemplateAdapter(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

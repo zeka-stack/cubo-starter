@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.messaging.registry;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.factory.KafkaContainerFactoryProxy;
@@ -25,7 +25,7 @@ public class MessagingRegistrationHandler {
         factories.put(MessagingType.ROCKETMQ, new RocketMQContainerFactoryProxy(rocketmqRegistry));
     }
 
-    public void registerAdapter(AbstractListenerAdapter adapter, MessagingListener annotation) {
+    public void registerAdapter(AbstractMessagingListenerAdapter adapter, MessagingListener annotation) {
         MessagingType messagingType = annotation.type();
         MessagingListenerContainerFactory factory = factories.get(messagingType);
         if (factory == null) {

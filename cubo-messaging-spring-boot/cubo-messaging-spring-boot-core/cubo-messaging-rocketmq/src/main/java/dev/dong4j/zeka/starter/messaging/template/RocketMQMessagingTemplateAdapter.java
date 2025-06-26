@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.messaging.template;
 
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.adapter.TemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapter;
 import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 import dev.dong4j.zeka.starter.messaging.util.TopicAndTagUtils;
 import java.util.Map;
@@ -11,11 +11,11 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
-public class RocketMQTemplateAdapter implements TemplateAdapter {
+public class RocketMQMessagingTemplateAdapter implements MessagingTemplateAdapter {
 
     private final RocketMQTemplate rocketMQTemplate;
 
-    public RocketMQTemplateAdapter(RocketMQTemplate rocketMQTemplate) {
+    public RocketMQMessagingTemplateAdapter(RocketMQTemplate rocketMQTemplate) {
         this.rocketMQTemplate = rocketMQTemplate;
     }
 

@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.KafkaTemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.KafkaMessagingTemplateAdapter;
 import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
 import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 import java.util.concurrent.CompletableFuture;
@@ -16,16 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-class KafkaTemplateAdapterTest {
+class KafkaMessagingMessagingTemplateAdapterTest {
 
     @Mock
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    private KafkaTemplateAdapter adapter;
+    private KafkaMessagingTemplateAdapter adapter;
 
     @BeforeEach
     void setUp() {
-        adapter = new KafkaTemplateAdapter(kafkaTemplate);
+        adapter = new KafkaMessagingTemplateAdapter(kafkaTemplate);
     }
 
     @Test

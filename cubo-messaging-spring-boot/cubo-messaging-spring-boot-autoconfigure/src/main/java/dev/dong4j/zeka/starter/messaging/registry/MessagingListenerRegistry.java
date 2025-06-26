@@ -1,9 +1,9 @@
 // UnifiedListenerRegistry.java
 package dev.dong4j.zeka.starter.messaging.registry;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.adapter.KafkaListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.adapter.RocketMQListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.KafkaMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.RocketMQMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
 import dev.dong4j.zeka.starter.messaging.handler.MessagingMessageHandler;
@@ -74,7 +74,7 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         MessagingHandlerMethod handlerMethod = new MessagingHandlerMethod(bean, method, resolver);
 
         // 创建适配器
-        AbstractListenerAdapter adapter = createListenerAdapter(handlerMethod, context, method);
+        AbstractMessagingListenerAdapter adapter = createListenerAdapter(handlerMethod, context, method);
 
         // 注册适配器
         registrationHandler.registerAdapter(adapter, annotation);
@@ -106,14 +106,14 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         };
     }
 
-    private AbstractListenerAdapter createListenerAdapter(MessagingHandlerMethod handlerMethod,
-                                                          MessagingContext context,
-                                                          Method method) {
+    private AbstractMessagingListenerAdapter createListenerAdapter(MessagingHandlerMethod handlerMethod,
+                                                                   MessagingContext context,
+                                                                   Method method) {
         switch (context.getMessagingType()) {
             case KAFKA:
-                return new KafkaListenerAdapter(handlerMethod, context, method);
+                return new KafkaMessagingListenerAdapter(handlerMethod, context, method);
             case ROCKETMQ:
-                return new RocketMQListenerAdapter(handlerMethod, context, method);
+                return new RocketMQMessagingListenerAdapter(handlerMethod, context, method);
             default:
                 throw new IllegalArgumentException("Unsupported MQ type");
         }

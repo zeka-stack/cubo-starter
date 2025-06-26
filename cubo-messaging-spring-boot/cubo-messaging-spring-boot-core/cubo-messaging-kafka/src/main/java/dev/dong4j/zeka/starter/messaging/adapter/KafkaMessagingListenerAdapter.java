@@ -7,11 +7,11 @@ import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
 import java.lang.reflect.Method;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-public class KafkaListenerAdapter extends AbstractListenerAdapter {
+public class KafkaMessagingListenerAdapter extends AbstractMessagingListenerAdapter {
 
-    public KafkaListenerAdapter(MessagingHandlerMethod handlerMethod,
-                                MessagingContext context,
-                                Method method) {
+    public KafkaMessagingListenerAdapter(MessagingHandlerMethod handlerMethod,
+                                         MessagingContext context,
+                                         Method method) {
         super(handlerMethod, context, method);
     }
 

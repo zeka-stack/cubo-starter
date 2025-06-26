@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.messaging.factory;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.adapter.KafkaListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.KafkaMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.util.MethodInvokerWrapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -19,8 +19,8 @@ public class KafkaContainerFactoryProxy implements MessagingListenerContainerFac
     }
 
     @Override
-    public void registerContainer(AbstractListenerAdapter adapter, MessagingListener annotation) {
-        if (adapter instanceof KafkaListenerAdapter) {
+    public void registerContainer(AbstractMessagingListenerAdapter adapter, MessagingListener annotation) {
+        if (adapter instanceof KafkaMessagingListenerAdapter) {
             KafkaListenerEndpoint endpoint = createKafkaListenerEndpoint(adapter, annotation);
             registry.registerListenerContainer(endpoint, null, true);
         } else {
@@ -28,7 +28,7 @@ public class KafkaContainerFactoryProxy implements MessagingListenerContainerFac
         }
     }
 
-    private KafkaListenerEndpoint createKafkaListenerEndpoint(AbstractListenerAdapter adapter, MessagingListener annotation) {
+    private KafkaListenerEndpoint createKafkaListenerEndpoint(AbstractMessagingListenerAdapter adapter, MessagingListener annotation) {
         MethodKafkaListenerEndpoint<String, String> endpoint = new MethodKafkaListenerEndpoint<>();
         endpoint.setId(annotation.groupId());
         endpoint.setGroupId(annotation.groupId());
@@ -49,14 +49,14 @@ public class KafkaContainerFactoryProxy implements MessagingListenerContainerFac
         return endpoint;
     }
 
-    private Object createMethodInvokerProxy(AbstractListenerAdapter adapter) {
+    private Object createMethodInvokerProxy(AbstractMessagingListenerAdapter adapter) {
         MethodInvokerWrapper invoker = new MethodInvokerWrapper(
             adapter,
             adapter.getClass().getMethods()[0],
             args -> {
                 // 调用适配器的 onMessage 方法
                 if (args.length > 0 && args[0] instanceof ConsumerRecord) {
-                    ((KafkaListenerAdapter) adapter).onMessage((ConsumerRecord) args[0]);
+                    ((KafkaMessagingListenerAdapter) adapter).onMessage((ConsumerRecord) args[0]);
                 }
                 return null;
             }

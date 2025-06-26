@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
@@ -59,12 +59,12 @@ class MessagingListenerRegistryTest {
         registry.registerMethod(testBean, method, annotation);
 
         // 验证注册调用
-        ArgumentCaptor<AbstractListenerAdapter> adapterCaptor =
-            ArgumentCaptor.forClass(AbstractListenerAdapter.class);
+        ArgumentCaptor<AbstractMessagingListenerAdapter> adapterCaptor =
+            ArgumentCaptor.forClass(AbstractMessagingListenerAdapter.class);
 
         verify(registrationHandler).registerAdapter(adapterCaptor.capture(), eq(annotation));
 
-        AbstractListenerAdapter adapter = adapterCaptor.getValue();
+        AbstractMessagingListenerAdapter adapter = adapterCaptor.getValue();
         assertNotNull(adapter);
     }
 

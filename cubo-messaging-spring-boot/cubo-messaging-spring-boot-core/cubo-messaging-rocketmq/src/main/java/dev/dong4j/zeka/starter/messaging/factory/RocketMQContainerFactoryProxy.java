@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.messaging.factory;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.adapter.RocketMQListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.RocketMQMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.apache.rocketmq.spring.support.DefaultRocketMQListenerContainer;
@@ -19,8 +19,8 @@ public class RocketMQContainerFactoryProxy implements MessagingListenerContainer
     }
 
     @Override
-    public void registerContainer(AbstractListenerAdapter adapter, MessagingListener annotation) {
-        if (adapter instanceof RocketMQListenerAdapter) {
+    public void registerContainer(AbstractMessagingListenerAdapter adapter, MessagingListener annotation) {
+        if (adapter instanceof RocketMQMessagingListenerAdapter) {
             DefaultRocketMQListenerContainer container = createRocketMQListenerContainer((RocketMQListener) adapter, annotation);
             registry.registerContainer(container);
         } else {

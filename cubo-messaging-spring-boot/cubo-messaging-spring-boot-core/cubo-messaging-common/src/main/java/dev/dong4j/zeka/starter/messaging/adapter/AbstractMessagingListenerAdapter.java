@@ -7,15 +7,15 @@ import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
 import java.lang.reflect.Method;
 import lombok.Getter;
 
-public abstract class AbstractListenerAdapter {
+public abstract class AbstractMessagingListenerAdapter {
     private final MessagingHandlerMethod handlerMethod;
     @Getter
     private final MessagingContext context;
     private final Method method;
 
-    public AbstractListenerAdapter(MessagingHandlerMethod handlerMethod,
-                                   MessagingContext context,
-                                   Method method) {
+    public AbstractMessagingListenerAdapter(MessagingHandlerMethod handlerMethod,
+                                            MessagingContext context,
+                                            Method method) {
         this.handlerMethod = handlerMethod;
         this.context = context;
         this.method = method;
