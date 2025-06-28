@@ -28,6 +28,6 @@ import org.springframework.context.annotation.Configuration;
 public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
 
     public MybatisAutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", MybatisAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", MybatisAutoConfiguration.class);
     }
 }

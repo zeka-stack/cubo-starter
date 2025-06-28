@@ -28,6 +28,6 @@ import org.springframework.context.annotation.Configuration;
 public class RestAutoConfiguration implements ZekaAutoConfiguration {
 
     public RestAutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", RestAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", RestAutoConfiguration.class);
     }
 }

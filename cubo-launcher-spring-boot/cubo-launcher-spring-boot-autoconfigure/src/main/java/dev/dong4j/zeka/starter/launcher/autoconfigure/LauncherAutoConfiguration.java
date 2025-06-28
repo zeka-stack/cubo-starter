@@ -30,6 +30,6 @@ import org.springframework.context.annotation.Configuration;
 public class LauncherAutoConfiguration implements ZekaAutoConfiguration {
 
     public LauncherAutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", LauncherAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", LauncherAutoConfiguration.class);
     }
 }

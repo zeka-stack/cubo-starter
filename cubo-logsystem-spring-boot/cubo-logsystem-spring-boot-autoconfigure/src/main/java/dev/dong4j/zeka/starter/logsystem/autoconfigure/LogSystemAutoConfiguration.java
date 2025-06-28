@@ -39,7 +39,7 @@ import org.springframework.context.annotation.Configuration;
 public class LogSystemAutoConfiguration implements ZekaAutoConfiguration {
 
     public LogSystemAutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", LogSystemAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", LogSystemAutoConfiguration.class);
     }
 
     /**
