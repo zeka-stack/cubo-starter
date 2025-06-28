@@ -14,13 +14,6 @@
     <name>Cubo {{Name}} Common</name>
 
     <dependencies>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>blen-kernel-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-logsystem-simple</artifactId>
-        </dependency>
+
     </dependencies>
 </project>

@@ -27,6 +27,6 @@ import org.springframework.context.annotation.Configuration;
 public class {{Name}}AutoConfiguration implements ZekaAutoConfiguration {
 
     public {{Name}}AutoConfiguration() {
-        log.info("[{}] start autoconfiguration....", {{Name}}AutoConfiguration.class);
+        log.info("启动自动配置: [{}]", {{Name}}AutoConfiguration.class);
     }
 }
