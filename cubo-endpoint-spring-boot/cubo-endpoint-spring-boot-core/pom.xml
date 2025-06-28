@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.dong4j</groupId>
+        <artifactId>cubo-endpoint-spring-boot</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>cubo-endpoint-spring-boot-core</artifactId>
+    <name>Cubo Endpoint Spring Boot Core</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>cubo-endpoint-common</module>
+        <module>cubo-endpoint-reactive</module>
+        <module>cubo-endpoint-servlet</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>blen-kernel-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-logsystem-simple</artifactId>
+        </dependency>
+    </dependencies>
+</project>

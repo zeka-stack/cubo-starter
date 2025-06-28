@@ -34,7 +34,48 @@
                 <scope>import</scope>
             </dependency>
             <!--mark-->
-
+            <!--region endpoint-->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-common</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-reactive</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-servlet</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-reactive-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-endpoint-servlet-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--endregion-->
 
             <!--region combiner -->
             <dependency>
