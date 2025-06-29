@@ -1,4 +1,4 @@
-package dev.dong4j.zeka.starter.endpoint;
+package dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet;
 
 import com.google.common.collect.Lists;
 import dev.dong4j.zeka.kernel.common.api.R;
@@ -36,7 +36,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Api(tags = "应用接口信息")
-public class ProjectInfoEndpoint {
+public class ProjectInfoEndpointAutoConfiguration {
     /** Application context */
     @Resource
     private WebApplicationContext applicationContext;
