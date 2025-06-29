@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
  * @date 2025.06.25 21:28
  * @since x.x.x
  */
-@ZekaTest(classes = MessagingConfiguration.class)
-class MessagingConfigurationTest {
+@ZekaTest(classes = MessagingContainerConfiguration.class)
+class MessagingContainerConfigurationTest {
 
 
     @Test

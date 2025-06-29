@@ -1,4 +1,3 @@
-// KafkaListenerAdapter.java
 package dev.dong4j.zeka.starter.messaging.adapter;
 
 import dev.dong4j.zeka.starter.messaging.context.MessagingContext;

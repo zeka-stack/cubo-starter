@@ -7,6 +7,7 @@ import dev.dong4j.zeka.kernel.common.enums.LibraryEnum;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.NetUtils;
+import dev.dong4j.zeka.starter.endpoint.ReactiveEndpointLauncherInitiation;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.reactive.ReactiveInitializationService;
 import java.io.IOException;
@@ -40,12 +41,12 @@ import org.springframework.web.reactive.function.server.ServerResponse;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(WebFluxConfigurer.class)
+@ConditionalOnClass(value = {WebFluxConfigurer.class, ReactiveEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration {
 
     public ReactiveStartInfoAutoConfiguration() {
-        log.info("启动自动配置: [{}]", ReactiveStartInfoAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", this.getClass());
     }
 
     /**

@@ -4,11 +4,13 @@ import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive.ReactiveStartInfoAutoConfiguration;
 import dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet.ServletStartInfoAutoConfiguration;
+import dev.dong4j.zeka.starter.endpoint.constant.Endpoint;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.initialization.PreloadComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -37,11 +39,12 @@ import org.springframework.context.annotation.Configuration;
     ServletStartInfoAutoConfiguration.class,
     ReactiveStartInfoAutoConfiguration.class
 })
+@ConditionalOnClass(Endpoint.class)
 @EnableConfigurationProperties(EndpointProperties.class)
 public class EndpointAutoConfiguration implements ZekaAutoConfiguration {
 
     public EndpointAutoConfiguration() {
-        log.info("启动自动配置: [{}]", EndpointAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", this.getClass());
     }
 
     /**

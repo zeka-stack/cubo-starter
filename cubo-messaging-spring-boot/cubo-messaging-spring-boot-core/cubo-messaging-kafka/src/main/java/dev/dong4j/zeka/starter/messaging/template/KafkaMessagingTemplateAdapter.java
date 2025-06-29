@@ -1,4 +1,3 @@
-// KafkaTemplateAdapter.java
 package dev.dong4j.zeka.starter.messaging.template;
 
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;

@@ -5,6 +5,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PreDestroy;
 import org.apache.rocketmq.spring.support.DefaultRocketMQListenerContainer;
 
+/**
+ * xxx
+ *
+ * @author dong4j
+ * @version 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.06.27
+ * @since 1.0.0
+ */
 public class DefaultRocketMQContainerRegistry implements RocketMQContainerFactoryProxy.RocketMQContainerRegistry {
 
     private final Map<String, DefaultRocketMQListenerContainer> containers = new ConcurrentHashMap<>();

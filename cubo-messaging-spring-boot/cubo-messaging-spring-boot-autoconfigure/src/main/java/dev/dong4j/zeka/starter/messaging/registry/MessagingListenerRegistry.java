@@ -38,7 +38,7 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         // 获取 Bean 的所有方法
         for (Method method : bean.getClass().getMethods()) {
-            // 检查方法是否带有@UnifiedMessageListener注解
+            // 检查方法是否带有 @MessagingListener 注解
             if (method.isAnnotationPresent(MessagingListener.class)) {
                 // 获取注解实例
                 MessagingListener annotation = method.getAnnotation(MessagingListener.class);
@@ -69,8 +69,7 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         // 创建自定义解析器
         MessagingHandlerMethod.UnifiedMessageResolver resolver = createCustomResolver();
 
-
-        // 创建 UnifiedMessageHandlerMethod
+        // 创建 MessagingHandlerMethod, 最终会通过代理调用具体实现处理消息
         MessagingHandlerMethod handlerMethod = new MessagingHandlerMethod(bean, method, resolver);
 
         // 创建适配器
@@ -106,6 +105,14 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         };
     }
 
+    /**
+     * 创建侦听器适配器, 当监听到消息时调用 {@link MessagingHandlerMethod#invoke(MessagingContext)} 处理
+     *
+     * @param handlerMethod 处理程序方法
+     * @param context       语境
+     * @param method        方法
+     * @return {@link AbstractMessagingListenerAdapter }
+     */
     private AbstractMessagingListenerAdapter createListenerAdapter(MessagingHandlerMethod handlerMethod,
                                                                    MessagingContext context,
                                                                    Method method) {

@@ -89,10 +89,9 @@
         <module>cubo-logsystem-spring-boot</module>
         <module>cubo-launcher-spring-boot</module>
         <module>cubo-messaging-spring-boot</module>
-        <module>cubo-rest-spring-boot</module>
-        <module>cubo-mybatis-spring-boot</module>
         <module>cubo-combiner-spring-boot</module>
         <!--mark-->
+        <module>cubo-rest-spring-boot</module>
         <module>cubo-endpoint-spring-boot</module>
     </modules>
 

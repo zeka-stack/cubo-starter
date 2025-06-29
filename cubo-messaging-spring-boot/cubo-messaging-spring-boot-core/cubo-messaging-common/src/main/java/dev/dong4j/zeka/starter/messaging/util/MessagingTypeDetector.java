@@ -36,6 +36,11 @@ public class MessagingTypeDetector {
     private final Set<MessagingType> userDisabledTypes = new HashSet<>();
     private boolean detectionCompleted = false;
 
+    /**
+     * 消息类型检测器
+     *
+     * @param environment 环境
+     */
     public MessagingTypeDetector(Environment environment) {
         this.environment = environment;
         this.userDisabledTypes.addAll(parseDisabledTypes());

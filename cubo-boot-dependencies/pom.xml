@@ -34,6 +34,49 @@
                 <scope>import</scope>
             </dependency>
             <!--mark-->
+            <!--region rest-->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-core</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-autoconfigure</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-common</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-servlet</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-reactive</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-servlet-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-rest-reactive-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--endregion-->
+
             <!--region endpoint-->
             <dependency>
                 <groupId>dev.dong4j</groupId>
@@ -81,42 +124,6 @@
             <dependency>
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-framework-spring-boot-starter</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <!--endregion-->
-
-            <!--region mybatis -->
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-mybatis-spring-boot-core</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-mybatis-spring-boot-autoconfigure</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-mybatis-spring-boot-starter</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <!--endregion-->
-
-            <!--region rest -->
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-rest-spring-boot-core</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-rest-spring-boot-autoconfigure</artifactId>
-                <version>${cubo-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.dong4j</groupId>
-                <artifactId>cubo-rest-spring-boot-starter</artifactId>
                 <version>${cubo-boot-dependencies.version}</version>
             </dependency>
             <!--endregion-->

@@ -6,6 +6,7 @@ import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.enums.LibraryEnum;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.starter.endpoint.ServletEndpointLauncherInitiation;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.servlet.ServletInitializationService;
 import java.io.IOException;
@@ -35,12 +36,12 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class})
+@ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ServletEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration {
 
     public ServletStartInfoAutoConfiguration() {
-        log.info("启动自动配置: [{}]", ServletStartInfoAutoConfiguration.class);
+        log.info("启动自动配置: [{}]", this.getClass());
     }
 
     /**
