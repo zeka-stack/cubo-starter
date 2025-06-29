@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * @since 1.0.0
  */
 @Slf4j
-@ZekaTest(classes = {{Name}}AutoConfiguration.class)
+@ZekaTest(classes = {{{Name}}AutoConfiguration.class})
 class {{Name}}AutoConfigurationTest {
 
     @Test

@@ -13,7 +13,4 @@
     <artifactId>cubo-openapi-common</artifactId>
     <name>Cubo Openapi Common</name>
 
-    <dependencies>
-
-    </dependencies>
 </project>

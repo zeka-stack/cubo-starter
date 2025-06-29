@@ -18,5 +18,9 @@
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-openapi-dubbo</artifactId>
         </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-endpoint-servlet-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 </project>

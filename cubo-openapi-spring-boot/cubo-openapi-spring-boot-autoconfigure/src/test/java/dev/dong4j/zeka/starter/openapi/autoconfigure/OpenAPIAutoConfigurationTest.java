@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.openapi.autoconfigure;
 
 import dev.dong4j.zeka.kernel.test.ZekaTest;
+import dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j.Knife4jAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +15,8 @@ import org.junit.jupiter.api.Test;
  * @since 1.0.0
  */
 @Slf4j
-@ZekaTest(classes = OpenapiAutoConfiguration.class)
-class OpenapiAutoConfigurationTest {
+@ZekaTest(classes = {OpenAPIAutoConfiguration.class, Knife4jAutoConfiguration.class,})
+class OpenAPIAutoConfigurationTest {
 
     @Test
     void test() {

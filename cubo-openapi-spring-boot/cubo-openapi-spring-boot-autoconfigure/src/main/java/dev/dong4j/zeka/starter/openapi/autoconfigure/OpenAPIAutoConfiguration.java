@@ -2,7 +2,9 @@ package dev.dong4j.zeka.starter.openapi.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j.Knife4jAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +21,17 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
-    prefix = OpenapiProperties.PREFIX,
+    prefix = OpenAPIProperties.PREFIX,
     name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true)
-@EnableConfigurationProperties(OpenapiProperties.class)
-public class OpenapiAutoConfiguration implements ZekaAutoConfiguration {
+@AutoConfigureAfter({
+    Knife4jAutoConfiguration.class,
+})
+@EnableConfigurationProperties(OpenAPIProperties.class)
+public class OpenAPIAutoConfiguration implements ZekaAutoConfiguration {
 
-    public OpenapiAutoConfiguration() {
+    public OpenAPIAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }
 }

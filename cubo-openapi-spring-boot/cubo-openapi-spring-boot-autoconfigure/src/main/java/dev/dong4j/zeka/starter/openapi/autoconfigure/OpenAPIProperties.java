@@ -16,8 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = OpenapiProperties.PREFIX)
-public class OpenapiProperties extends ZekaProperties {
+@ConfigurationProperties(prefix = OpenAPIProperties.PREFIX)
+public class OpenAPIProperties extends ZekaProperties {
     /** 组件配置前缀 */
     public static final String PREFIX = "zeka-stack.openapi";
 }

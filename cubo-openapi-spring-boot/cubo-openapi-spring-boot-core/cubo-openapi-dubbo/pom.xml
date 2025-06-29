@@ -18,5 +18,6 @@
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-openapi-common</artifactId>
         </dependency>
+
     </dependencies>
 </project>

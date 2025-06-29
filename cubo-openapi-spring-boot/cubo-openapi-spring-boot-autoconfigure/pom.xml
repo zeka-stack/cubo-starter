@@ -24,11 +24,6 @@
         </dependency>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-openapi-agent</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
             <artifactId>cubo-openapi-dubbo</artifactId>
             <optional>true</optional>
         </dependency>
@@ -38,13 +33,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-openapi-restdoc</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-openapi-swagger</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
     </dependencies>

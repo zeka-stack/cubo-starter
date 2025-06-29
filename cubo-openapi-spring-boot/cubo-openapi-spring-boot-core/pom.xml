@@ -16,11 +16,8 @@
 
     <modules>
         <module>cubo-openapi-common</module>
-        <module>cubo-openapi-agent</module>
         <module>cubo-openapi-dubbo</module>
         <module>cubo-openapi-knife4j</module>
-        <module>cubo-openapi-restdoc</module>
-        <module>cubo-openapi-swagger</module>
     </modules>
 
     <dependencies>

@@ -6,10 +6,9 @@ import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
+import java.util.Map;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.util.Map;
 
 /**
  * <p>Description: 日志系统默认配置 </p>
@@ -34,7 +33,7 @@ public class LogSystemRecordInitiation implements LauncherInitiation {
      */
     @Override
     public Map<String, Object> launcher(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
-        return ChainMap.build(0)
+        return ChainMap.build(1)
             .put(ConfigKey.SpringConfigKey.MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING, ConfigDefaultValue.TRUE);
     }
 

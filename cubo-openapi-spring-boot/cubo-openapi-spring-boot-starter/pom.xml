@@ -15,11 +15,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cubo-openapi-agent-spring-boot-starter</module>
         <module>cubo-openapi-dubbo-spring-boot-starter</module>
         <module>cubo-openapi-knife4j-spring-boot-starter</module>
-        <module>cubo-openapi-restdoc-spring-boot-starter</module>
-        <module>cubo-openapi-swagger-spring-boot-starter</module>
     </modules>
 
     <dependencies>
