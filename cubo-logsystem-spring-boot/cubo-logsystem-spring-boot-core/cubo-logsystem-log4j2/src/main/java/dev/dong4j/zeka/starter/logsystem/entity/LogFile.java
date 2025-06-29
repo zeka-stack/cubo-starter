@@ -1,6 +1,5 @@
 package dev.dong4j.zeka.starter.logsystem.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +15,6 @@ import org.jetbrains.annotations.Contract;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class LogFile {
     /** 日志文件名, 此配置只对 log4j2-flie.xml 有效. */
     private String name;
