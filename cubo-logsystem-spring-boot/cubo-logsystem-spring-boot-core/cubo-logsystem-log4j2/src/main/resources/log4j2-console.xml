@@ -204,6 +204,7 @@
         <Logger name="org.springframework.core.log.CompositeLog" level="WARN" includeLocation="${sys:SHOW_LOG_LOCATION}"/>
         <Logger name="org.springframework.context.support" level="WARN" includeLocation="${sys:SHOW_LOG_LOCATION}"/>
         <Logger name="org.springframework.context.annotation" level="WARN" includeLocation="${sys:SHOW_LOG_LOCATION}"/>
+        <Logger name="io.swagger.v3" level="WARN" includeLocation="${sys:SHOW_LOG_LOCATION}"/>
         <Logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="ERROR"
                 includeLocation="${sys:SHOW_LOG_LOCATION}"/>
         <!-- 开启 rest mapper 日志-->
