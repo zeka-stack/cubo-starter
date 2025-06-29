@@ -6,21 +6,17 @@
 
     <parent>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-mybatis-spring-boot</artifactId>
+        <artifactId>cubo-rest-spring-boot-starter</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>cubo-mybatis-spring-boot-starter</artifactId>
-    <name>Cubo Mybatis Spring Boot Starter</name>
+    <artifactId>cubo-rest-servlet-spring-boot-starter</artifactId>
+    <name>Cubo Rest Servlet Spring Boot Starter</name>
 
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-mybatis-spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-mybatis-spring-boot-core</artifactId>
+            <artifactId>cubo-rest-servlet</artifactId>
         </dependency>
     </dependencies>
 </project>

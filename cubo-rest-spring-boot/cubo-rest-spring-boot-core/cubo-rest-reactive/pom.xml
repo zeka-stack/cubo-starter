@@ -6,26 +6,22 @@
 
     <parent>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-mybatis-spring-boot</artifactId>
+        <artifactId>cubo-rest-spring-boot-core</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>cubo-mybatis-spring-boot-autoconfigure</artifactId>
-    <name>Cubo Mybatis Spring Boot Autoconfigure</name>
+    <artifactId>cubo-rest-reactive</artifactId>
+    <name>Cubo Rest Spring Boot Reactive</name>
 
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>blen-kernel-autoconfigure</artifactId>
+            <artifactId>cubo-rest-common</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-mybatis-spring-boot-core</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-logsystem-simple</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -6,28 +6,28 @@
 
     <parent>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-{{name}}-spring-boot</artifactId>
+        <artifactId>cubo-rest-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>cubo-{{name}}-spring-boot-autoconfigure</artifactId>
-    <name>Cubo {{Name}} Spring Boot Autoconfigure</name>
+    <artifactId>cubo-rest-spring-boot-core</artifactId>
+    <name>Cubo Rest Spring Boot Core</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>cubo-rest-common</module>
+        <module>cubo-rest-servlet</module>
+        <module>cubo-rest-reactive</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>blen-kernel-autoconfigure</artifactId>
+            <artifactId>blen-kernel-common</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-logsystem-simple</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-{{name}}-{{module...}}</artifactId>
-            <optional>true</optional>
-        </dependency>
-
     </dependencies>
 </project>

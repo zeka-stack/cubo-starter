@@ -20,12 +20,13 @@
         </dependency>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-{{name}}-spring-boot-core</artifactId>
-            <optional>true</optional>
+            <artifactId>cubo-logsystem-simple</artifactId>
         </dependency>
+
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-logsystem-simple</artifactId>
+            <artifactId>cubo-{{name}}-spring-boot-core</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>

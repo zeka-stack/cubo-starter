@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-{{name}}-spring-boot</artifactId>
+        <artifactId>cubo-rest-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>cubo-{{name}}-spring-boot-autoconfigure</artifactId>
-    <name>Cubo {{Name}} Spring Boot Autoconfigure</name>
+    <artifactId>cubo-rest-spring-boot-autoconfigure</artifactId>
+    <name>Cubo Rest Spring Boot Autoconfigure</name>
 
     <dependencies>
         <dependency>
@@ -25,9 +25,24 @@
 
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-{{name}}-{{module...}}</artifactId>
+            <artifactId>cubo-rest-servlet</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-rest-reactive</artifactId>
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
