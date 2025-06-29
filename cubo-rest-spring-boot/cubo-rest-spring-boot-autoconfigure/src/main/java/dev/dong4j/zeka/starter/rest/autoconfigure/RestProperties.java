@@ -80,7 +80,7 @@ public class RestProperties extends ZekaProperties {
      */
     @Data
     public static class Multipart {
-        /** Location */
-        private String location = ConfigDefaultValue.CONTAINER_LOCATION;
+        /** Undertow 容器目录 */
+        private String location = System.getProperty("java.io.tmpdir", ConfigDefaultValue.CONTAINER_LOCATION);
     }
 }

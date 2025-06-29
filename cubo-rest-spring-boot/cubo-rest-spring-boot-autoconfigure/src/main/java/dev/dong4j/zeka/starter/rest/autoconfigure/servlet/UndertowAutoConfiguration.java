@@ -74,7 +74,9 @@ public class UndertowAutoConfiguration implements ZekaAutoConfiguration, WebServ
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setLocation(this.properties.getMultipart().getLocation());
+        final String location = this.properties.getMultipart().getLocation();
+        log.debug("Undertow 容器目录: [{}]", location);
+        factory.setLocation(location);
         return factory.createMultipartConfig();
     }
 
