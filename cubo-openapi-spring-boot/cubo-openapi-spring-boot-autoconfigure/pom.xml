@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.dong4j</groupId>
+        <artifactId>cubo-openapi-spring-boot</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>cubo-openapi-spring-boot-autoconfigure</artifactId>
+    <name>Cubo Openapi Spring Boot Autoconfigure</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>blen-kernel-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-logsystem-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-openapi-agent</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-openapi-dubbo</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-openapi-knife4j</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-openapi-restdoc</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>dev.dong4j</groupId>
+            <artifactId>cubo-openapi-swagger</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
