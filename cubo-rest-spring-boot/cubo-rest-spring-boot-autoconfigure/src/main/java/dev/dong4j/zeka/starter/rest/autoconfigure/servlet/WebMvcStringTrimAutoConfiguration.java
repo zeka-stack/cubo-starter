@@ -1,12 +1,15 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
 import javax.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +30,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Slf4j
 @Configuration
+@ConditionalOnProperty(
+    prefix = RestProperties.PREFIX,
+    name = ZekaProperties.ENABLED,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class, ZekaServletExceptionErrorAttributes.class})
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)

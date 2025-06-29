@@ -18,7 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 @Configuration
 @ConditionalOnProperty(
     prefix = MessagingProperties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true
 )

@@ -3,6 +3,7 @@ package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 import com.fasterxml.jackson.core.json.PackageVersion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
@@ -90,6 +91,11 @@ import org.springframework.web.util.UrlPathHelper;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(JacksonConfiguration.class)
+@ConditionalOnProperty(
+    prefix = RestProperties.PREFIX,
+    name = ZekaProperties.ENABLED,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class, WebProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)

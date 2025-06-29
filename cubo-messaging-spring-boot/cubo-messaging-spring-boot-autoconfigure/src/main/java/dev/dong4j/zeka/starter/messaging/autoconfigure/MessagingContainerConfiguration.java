@@ -27,7 +27,7 @@ import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 @Configuration
 @ConditionalOnProperty(
     prefix = MessagingProperties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true
 )

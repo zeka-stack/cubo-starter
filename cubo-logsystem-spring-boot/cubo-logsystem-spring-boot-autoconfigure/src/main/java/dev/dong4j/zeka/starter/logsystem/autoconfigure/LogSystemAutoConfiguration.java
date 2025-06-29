@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(LogPrintStream.class)
 @ConditionalOnProperty(
     prefix = LogSystemProperties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true
 )

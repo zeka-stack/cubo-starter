@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.undertow.ShowUndertowLog;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
@@ -39,6 +41,11 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(RestProperties.class)
+@ConditionalOnProperty(
+    prefix = RestProperties.PREFIX,
+    name = ZekaProperties.ENABLED,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class, Undertow.class})
 public class UndertowAutoConfiguration implements ZekaAutoConfiguration, WebServerFactoryCustomizer<UndertowServletWebServerFactory> {

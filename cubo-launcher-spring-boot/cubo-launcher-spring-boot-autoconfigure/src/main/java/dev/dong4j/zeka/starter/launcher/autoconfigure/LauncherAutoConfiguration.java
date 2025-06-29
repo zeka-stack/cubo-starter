@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(ZekaStarter.class)
 @ConditionalOnProperty(
     prefix = LauncherProperties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true)
 @EnableConfigurationProperties(LauncherProperties.class)

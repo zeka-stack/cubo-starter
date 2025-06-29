@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive;
 
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.constant.App;
@@ -8,6 +9,7 @@ import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.NetUtils;
 import dev.dong4j.zeka.starter.endpoint.ReactiveEndpointLauncherInitiation;
+import dev.dong4j.zeka.starter.endpoint.autoconfigure.EndpointProperties;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.reactive.ReactiveInitializationService;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +44,11 @@ import org.springframework.web.reactive.function.server.ServerResponse;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(
+    prefix = EndpointProperties.PREFIX,
+    name = ZekaProperties.ENABLED,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ReactiveEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration {

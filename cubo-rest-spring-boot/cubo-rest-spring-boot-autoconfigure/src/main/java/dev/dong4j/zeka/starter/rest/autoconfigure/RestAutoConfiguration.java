@@ -40,7 +40,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
     prefix = RestProperties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)

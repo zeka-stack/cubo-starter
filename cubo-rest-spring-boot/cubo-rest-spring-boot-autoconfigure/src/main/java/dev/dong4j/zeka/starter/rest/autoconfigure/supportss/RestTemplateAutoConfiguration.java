@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.exception.BaseException;
 import dev.dong4j.zeka.kernel.common.jackson.MappingApiJackson2HttpMessageConverter;
 import dev.dong4j.zeka.kernel.common.ssl.DisableValidationTrustManager;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +47,11 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(
+    prefix = RestProperties.PREFIX,
+    name = ZekaProperties.ENABLED,
+    havingValue = ZekaProperties.ON,
+    matchIfMissing = true)
 @EnableConfigurationProperties(RestProperties.class)
 @ConditionalOnMissingClass("dev.dong4j.zeka.agent.adapter.config.AgentAdapterRestConfiguration")
 public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
