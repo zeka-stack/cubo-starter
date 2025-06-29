@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
     prefix = {{Name}}Properties.PREFIX,
-    name = ZekaProperties.ENABLE,
+    name = ZekaProperties.ENABLED,
     havingValue = ZekaProperties.ON,
     matchIfMissing = true)
 @EnableConfigurationProperties({{Name}}Properties.class)
