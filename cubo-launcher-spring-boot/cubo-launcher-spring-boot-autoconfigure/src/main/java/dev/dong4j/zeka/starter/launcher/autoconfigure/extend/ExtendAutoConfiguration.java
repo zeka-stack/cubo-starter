@@ -31,7 +31,11 @@ public class ExtendAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.0.0
      */
     @Bean
-    @ConditionalOnProperty(value = ConfigKey.EXTEND_ENABLE_AUTOWIRED_IS_NULL, havingValue = ConfigDefaultValue.TRUE_STRING)
+    @ConditionalOnProperty(
+        value = ConfigKey.EXTEND_ENABLE_AUTOWIRED_IS_NULL,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true
+    )
     public AutowiredAnnotationBeanPostProcessor autowiredAnnotationExtend() {
         log.info("全局设置允许 @Autowired 允许注入的 bean 为 null");
         return new AutowiredAnnotationExtend();
@@ -44,7 +48,11 @@ public class ExtendAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.0.0
      */
     @Bean
-    @ConditionalOnProperty(value = ConfigKey.EXTEND_ENABLE_RESOURCE_IS_NULL, havingValue = ConfigDefaultValue.TRUE_STRING)
+    @ConditionalOnProperty(
+        value = ConfigKey.EXTEND_ENABLE_RESOURCE_IS_NULL,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true
+    )
     public CommonAnnotationBeanPostProcessor resourceAnnotationExtend() {
         log.info("设置允许 @Resource 允许注入的 bean 为 null");
         return new ResourceAnnotationExtend();

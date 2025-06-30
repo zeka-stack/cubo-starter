@@ -34,16 +34,20 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
     </dependencies>
 </project>

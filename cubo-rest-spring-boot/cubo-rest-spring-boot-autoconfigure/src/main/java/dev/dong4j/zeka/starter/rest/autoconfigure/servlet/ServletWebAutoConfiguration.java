@@ -71,7 +71,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UrlPathHelper;
@@ -132,7 +131,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      */
     @Bean
     @ConditionalOnMissingBean(CharacterEncodingFilter.class)
-    public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean() {
+    public FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilterFilterRegistrationBean() {
         FilterRegistrationBean<CharacterEncodingFilter> registrationBean = new FilterRegistrationBean<>();
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding(StringPool.UTF_8);
@@ -150,10 +149,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      */
     @Bean
     @ConditionalOnMissingBean(ServletGlobalCacheFilter.class)
-    @ConditionalOnProperty(value = ConfigKey.WEB_ENABLE_GLOBAL_CACHE_FILTER,
+    @ConditionalOnProperty(
+        value = ConfigKey.WEB_ENABLE_GLOBAL_CACHE_FILTER,
         havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
-    public FilterRegistrationBean<ServletGlobalCacheFilter> servletRequestCacheFilter(@NotNull WebProperties properties) {
+        matchIfMissing = true
+    )
+    public FilterRegistrationBean<ServletGlobalCacheFilter> servletGlobalCacheFilterFilterRegistrationBean(@NotNull WebProperties properties) {
         log.debug("加载 Request & Response Cahce 过滤器 [{}]", ServletGlobalCacheFilter.class);
         ServletGlobalCacheFilter servletGlobalCacheFilter = new ServletGlobalCacheFilter(properties.getIgnoreCacheRequestUrl());
         FilterRegistrationBean<ServletGlobalCacheFilter> bean = new FilterRegistrationBean<>(servletGlobalCacheFilter);
@@ -169,9 +170,9 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      * @since 1.0.0
      */
     @Bean
-    @Profile(value = {App.ENV_LOCAL, App.ENV_DEV, App.ENV_TEST, App.ENV_PREV})
+    @Profile(value = {App.ENV_NOT_PROD})
     @ConditionalOnMissingBean(CorsFilter.class)
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
+    public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean() {
         log.debug("非正式环境开启跨域支持: {}", CorsFilter.class);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration(StringPool.ANY_PATH, this.buildConfig());
@@ -193,10 +194,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      */
     @Bean
     @ConditionalOnMissingBean(ExceptionFilter.class)
-    @ConditionalOnProperty(value = ConfigKey.WEB_ENABLE_EXCEPTION_FILTER,
+    @ConditionalOnProperty(
+        value = ConfigKey.WEB_ENABLE_EXCEPTION_FILTER,
         havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
-    public FilterRegistrationBean<ExceptionFilter> errorFilterProxy(ServerProperties serverProperties) {
+        matchIfMissing = true
+    )
+    public FilterRegistrationBean<ExceptionFilter> exceptionFilterFilterRegistrationBean(ServerProperties serverProperties) {
         log.debug("加载 Filter 异常处理器 [{}]", ExceptionFilter.class);
         FilterRegistrationBean<ExceptionFilter> bean = new FilterRegistrationBean<>(new ExceptionFilter(serverProperties));
         InnerWebUtils.setUrlPatterns(bean, Ordered.HIGHEST_PRECEDENCE + 50);
@@ -212,8 +215,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      */
     @Bean
     @ConditionalOnMissingBean(GlobalParameterFilter.class)
-    @ConditionalOnProperty(value = ConfigKey.REST_ENABLE_GLOBAL_PARAMETER_FILTER, havingValue = ConfigDefaultValue.TRUE_STRING)
-    public FilterRegistrationBean<GlobalParameterFilter> parameterFilterRegistrationBean() {
+    @ConditionalOnProperty(
+        value = ConfigKey.REST_ENABLE_GLOBAL_PARAMETER_FILTER,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true
+    )
+    public FilterRegistrationBean<GlobalParameterFilter> globalParameterFilterFilterRegistrationBean() {
         log.info("加载全局参数注入拦截器: {}", GlobalParameterFilter.class);
         FilterRegistrationBean<GlobalParameterFilter> bean = new FilterRegistrationBean<>(new GlobalParameterFilter());
         InnerWebUtils.setUrlPatterns(bean, Ordered.LOWEST_PRECEDENCE - 1000);
@@ -230,8 +237,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
      */
     @Bean
     @ConditionalOnMissingBean(XssFilter.class)
-    @ConditionalOnProperty(value = ConfigKey.XSS_ENABLE_XSS_FILTER, havingValue = ConfigDefaultValue.TRUE_STRING)
-    public FilterRegistrationBean<XssFilter> xssFilterRegistration(XssProperties xssProperties) {
+    @ConditionalOnProperty(
+        value = ConfigKey.XSS_ENABLE_XSS_FILTER,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true
+    )
+    public FilterRegistrationBean<XssFilter> xssFilterFilterRegistrationBean(XssProperties xssProperties) {
         log.debug("加载防 XSS 注入 Filter: {}", XssFilter.class);
         FilterRegistrationBean<XssFilter> bean = new FilterRegistrationBean<>(new XssFilter(xssProperties.getExcludePatterns()));
         InnerWebUtils.setUrlPatterns(bean, Ordered.LOWEST_PRECEDENCE - 900);
@@ -336,15 +347,6 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
         UrlPathHelper urlPathHelper = new UrlPathHelper();
         urlPathHelper.setRemoveSemicolonContent(false);
         configurer.setUrlPathHelper(urlPathHelper);
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-            .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-            .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /**

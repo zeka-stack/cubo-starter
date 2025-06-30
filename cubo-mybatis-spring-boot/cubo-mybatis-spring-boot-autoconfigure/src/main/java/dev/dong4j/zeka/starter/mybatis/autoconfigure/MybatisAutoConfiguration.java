@@ -93,8 +93,11 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MybatisPlusInterceptor.class)
     @Profile(value = {App.ENV_NOT_PROD})
-    @ConditionalOnProperty(value = ConfigKey.MYBATIS_ENABLE_ILLEGAL_SQL_INTERCEPTOR,
-        havingValue = ConfigDefaultValue.TRUE_STRING)
+    @ConditionalOnProperty(
+        value = ConfigKey.MYBATIS_ENABLE_ILLEGAL_SQL_INTERCEPTOR,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true
+    )
     public MybatisPlusInterceptor mybatisPlusInterceptor(@NotNull MybatisProperties mybatisProperties) {
         final MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         // 非法 SQL 语句拦截器: SQL 严格模式
@@ -133,9 +136,11 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @ConditionalOnMissingBean(PerformanceInterceptor.class)
     @ConditionalOnMissingClass("com.p6spy.engine.spy.P6SpyDriver")
     @Profile(value = {App.ENV_NOT_PROD})
-    @ConditionalOnProperty(value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_LOG,
+    @ConditionalOnProperty(
+        value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_LOG,
         havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
+        matchIfMissing = true
+    )
     public PerformanceInterceptor performanceInterceptor(MybatisProperties mybatisProperties) {
         PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();
         performanceInterceptor.setFormat(mybatisProperties.isSqlFormat());
@@ -152,9 +157,11 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(SensitiveFieldDecryptIntercepter.class)
-    @ConditionalOnProperty(value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_SENSITIVE,
+    @ConditionalOnProperty(
+        value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_SENSITIVE,
         havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
+        matchIfMissing = true
+    )
     public SensitiveFieldDecryptIntercepter sensitiveFieldDecryptIntercepter(@NotNull MybatisProperties mybatisProperties) {
         return new SensitiveFieldDecryptIntercepter(mybatisProperties.getSensitiveKey());
     }
@@ -168,9 +175,11 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(SensitiveFieldEncryptIntercepter.class)
-    @ConditionalOnProperty(value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_SENSITIVE,
+    @ConditionalOnProperty(
+        value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_SENSITIVE,
         havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
+        matchIfMissing = true
+    )
     public SensitiveFieldEncryptIntercepter sensitiveFieldEncryptIntercepter(@NotNull MybatisProperties mybatisProperties) {
         SqlUtils.setSensitiveKey(mybatisProperties.getSensitiveKey());
         return new SensitiveFieldEncryptIntercepter(mybatisProperties.getSensitiveKey());
@@ -208,7 +217,11 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.7.1
      */
     @Bean
-    @ConditionalOnProperty(name = ConfigKey.DruidConfigKey.DRIVER_CLASS, havingValue = "com.mysql.cj.jdbc.Driver", matchIfMissing = true)
+    @ConditionalOnProperty(
+        name = ConfigKey.DruidConfigKey.DRIVER_CLASS,
+        havingValue = "com.mysql.cj.jdbc.Driver",
+        matchIfMissing = true
+    )
     @ConditionalOnClass(name = "com.p6spy.engine.spy.P6SpyDriver")
     public ObjectProvider<ZekaComponentBean> mybatisZekaComponentBean() {
         log.warn("classpath 存在 p6spy 但是未使用, 忽略加载 PerformanceInterceptor, "
