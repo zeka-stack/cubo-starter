@@ -141,8 +141,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     public <DTO extends BaseDTO<? extends Serializable>, Q extends BaseQuery<? extends Serializable>> IPage<DTO>
     page(IPage<DTO> page, @NotNull Q query) {
         Assertions.notNull(query);
-        Condition.getPage(query);
-        return this.baseMapper.page(page, query);
+        return this.baseMapper.page(Condition.getPage(query), query);
     }
 
     /**
@@ -157,7 +156,6 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     @Override
     public <DTO extends BaseDTO<? extends Serializable>, Q extends BaseQuery<? extends Serializable>> IPage<DTO> page(@NotNull Q query) {
         Assertions.notNull(query);
-        Condition.getPage(query);
         return this.baseMapper.page(Condition.getPage(query), query);
     }
 
@@ -173,6 +171,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     @Override
     public <DTO extends BaseDTO<? extends Serializable>, Q extends BaseQuery<? extends Serializable>> List<DTO> list(@NotNull Q query) {
         Assertions.notNull(query);
+        Condition.checkTime(query);
         return this.baseMapper.page(query);
     }
 
@@ -186,6 +185,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     @Override
     public <Q extends BaseQuery<? extends Serializable>> int count(@NotNull Q query) {
         Assertions.notNull(query);
+        Condition.checkTime(query);
         return this.baseMapper.count(query);
     }
 
@@ -202,6 +202,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     public <DTO extends BaseDTO<? extends Serializable>,
         Q extends BaseQuery<? extends Serializable>> Cursor<DTO> stream(@NotNull Q query) {
         Assertions.notNull(query);
+        Condition.checkTime(query);
         return this.baseMapper.stream(query);
     }
 

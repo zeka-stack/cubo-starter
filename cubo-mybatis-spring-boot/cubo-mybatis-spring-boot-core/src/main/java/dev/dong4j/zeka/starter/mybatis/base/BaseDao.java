@@ -40,19 +40,6 @@ public interface BaseDao<T> extends BaseMapper<T> {
     int replace(T entity);
 
     /**
-     * 通用分页查询接口
-     *
-     * @param <D>   {@link BaseDTO} 子类
-     * @param <Q>   {@link BaseQuery} 子类
-     * @param page  分页参数
-     * @param query 查询参数
-     * @return the page
-     * @since 1.6.0
-     */
-    <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> IPage<D> page(@Param("page") IPage<D> page,
-                                                                                      @Param("query") Q query);
-
-    /**
      * 通用 list 查询接口, sql 走的是 page 分页查询, 但是不会执行 count 查询.
      *
      * @param <D>   {@link BaseDTO} 子类
@@ -63,6 +50,18 @@ public interface BaseDao<T> extends BaseMapper<T> {
      */
     <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> List<D> page(@Param("query") Q query);
 
+    /**
+     * 通用分页查询接口, 有 IPage 参数会自动执行 count 查询.
+     *
+     * @param <D>   {@link BaseDTO} 子类
+     * @param <Q>   {@link BaseQuery} 子类
+     * @param page  分页参数
+     * @param query 查询参数
+     * @return the page
+     * @since 1.6.0
+     */
+    <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> IPage<D> page(@Param("page") IPage<D> page,
+                                                                                      @Param("query") Q query);
 
     /**
      * 流式查询：防止查询返回得数据量太大导致应用OOM

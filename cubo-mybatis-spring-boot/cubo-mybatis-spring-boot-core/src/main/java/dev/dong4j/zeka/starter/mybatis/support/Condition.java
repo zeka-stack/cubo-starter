@@ -3,15 +3,13 @@ package dev.dong4j.zeka.starter.mybatis.support;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.kernel.common.base.BaseQuery;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.mybatis.support.Page;
-import dev.dong4j.zeka.kernel.common.mybatis.support.Query;
-import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.Tools;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -45,40 +43,23 @@ public class Condition {
             Tools.toLong(query.getPage(), ConfigKit.getLongValue(ConfigKey.MybatisConfigKey.PAGE, 1L)),
             Tools.toLong(query.getLimit(), ConfigKit.getLongValue(ConfigKey.MybatisConfigKey.LIMIT, 10L)));
 
+        checkTime(query);
+
         Arrays.stream(Tools.toStrArray(SqlKeyword.filter(query.getAscs()))).forEach(o -> page.addOrder(OrderItem.asc(o)));
         Arrays.stream(Tools.toStrArray(SqlKeyword.filter(query.getDescs()))).forEach(o -> page.addOrder(OrderItem.desc(o)));
         return page;
     }
 
     /**
-     * Gets page *
+     * 时间检查: 开始时间不能大于结束时间
      *
-     * @param <T>    parameter
-     * @param params params
-     * @return the page
-     * @since 1.0.0
-     * @deprecated 请使用 {@link Condition#getPage(BaseQuery)}, 将在 2.0.0 删除
+     * @param query query
+     * @since 2024.2.0
      */
-    @NotNull
-    @Deprecated
-    public static <T> IPage<T> getPage(Map<String, Object> params) {
-        log.error("请使用 Condition#getPage(dev.dong4j.zeka.kernel.common.base.BaseQuery) 替换, 2.0.0 版本将彻底删除");
-
-        Query<?> query = new Query<>();
-        query.setPage(CollectionUtils.findValueOfType(params, Query.PAGE, Integer.class));
-        params.remove(Query.PAGE);
-        query.setLimit(CollectionUtils.findValueOfType(params, Query.LIMIT, Integer.class));
-        params.remove(Query.LIMIT);
-        query.setAscs(CollectionUtils.findValueOfType(params, Query.ASCS, String.class));
-        params.remove(Query.ASCS);
-        query.setDescs(CollectionUtils.findValueOfType(params, Query.DESCS, String.class));
-        params.remove(Query.DESCS);
-
-        query.setStartTime(CollectionUtils.findValueOfType(params, Query.START_TIME, Date.class));
-        params.remove(Query.START_TIME);
-        query.setEndTime(CollectionUtils.findValueOfType(params, Query.END_TIME, Date.class));
-        params.remove(Query.END_TIME);
-        return getPage(query);
+    public static void checkTime(@NotNull BaseQuery<?> query) {
+        if (query.getStartTime() != null && query.getEndTime() != null) {
+            BaseCodes.PARAM_VERIFY_ERROR.isTrue(query.getStartTime().before(query.getEndTime()), "开始时间必须在结束时间之前");
+        }
     }
 
     /**

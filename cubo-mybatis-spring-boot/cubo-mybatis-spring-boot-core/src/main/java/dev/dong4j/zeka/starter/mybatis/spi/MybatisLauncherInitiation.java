@@ -34,8 +34,8 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
                                         String appName,
                                         boolean isLocalLaunch) {
         return ChainMap.build(8)
-            // mybatis-plus
-            .put(ConfigKey.MybatisConfigKey.MAPPER_LOCATIONS, "classpath*:/mapper/*.xml")
+            // 支持 mappers 和里面的子目录, 包括 jar 中的 xml 文件
+            .put(ConfigKey.MybatisConfigKey.MAPPER_LOCATIONS, "classpath*:/mappers/**/*.xml")
             .put(ConfigKey.MybatisConfigKey.CONFIGURATION_CALL_SETTERS_ON_NULLS, ConfigDefaultValue.TRUE)
             .put(ConfigKey.MybatisConfigKey.CONFIGURATION_LOG_IMPL, "dev.dong4j.zeka.starter.mybatis.logger.NoLogOutImpl")
             .put(ConfigKey.MybatisConfigKey.CONFIGURATION_CACHE_ENABLED, ConfigDefaultValue.TRUE)
