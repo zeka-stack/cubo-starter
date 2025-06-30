@@ -12,6 +12,7 @@
 
     <artifactId>cubo-framework-spring-boot-starter</artifactId>
     <name>Cubo Combiner Spring Boot Starter</name>
+    <description>logsystem 和 launcher 的聚合组件</description>
 
     <dependencies>
         <dependency>

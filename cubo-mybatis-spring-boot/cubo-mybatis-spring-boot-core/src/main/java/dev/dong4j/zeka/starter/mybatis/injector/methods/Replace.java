@@ -14,6 +14,8 @@ import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
  */
 public class Replace extends AbstractInsertMethod {
 
+    private static final long serialVersionUID = 2783717166289508211L;
+
     /**
      * Replace
      *

@@ -1,9 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.core.enums.IEnum;
+import com.baomidou.mybatisplus.annotation.IEnum;
+import com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;

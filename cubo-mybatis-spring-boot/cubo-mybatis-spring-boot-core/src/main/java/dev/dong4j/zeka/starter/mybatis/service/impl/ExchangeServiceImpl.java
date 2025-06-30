@@ -211,6 +211,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
 
     /**
      * Update batch
+     * fixme-dong4j : (2025.06.30 20:31) [修复事务失效问题]
      *
      * @param dtos      dtos
      * @param batchSize batch size

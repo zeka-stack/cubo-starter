@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @RequiredArgsConstructor
 public class AbstractInsertMethod extends AbstractMethod {
+
+    private static final long serialVersionUID = -8858194763848035688L;
     /** Sql method */
     private final MybatisSqlMethod sqlMethod;
 

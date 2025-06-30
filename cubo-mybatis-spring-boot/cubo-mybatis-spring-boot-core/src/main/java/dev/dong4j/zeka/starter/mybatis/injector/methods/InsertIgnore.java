@@ -13,6 +13,8 @@ import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
  */
 public class InsertIgnore extends AbstractInsertMethod {
 
+    private static final long serialVersionUID = 7334973787192990572L;
+
     /**
      * Insert ignore
      *

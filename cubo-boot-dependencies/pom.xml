@@ -219,6 +219,11 @@
                 <artifactId>cubo-framework-spring-boot-starter</artifactId>
                 <version>${cubo-boot-dependencies.version}</version>
             </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-ssm-spring-boot-starter</artifactId>
+                <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
             <!--endregion-->
 
             <!--region logsystem-->
