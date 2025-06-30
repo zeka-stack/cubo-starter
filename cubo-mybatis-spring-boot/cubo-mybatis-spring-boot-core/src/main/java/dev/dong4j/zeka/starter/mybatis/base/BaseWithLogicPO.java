@@ -3,7 +3,7 @@ package dev.dong4j.zeka.starter.mybatis.base;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import dev.dong4j.zeka.kernel.common.enums.DeleteEnum;
+import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 import dev.dong4j.zeka.starter.mybatis.handler.TimeMetaObjectHandler;
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public abstract class BaseWithLogicPO<T extends Serializable, M extends Model<M>
     /** 逻辑删除标识: 逻辑已删除值(1); 逻辑未删除值(0) 默认为 0 */
     @TableLogic(value = "0", delval = "id")
     @TableField(value = DELETED)
-    private DeleteEnum deleted;
+    private DeletedEnum deleted;
 
     /**
      * Gets deleted *
@@ -38,7 +38,7 @@ public abstract class BaseWithLogicPO<T extends Serializable, M extends Model<M>
      * @since 1.0.0
      */
     @Override
-    public DeleteEnum getDeleted() {
+    public DeletedEnum getDeleted() {
         return this.deleted;
     }
 
@@ -50,7 +50,7 @@ public abstract class BaseWithLogicPO<T extends Serializable, M extends Model<M>
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
-    public M setDeleted(DeleteEnum deleted) {
+    public M setDeleted(DeletedEnum deleted) {
         this.deleted = deleted;
         return (M) this;
     }

@@ -1,8 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
 import dev.dong4j.zeka.kernel.common.mapstruct.Converter;
-import dev.dong4j.zeka.kernel.common.mapstruct.DeleteEnumConverter;
-import dev.dong4j.zeka.kernel.common.mapstruct.EnableEnumConverter;
+import dev.dong4j.zeka.kernel.common.mapstruct.DeletedEnumConverter;
+import dev.dong4j.zeka.kernel.common.mapstruct.EnabledEnumConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.EntityEnumConverter;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
@@ -24,8 +24,8 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(uses = {
     UserOuterWrapper.GenderEnumConverter.class,
-    DeleteEnumConverter.class,
-    EnableEnumConverter.class}
+    DeletedEnumConverter.class,
+    EnabledEnumConverter.class}
 )
 public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
 
@@ -45,8 +45,8 @@ public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumDescToValue"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter", "EnumDescToValue"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter", "EnumDescToValue"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumDescToValue"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumDescToValue"})
     UserDTO to(UserVO s);
 
     /**
@@ -59,8 +59,8 @@ public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumValueToDesc"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter", "EnumValueToDesc"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter", "EnumValueToDesc"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumValueToDesc"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumValueToDesc"})
     UserVO from(UserDTO t);
 
     /**

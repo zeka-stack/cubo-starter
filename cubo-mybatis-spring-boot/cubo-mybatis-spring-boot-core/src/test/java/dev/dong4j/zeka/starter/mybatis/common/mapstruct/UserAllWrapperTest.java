@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
-import dev.dong4j.zeka.kernel.common.enums.DeleteEnum;
-import dev.dong4j.zeka.kernel.common.enums.EnableEnum;
+import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
+import dev.dong4j.zeka.kernel.common.enums.EnabledEnum;
 import dev.dong4j.zeka.kernel.common.exception.BaseException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
@@ -38,8 +38,8 @@ class UserAllWrapperTest {
         Assertions.assertEquals(po.getGender(),
             EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(BaseException::new));
         Assertions.assertEquals(po.getEnable(),
-            EnumUtils.of(EnableEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new));
-        Assertions.assertEquals(po.getDeleted(), EnumUtils.of(DeleteEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new));
+            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new));
+        Assertions.assertEquals(po.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new));
     }
 
     /**
@@ -55,8 +55,8 @@ class UserAllWrapperTest {
         Assertions.assertEquals(vo.getGender(),
             EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(BaseException::new).getDesc());
         Assertions.assertEquals(vo.getEnable(),
-            EnumUtils.of(EnableEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new).getDesc());
-        Assertions.assertEquals(vo.getDeleted(), EnumUtils.of(DeleteEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new).getDesc());
+            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new).getDesc());
+        Assertions.assertEquals(vo.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new).getDesc());
     }
 
     /**

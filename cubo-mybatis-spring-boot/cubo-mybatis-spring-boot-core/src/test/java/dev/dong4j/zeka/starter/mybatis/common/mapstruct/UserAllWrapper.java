@@ -1,8 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.mapstruct.DeleteEnumConverter;
-import dev.dong4j.zeka.kernel.common.mapstruct.EnableEnumConverter;
+import dev.dong4j.zeka.kernel.common.mapstruct.DeletedEnumConverter;
+import dev.dong4j.zeka.kernel.common.mapstruct.EnabledEnumConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.EntityEnumConverter;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
@@ -25,8 +25,8 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(uses = {
     UserAllWrapper.GenderEnumConverter.class,
-    DeleteEnumConverter.class,
-    EnableEnumConverter.class}
+    DeletedEnumConverter.class,
+    EnabledEnumConverter.class}
 )
 public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
     /**
@@ -49,8 +49,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumDescToValue"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter", "EnumDescToValue"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter", "EnumDescToValue"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumDescToValue"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumDescToValue"})
     UserDTO dto(UserVO vo);
 
     /**
@@ -66,8 +66,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumValueToDesc"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter", "EnumValueToDesc"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter", "EnumValueToDesc"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumValueToDesc"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumValueToDesc"})
     UserVO vo(UserDTO dto);
 
     /**
@@ -86,8 +86,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
     @Mapping(target = "updateTime", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter"})
     User po(UserDTO dto);
 
     /**
@@ -104,8 +104,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter"})
     UserDTO dto(User po);
 
     /**
@@ -121,8 +121,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter"})
     UserVO vo(User po);
 
     /**
@@ -137,8 +137,8 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
     @Mapping(target = "updateTime", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
-    @Mapping(target = "enable", qualifiedByName = {"EnableEnumConverter"})
-    @Mapping(target = "deleted", qualifiedByName = {"DeleteEnumConverter"})
+    @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter"})
+    @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter"})
     User po(UserVO vo);
 
     /**
