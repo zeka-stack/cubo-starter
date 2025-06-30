@@ -27,6 +27,7 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
      * @param appName       app name
      * @param isLocalLaunch is local launch
      * @return the map
+     * @see dev.dong4j.zeka.starter.mybatis.logger.NoLogOutImpl
      * @since 1.0.0
      */
     @Override

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.App;
@@ -33,6 +34,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -91,26 +93,59 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.0.0
      */
     @Bean
-    @ConditionalOnMissingBean(MybatisPlusInterceptor.class)
+    @ConditionalOnMissingBean(IllegalSQLInnerInterceptor.class)
     @Profile(value = {App.ENV_NOT_PROD})
-    @ConditionalOnProperty(
-        value = ConfigKey.MYBATIS_ENABLE_ILLEGAL_SQL_INTERCEPTOR,
-        havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true
-    )
-    public MybatisPlusInterceptor mybatisPlusInterceptor(@NotNull MybatisProperties mybatisProperties) {
-        final MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        // 非法 SQL 语句拦截器: SQL 严格模式
-        mybatisPlusInterceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());
-        // SQL执行分析插件, 拦截一些整表操作,在生产环境最好关闭.
-        mybatisPlusInterceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
+    @ConditionalOnProperty(value = ConfigKey.MYBATIS_ENABLE_ILLEGAL_SQL_INTERCEPTOR,
+        havingValue = ConfigDefaultValue.TRUE_STRING)
+    public IllegalSQLInnerInterceptor illegalSqlInterceptor() {
+        return new IllegalSQLInnerInterceptor();
+    }
 
-        // 分页插件, 不需要设置方言, mybatis-plus 自动判断
-        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
+    /**
+     * SQL执行分析插件, 拦截一些整表操作,在生产环境最好关闭.
+     *
+     * @return the sql explain interceptor
+     * @since 1.0.0
+     */
+    @Bean
+    @ConditionalOnMissingBean(BlockAttackInnerInterceptor.class)
+    @Profile(value = {App.ENV_NOT_PROD})
+    @ConditionalOnProperty(value = ConfigKey.MYBATIS_ENABLE_SQL_EXPLAIN_INTERCEPTOR,
+        havingValue = ConfigDefaultValue.TRUE_STRING,
+        matchIfMissing = true)
+    public BlockAttackInnerInterceptor sqlExplainInterceptor() {
+        return new BlockAttackInnerInterceptor();
+    }
+
+    /**
+     * 分页插件, 不需要设置方言, mybatis-plus 自动判断
+     *
+     * @param mybatisProperties mybatis properties
+     * @return the pagination interceptor
+     * @since 1.0.0
+     */
+    @Bean
+    @ConditionalOnMissingBean(PaginationInnerInterceptor.class)
+    public PaginationInnerInterceptor paginationInterceptor(@NotNull MybatisProperties mybatisProperties) {
+        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
         // 设置默认最大分页数 (zeka-stack.mybatis.single-page-limit)
-        paginationInnerInterceptor.setMaxLimit(mybatisProperties.getSinglePageLimit());
-        mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
-        return mybatisPlusInterceptor;
+        paginationInterceptor.setMaxLimit(mybatisProperties.getSinglePageLimit());
+        return paginationInterceptor;
+    }
+
+    /**
+     * Mybatis plus interceptor
+     *
+     * @param interceptors interceptors
+     * @return the mybatis plus interceptor
+     * @since 1.0.0
+     */
+    @Bean
+    @ConditionalOnBean(InnerInterceptor.class)
+    public MybatisPlusInterceptor mybatisPlusInterceptor(List<InnerInterceptor> interceptors) {
+        MybatisPlusInterceptor plusInterceptor = new MybatisPlusInterceptor();
+        interceptors.forEach(plusInterceptor::addInnerInterceptor);
+        return plusInterceptor;
     }
 
     /**

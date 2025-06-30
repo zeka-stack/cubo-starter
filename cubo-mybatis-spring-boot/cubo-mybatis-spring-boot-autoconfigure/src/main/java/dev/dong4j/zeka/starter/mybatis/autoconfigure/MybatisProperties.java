@@ -25,8 +25,8 @@ public class MybatisProperties extends ZekaProperties {
     private boolean enableLog;
     /** 输出到日志的 sql 是否格式化 */
     private boolean sqlFormat = false;
-    /** 超过 300 毫秒的 sql 记录日志 */
-    private Long performmaxTime = 300L;
+    /** 超过 1000 毫秒的 sql 记录日志 */
+    private Long performmaxTime = 1000L;
     /** 分页默认起始页 */
     private Long page;
     /** 分页默认大小 */
