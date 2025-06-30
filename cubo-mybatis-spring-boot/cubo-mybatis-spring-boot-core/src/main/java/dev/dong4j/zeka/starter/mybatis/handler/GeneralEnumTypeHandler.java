@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
+import dev.dong4j.zeka.kernel.common.enums.DeleteEnum;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
@@ -218,7 +219,18 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
      */
     private E valueOf(@NotNull Class<E> enumClass, Object value) {
         E[] es = enumClass.getEnumConstants();
-        return Arrays.stream(es).filter((e) -> this.equalsValue(value, this.getValue(e))).findAny().orElse(null);
+        if (DeleteEnum.class.getName().equals(enumClass.getName()) && value instanceof Number) {
+            // 如果是数值类型, 则应该是使用了大于0表示已删除的方式来处理 deleted 字段, 因此需要特殊处理
+            if (new BigDecimal(String.valueOf(value)).compareTo(BigDecimal.ZERO) == 0) {
+                // 如果等于 0 表示未删除, 否则为已删除(不考虑小于0的情况))
+                value = DeleteEnum.N.getValue();
+            } else {
+                value = DeleteEnum.Y.getValue();
+            }
+        }
+        // 其他枚举走原有逻辑
+        Object finalValue = value;
+        return Arrays.stream(es).filter((e) -> this.equalsValue(finalValue, this.getValue(e))).findAny().orElse(null);
     }
 
     /**

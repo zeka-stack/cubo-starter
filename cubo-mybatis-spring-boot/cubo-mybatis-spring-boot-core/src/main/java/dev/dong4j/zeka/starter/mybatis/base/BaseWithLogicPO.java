@@ -27,7 +27,7 @@ public abstract class BaseWithLogicPO<T extends Serializable, M extends Model<M>
     private static final long serialVersionUID = 7951121625400869460L;
 
     /** 逻辑删除标识: 逻辑已删除值(1); 逻辑未删除值(0) 默认为 0 */
-    @TableLogic
+    @TableLogic(value = "0", delval = "id")
     @TableField(value = DELETED)
     private DeleteEnum deleted;
 

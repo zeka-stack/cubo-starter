@@ -26,8 +26,8 @@ public abstract class BaseExtendPO<T extends Serializable, M extends Model<M>> e
     private static final long serialVersionUID = 7951121625400869460L;
 
     /** 逻辑删除标识: 逻辑已删除值(1); 逻辑未删除值(0) 默认为 0 */
-    @TableLogic
     @TableField(value = DELETED)
+    @TableLogic(value = "0", delval = "id")
     private DeleteEnum deleted;
     /** 创建时间 (公共字段) */
     @TableField(value = CREATE_TIME, fill = FieldFill.INSERT)
