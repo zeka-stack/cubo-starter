@@ -24,6 +24,7 @@
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <druid.version>1.2.4</druid.version>
+        <rocketmq-spring-boot-starter.version>2.2.3</rocketmq-spring-boot-starter.version>
     </properties>
 
     <!-- 统一管理依赖 -->
@@ -313,6 +314,11 @@
                 <groupId>dev.dong4j</groupId>
                 <artifactId>cubo-messaging-kafka-spring-boot-starter</artifactId>
                 <version>${cubo-boot-dependencies.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-spring-boot-starter.version}</version>
             </dependency>
             <!--endregion-->
 
