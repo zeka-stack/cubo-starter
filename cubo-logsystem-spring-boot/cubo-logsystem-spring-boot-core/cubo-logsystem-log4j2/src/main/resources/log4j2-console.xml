@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF" monitorInterval="10" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin">
+<Configuration status="OFF" monitorInterval="10" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin"
+               xmlns:xi="http://www.w3.org/2001/XInclude">
     <Properties>
         <Property name="SHOW_LOG_LOCATION">true</Property>
         <Property name="SHOW_LOG_LOCATION_LAYOUT">%location{.}</Property>
@@ -160,6 +161,7 @@
             </Routes>
         </Routing>
 
+        <xi:include href="sql-appender.xml"/>
     </Appenders>
 
     <Loggers>
@@ -244,6 +246,9 @@
         <Logger name="dev.dong4j.zeka.starter.mongo.index.CustomMongoPersistentEntityIndexResolver" level="ERROR"
                 includeLocation="${sys:SHOW_LOG_LOCATION}"/>
 
+        <Logger name="sql.timing" level="WARN" additivity="false">
+            <AppenderRef ref="SQL_FILE"/>
+        </Logger>
         <Logger name="dev.dong4j.zeka" level="DEBUG" additivity="false" includeLocation="${sys:SHOW_LOG_LOCATION}">
             <AppenderRef ref="CONSOLE"/>
             <AppenderRef ref="ROUTING_APPENDER"/>

@@ -22,6 +22,7 @@ import dev.dong4j.zeka.starter.mybatis.handler.GeneralEnumTypeHandler;
 import dev.dong4j.zeka.starter.mybatis.handler.MetaHandlerChain;
 import dev.dong4j.zeka.starter.mybatis.handler.MetaObjectChain;
 import dev.dong4j.zeka.starter.mybatis.handler.SerializableIdTypeHandler;
+import dev.dong4j.zeka.starter.mybatis.handler.SqlExecuteTimeoutHandler;
 import dev.dong4j.zeka.starter.mybatis.handler.TenantIdMetaObjectHandler;
 import dev.dong4j.zeka.starter.mybatis.handler.TimeMetaObjectHandler;
 import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlInjector;
@@ -173,14 +174,29 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @Profile(value = {App.ENV_NOT_PROD})
     @ConditionalOnProperty(
         value = ConfigKey.MybatisConfigKey.MYBATIS_ENABLE_LOG,
-        havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true
+        havingValue = ConfigDefaultValue.TRUE_STRING
     )
     public PerformanceInterceptor performanceInterceptor(MybatisProperties mybatisProperties) {
         PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();
         performanceInterceptor.setFormat(mybatisProperties.isSqlFormat());
         performanceInterceptor.setMaxTime(mybatisProperties.getPerformmaxTime());
+        performanceInterceptor.setMaxLength(mybatisProperties.getMaxLength());
         return performanceInterceptor;
+    }
+
+    /**
+     * SQL执行超时处理程序: 写入单独的 sql.log
+     *
+     * @return <p>Description:异步监听日志事件</p>
+     */
+    @Bean
+    @ConditionalOnProperty(
+        value = ConfigKey.MybatisConfigKey.APPEND_SQL_FILE,
+        havingValue = ConfigDefaultValue.TRUE_STRING
+    )
+    @ConditionalOnMissingBean
+    public SqlExecuteTimeoutHandler sqlExecuteTimeoutHandler() {
+        return new SqlExecuteTimeoutHandler();
     }
 
     /**

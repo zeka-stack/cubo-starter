@@ -1,0 +1,24 @@
+<!-- 专门记录 SQL 日志 -->
+<RollingRandomAccessFile name="SQL_FILE"
+                         fileName="${LOG_BASE_FOLDER}/sql.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/sql-%d{HH}.%i.log.gz"
+                         immediateFlush="false">
+    <PatternLayout charset="${LOG_CHARSET}">
+        <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+            <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+        </MarkerPatternSelector>
+    </PatternLayout>
+    <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBaseDTriggeringPolicy size="${LOG_FILE_MAX_SIZE}"/>
+    </Policies>
+    <DefaultRolloverStrategy max="${LOG_FILE_TOTAL_SIZE_CAP}">
+        <Delete basePath="${LOG_BASE_FOLDER}" maxDepth="2">
+            <IfFileName glob="*/sql-*.log.gz"/>
+            <IfLastModified age="${LOG_FILE_MAX_HISTORY}d"/>
+        </Delete>
+    </DefaultRolloverStrategy>
+</RollingRandomAccessFile>

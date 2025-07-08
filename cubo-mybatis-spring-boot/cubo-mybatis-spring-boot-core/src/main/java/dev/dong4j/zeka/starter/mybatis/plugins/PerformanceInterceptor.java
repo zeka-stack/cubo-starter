@@ -71,6 +71,9 @@ public class PerformanceInterceptor implements Interceptor {
     /** SQL 是否格式化 */
     @Setter
     private boolean format;
+    /** 输出的最长 sql */
+    @Setter
+    private int maxLength;
     /** Oracle get original sql method */
     private Method oracleGetOriginalSqlMethod;
     /** Druid get sql method */
@@ -153,24 +156,17 @@ public class PerformanceInterceptor implements Interceptor {
         if (originalSql == null) {
             originalSql = statement.toString();
         }
-        originalSql = originalSql.replaceAll("[\\s]+", StringPool.SPACE);
-        int index = this.indexOfSqlStart(originalSql);
-        if (index > 0) {
-            originalSql = originalSql.substring(index);
-        }
-
         // 计算执行 SQL 耗时
         long start = SystemClock.now();
         Object result = invocation.proceed();
         long timing = SystemClock.now() - start;
-
-        // 格式化 SQL 打印执行结果
-        return this.format(invocation, originalSql, result, timing);
+        final String formatSql = format(originalSql);
+        String displayedSql = formatSql.length() > maxLength ? formatSql.substring(0, maxLength) + "... [完整SQL已截断]" : originalSql;
+        return this.format(invocation, displayedSql, result, timing);
     }
 
     /**
      * Format object
-     * todo-dong4j : (2021.09.26 09:43) [处理 SqlExecuteTimeoutEvent 事件, 持久化慢 SQL 日志]
      *
      * @param invocation  invocation
      * @param originalSql original sql
@@ -215,6 +211,22 @@ public class PerformanceInterceptor implements Interceptor {
     }
 
     /**
+     * 格式化 SQL（去多余空格 + 截取有效部分）
+     */
+    private String format(String sql) {
+        if (sql == null || sql.trim().isEmpty()) {
+            return "";
+        }
+        sql = sql.replaceAll("\\s+", " ").trim();
+        int startIndex = indexOfSqlStart(sql);
+        if (startIndex > 0) {
+            sql = sql.substring(startIndex);
+        }
+        return sql;
+    }
+
+
+    /**
      * Plugin object
      *
      * @param target target
@@ -239,11 +251,15 @@ public class PerformanceInterceptor implements Interceptor {
     public void setProperties(@NotNull Properties prop) {
         String maxTime = prop.getProperty("maxTime");
         String format = prop.getProperty("format");
+        String maxLength = prop.getProperty("maxLength");
         if (StringUtils.isNotBlank(maxTime)) {
             this.maxTime = Long.parseLong(maxTime);
         }
         if (StringUtils.isNotBlank(format)) {
             this.format = Boolean.parseBoolean(format);
+        }
+        if (StringUtils.isNotBlank(maxLength)) {
+            this.maxLength = Integer.parseInt(maxLength);
         }
     }
 
