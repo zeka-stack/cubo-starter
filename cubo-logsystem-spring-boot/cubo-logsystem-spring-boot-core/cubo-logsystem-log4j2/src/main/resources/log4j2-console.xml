@@ -22,8 +22,6 @@
 
         <!--@formatter:off-->
         <property name="CONSOLE_LOG_PATTERN">%clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} %clr{[${sys:LOG_LEVEL_PATTERN}]} %clr{-}{faint} %clr{[%15.15t]}{faint} ${sys:SHOW_LOG_LOCATION_LAYOUT} %clr{::}{faint} ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</property>
-        <!--@formatter:on-->
-        <!--@formatter:off-->
         <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} - [%15.15t] %c{1.} :: ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
         <!--@formatter:on-->
     </Properties>
