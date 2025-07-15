@@ -14,6 +14,13 @@ import dev.dong4j.zeka.starter.logsystem.Constants;
 import dev.dong4j.zeka.starter.logsystem.handler.AdditionalProcessor;
 import dev.dong4j.zeka.starter.logsystem.handler.LogFileProcessor;
 import dev.dong4j.zeka.starter.logsystem.handler.PatternProcessor;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -40,14 +47,6 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ResourceUtils;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
 
 import static org.springframework.boot.context.logging.LoggingApplicationListener.CONFIG_PROPERTY;
 
@@ -411,7 +410,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      *
      * @since 1.0.0
      */
-    @SuppressWarnings("checkstyle:Regexp")
+    @SuppressWarnings({"checkstyle:Regexp", "DuplicatedCode"})
     private void printLogConfigInfo() {
 
         if (ConfigKit.isDebugModel()) {

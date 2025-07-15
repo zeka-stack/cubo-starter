@@ -8,12 +8,8 @@
 <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
 <Configuration status="OFF" monitorInterval="30" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin"
                xmlns:xi="http://www.w3.org/2001/XInclude">
-    <Properties>
-        <include file="properties.xml"/>
-        <!--@formatter:off-->
-        <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} - [%15.15t] %c{1.} :: ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
-        <!--@formatter:on-->
-    </Properties>
+
+    <xi:include href="properties.xml"/>
 
     <CustomLevels>
         <!-- 注意: intLevel 值越小, 级别越高 see: org.apache.logging.log4j.core.filter.LevelRangeFilter -->
@@ -30,8 +26,85 @@
     </Appenders>
 
     <Loggers>
-        <!-- 使用 Log4j2 原生 include -->
-        <include file="loggers.xml"/>
+        <!-- ohter -->
+        <Logger name="com.netflix.http4.ConnectionPoolCleaner" level="WARN"/>
+        <Logger name="com.ulisesbocchio.jasyptspringboot" level="INFO"/>
+        <Logger name="springfox.documentation" level="WARN"/>
+        <Logger name="io.swagger.models.parameters.AbstractSerializableParameter" level="ERROR"/>
+        <Logger name="org.thymeleaf" level="WARN"/>
+        <Logger name="com.ulisesbocchio.jasyptspringboot.EncryptablePropertySourceConverter" level="WARN"/>
+        <!-- mybatis loggers -->
+        <Logger name="com.baomidou.mybatisplus.core.MybatisConfiguration" level="INFO"/>
+        <!-- 注册到 Spring boot admin -->
+        <Logger name="de.codecentric.boot.admin.client.registration.ApplicationRegistrator" level="ERROR"/>
+        <!-- sql loggers -->
+        <Logger name="java.sql.Connection" level="INFO"/>
+        <Logger name="java.sql.Statement" level="INFO"/>
+        <Logger name="java.sql.PreparedStatement" level="INFO"/>
+        <Logger name="java.sql.ResultSet" level="INFO"/>
+        <!-- General Apache libraries -->
+        <Logger name="org.apache" level="WARN"/>
+        <Logger name="reactor.util" level="INFO"/>
+        <!-- dubbo & nacos-->
+        <Logger name="com.zaxxer" level="INFO"/>
+        <Logger name="com.alibaba.dubbo.remoting.transport.DecodeHandler" level="WARN"/>
+        <Logger name="com.alibaba.dubbo.monitor.dubbo.DubboMonitor" level="OFF"/>
+        <Logger name="com.alibaba.dubbo.remoting.exchange.support.header.HeartbeatHandler" level="WARN"/>
+        <Logger name="com.alibaba.dubbo.remoting.exchange.support.header.HeartBeatTask" level="WARN"/>
+        <Logger name="com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry" level="WARN"/>
+        <Logger name="com.alibaba.dubbo.config.AbstractConfig" level="ERROR"/>
+        <Logger name="com.alibaba.nacos.client" level="WARN"/>
+        <Logger name="druid.sql" level="WARN"/>
+        <Logger name="io.netty" level="INFO"/>
+        <Logger name="io.undertow.request.security" level="WARN"/>
+        <Logger name="org.xnio.nio" level="WARN"/>
+        <Logger name="org.mongodb.driver" level="INFO"/>
+        <Logger name="org.hibernate.validator.internal" level="WARN"/>
+        <Logger name="org.reflections.Reflections" level="ERROR"/>
+        <Logger name="com.alibaba.cloud.dubbo.registry" level="ERROR"/>
+        <Logger name="org.apache.dubbo.config" level="ERROR"/>
+        <Logger name="com.alibaba.cloud.dubbo.metadata.repository" level="ERROR"/>
+        <Logger name="org.apache.dubbo.common.logger.log4j2" level="ERROR"/>
+        <Logger name="org.apache.dubbo.registry.integration" level="ERROR"/>
+        <!-- redis -->
+        <Logger name="io.lettuce" level="INFO"/>
+        <!-- spring -->
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="org.springframework.core.log.CompositeLog" level="WARN"/>
+        <Logger name="org.springframework.context.support" level="WARN"/>
+        <Logger name="org.springframework.context.annotation" level="WARN"/>
+        <Logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="ERROR"/>
+        <Logger name="org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator" level="ERROR"/>
+        <Logger name="org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver" level="ERROR"/>
+        <Logger name="org.springframework.data.convert.CustomConversions" level="ERROR"/>
+        <Logger name="com.mongodb.diagnostics" level="WARN"/>
+        <!-- 开启 rest mapper 日志-->
+        <Logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="TRACE"/>
+        <!-- spring boot -->
+        <Logger name="org.springframework.boot.actuate.endpoint" level="WARN"/>
+        <Logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="ERROR"/>
+        <Logger name="org.springframework.statemachine.support.LifecycleObjectSupport" level="ERROR"/>
+        <!-- spring cloud -->
+        <Logger name="org.springframework.cloud.gateway.filter.LoadBalancerClientFilter" level="WARN"/>
+        <Logger name="org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter" level="WARN"/>
+        <Logger name="org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertyResolver" level="ERROR"/>
+        <Logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="ERROR"/>
+
+        <!-- springfox -->
+        <Logger name="springfox.documentation.spring.web.readers.parameter.ParameterDataTypeReader" level="ERROR"/>
+        <!-- Nacos -->
+        <Logger name="com.alibaba.cloud.nacos.client.NacosPropertySourceBuilder" level="DEBUG"/>
+        <Logger name="com.alibaba.nacos.common.remote.client" level="WARN"/>
+        <!-- 每次更新元数据时输出 info 日志 -->
+        <Logger name="com.alibaba.cloud.dubbo.autoconfigure.DubboServiceDiscoveryAutoConfiguration" level="WARN"/>
+        <!-- Lettuce -->
+        <Logger name="io.lettuce.core.protocol" level="WARN"/>
+        <Logger name="org.springframework.integration.redis.util" level="ERROR"/>
+        <!-- mongo -->
+        <Logger name="index.mongo.io.github.atom.kernel.CustomMongoPersistentEntityIndexCreator" level="ERROR"/>
+        <Logger name="index.mongo.io.github.atom.kernel.CustomMongoPersistentEntityIndexResolver" level="ERROR"/>
+        <!-- seata -->
+        <Logger name="io.seata.rm.AbstractRMHandler" level="ERROR"/>
 
         <Logger name="sql.timing" level="WARN" additivity="false">
             <AppenderRef ref="SQL_FILE"/>

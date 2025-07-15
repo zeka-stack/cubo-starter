@@ -2,7 +2,24 @@
 <Configuration status="OFF" monitorInterval="10" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin"
                xmlns:xi="http://www.w3.org/2001/XInclude">
     <Properties>
-        <include file="properties.xml"/>
+        <!-- (各应用需要修改) 日志文件本地存放目录路径 建议各个环境跟生产环境统一起来,方便维护 -->
+        <property name="LOG_BASE_FOLDER">${sys:LOG_PATH}/${sys:APP_NAME}</property>
+        <!-- 日志文件最小切割单位 值不做强制要求, 建议100MB -->
+        <property name="LOG_FILE_MAX_SIZE">${sys:LOG_FILE_MAX_SIZE}</property>
+        <property name="LOG_FILE_MAX_HISTORY">${sys:LOG_FILE_MAX_HISTORY}</property>
+        <property name="LOG_FILE_TOTAL_SIZE_CAP">${sys:LOG_FILE_TOTAL_SIZE_CAP}</property>
+        <!-- 必须并强制遵守 日志文件的编码 -->
+        <property name="LOG_CHARSET">UTF-8</property>
+        <Property name="SHOW_LOG_LOCATION">false</Property>
+        <Property name="SHOW_LOG_LOCATION_LAYOUT">%location{.}</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="MARKER_PATTERN">%m%n</Property>
+        <Property name="ROLLING_FILE_NAME_PATTERN">%d{yyyyMMdd.HH}.%i.log.gz</Property>
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+        <!-- <property name="DELETE_FILE_AGE">${sys:DELETE_FILE_AGE_VALUE}</property> -->
+        <Property name="ROLLING_FILE_NAME_PATTERN">%d{yyyyMMdd.HH}.%i.log.gz</Property>
+
         <!--@formatter:off-->
         <property name="CONSOLE_LOG_PATTERN">%clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} %clr{[${sys:LOG_LEVEL_PATTERN}]} %clr{-}{faint} %clr{[%15.15t]}{faint} ${sys:SHOW_LOG_LOCATION_LAYOUT} %clr{::}{faint} ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</property>
         <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} - [%15.15t] %c{1.} :: ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>

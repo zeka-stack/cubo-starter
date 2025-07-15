@@ -65,7 +65,7 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
         MDC.put("env", "本地开发");
         LogAppenderType appenderType = LogAppenderType.CONSOLE;
 
-        // docker 启动方式: atom-maven-plugin/atom-container-maven-plugin/docker/Dockerfile
+        // docker 启动方式: arco-maven-plugin/arco-container-maven-plugin/docker/Dockerfile
         final String startType = System.getProperty(App.START_TYPE);
         if (App.START_DOCKER.equals(startType)) {
             MDC.put("env", "Docker 启动");
@@ -109,14 +109,21 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
     }
 
     /**
-     * 设置日志配置文件中的变量, 从配置文件中读取, 有则设置, 没有则不设置, 将使用日志配置文件中的默认配置
+     * 设置日志配置文件中的 APP_NAME, 如果配置了 zeka-stack.logging.file.path 且是相对路径 (不是以 / 开头或者 ./ 开头), APP_NAME 就设置为空字符串
+     * 这样就不会将日志写入到应用名目录中(因为本身已经使用相对路径, 说明是能够确认日志所属的应用的)
      *
      * @since 1.0.0
      */
     private void setLogAppName() {
-        String applicationName = ConfigKit.getProperty(this.environment, ConfigKey.SpringConfigKey.APPLICATION_NAME);
+        final String filePath = ConfigKit.getProperty(this.environment, ConfigKey.LogSystemConfigKey.LOG_FILE_PATH);
+        if (StringUtils.isNotBlank(filePath) && (filePath.startsWith("./") || !filePath.startsWith("/"))) {
+            this.setSystemProperty("", Constants.APP_NAME);
+            return;
+        }
+
+        String applicationName = ConfigKit.getProperty(this.environment, ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
         if (StringUtils.isBlank(applicationName)) {
-            applicationName = this.environment.getProperty(ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
+            applicationName = this.environment.getProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME);
         }
         // zeka-stack.logging.app-name
         this.setSystemProperty(StringUtils.isBlank(applicationName) ? "Please-Inherit-ZekaStarter" : applicationName, Constants.APP_NAME);

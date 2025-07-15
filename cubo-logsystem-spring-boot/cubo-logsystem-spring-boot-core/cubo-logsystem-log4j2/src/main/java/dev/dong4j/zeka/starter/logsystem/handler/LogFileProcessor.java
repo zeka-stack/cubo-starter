@@ -9,12 +9,11 @@ import dev.dong4j.zeka.starter.logsystem.AbstractPropertiesProcessor;
 import dev.dong4j.zeka.starter.logsystem.Constants;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
 import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
+import java.io.File;
 import lombok.Getter;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.logging.LoggingSystemProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.io.File;
 
 /**
  * <p>Description: zeka-stack.logging.file 配置处理</p>
@@ -69,13 +68,18 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         this.name = tempName;
         this.path = FileUtils.toPath(tempPath);
 
+        String appName = ConfigKit.getProperty(environment, ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
+        if (StringUtils.isBlank(appName)) {
+            appName = ConfigKit.getProperty(environment, ConfigKey.SpringConfigKey.APPLICATION_NAME);
+        }
+
+        if (tempPath.startsWith("./") || !tempPath.startsWith("/")) {
+            appName = "";
+        }
+
         JustOnceLogger.printOnce(LogFileProcessor.class.getName(),
             "logging file: "
-                + FileUtils.appendPath(this.path,
-                ConfigKit.getProperty(environment,
-                    ConfigKey.SpringConfigKey.APPLICATION_NAME),
-                this.name));
-
+                + FileUtils.appendPath(this.path, appName, this.name));
     }
 
     /**
