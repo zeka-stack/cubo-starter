@@ -1,0 +1,22 @@
+<!-- debug 及以上所有日志单独输出, 线上开启 debug 日志排查完问题后, 修改日志等级为 INFO/WARN/ERROR, 最后删除 debug.log 文件 -->
+<RollingRandomAccessFile name="DEBUG_FILE"
+                         fileName="${LOG_BASE_FOLDER}/debug.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/debug-${sys:ROLLING_FILE_NAME_PATTERN}"
+                         immediateFlush="false">
+    <PatternLayout charset="${LOG_CHARSET}">
+        <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+            <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+        </MarkerPatternSelector>
+    </PatternLayout>
+    <Filters>
+        <!-- 全量输出 DEBUG 及以上级别的日志 -->
+        <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+    </Filters>
+    <Policies>
+        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+        <SizeBaseDTriggeringPolicy size="${LOG_FILE_MAX_SIZE}"/>
+    </Policies>
+</RollingRandomAccessFile>

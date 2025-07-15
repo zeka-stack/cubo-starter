@@ -1,0 +1,80 @@
+<!-- 根据 threadlocal 中是否存在特定的值来路由日志存储到哪个文件 https://logging.apache.org/log4j/log4j-2.2/faq.html -->
+<Routing name="ROUTING_APPENDER">
+    <Routes pattern="$${ctx:ROUTING_APPENDER_KEY}">
+        <!-- 单独存储 agent service 的响应日志 -->
+        <Route key="AGENT_SERVICE">
+            <RollingFile name="AGENT_FILE"
+                         fileName="${LOG_BASE_FOLDER}/agent.service.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/agent.service.log-${sys:ROLLING_FILE_NAME_PATTERN}">
+                <PatternLayout charset="${LOG_CHARSET}">
+                    <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+                        <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+                    </MarkerPatternSelector>
+                </PatternLayout>
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                    <SizeBasedTriggeringPolicy size="10 MB"/>
+                </Policies>
+
+                <Filters>
+                    <!-- 只保留 TRACE 级别日志, DEBUG 及以上日志全拒绝 -->
+                    <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+                    <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+                </Filters>
+            </RollingFile>
+        </Route>
+        <!-- 单独存储网关的路由日志 -->
+        <Route key="GATEWAY">
+            <RollingFile name="GATEWAY_FILE"
+                         fileName="${LOG_BASE_FOLDER}/gateway.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/gateway.log-${sys:ROLLING_FILE_NAME_PATTERN}">
+                <PatternLayout charset="${LOG_CHARSET}">
+                    <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+                        <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+                    </MarkerPatternSelector>
+                </PatternLayout>
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                    <SizeBasedTriggeringPolicy size="10 MB"/>
+                </Policies>
+
+                <Filters>
+                    <!-- 只保留 TRACE 级别日志, DEBUG 及以上日志全拒绝 -->
+                    <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+                    <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+                </Filters>
+            </RollingFile>
+        </Route>
+        <!-- 单独存储 REST 的请求响应日志 -->
+        <Route key="REST">
+            <RollingFile name="REST_FILE"
+                         fileName="${LOG_BASE_FOLDER}/rest.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/rest.log-${sys:ROLLING_FILE_NAME_PATTERN}">
+                <PatternLayout charset="${LOG_CHARSET}">
+                    <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+                        <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+                        <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+                    </MarkerPatternSelector>
+                </PatternLayout>
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                    <SizeBasedTriggeringPolicy size="10 MB"/>
+                </Policies>
+
+                <Filters>
+                    <!-- 只保留 TRACE 级别日志, DEBUG 及以上日志全拒绝 -->
+                    <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+                    <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+                </Filters>
+            </RollingFile>
+        </Route>
+    </Routes>
+</Routing>

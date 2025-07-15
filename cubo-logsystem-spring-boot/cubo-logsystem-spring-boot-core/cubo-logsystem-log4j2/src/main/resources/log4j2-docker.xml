@@ -6,12 +6,13 @@
 <!-- 5. 如果将日志等级设置为 trace, 会将 agent service, rest api, gateway 服务中特定阶段的 trace 日志分别输出 agent.service.log, rest.log 和 gateway.log 文件, 但不会输出到 all.log 和 error.log 中 -->
 <!-- status="OFF", 可以去掉, 它的含义为是否记录log4j2本身的event信息, 默认是OFF -->
 <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
-<Configuration status="OFF" monitorInterval="30" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin"
+<Configuration status="OFF" monitorInterval="30" shutdownHook="disable"
                xmlns:xi="http://www.w3.org/2001/XInclude">
     <Properties>
         <include file="properties.xml"/>
         <!--@formatter:off-->
-        <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} - [%15.15t] %c{1.} :: ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <property name="CONSOLE_LOG_PATTERN">c %clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} %clr{[${sys:LOG_LEVEL_PATTERN}]} %clr{-}{faint} %clr{[%15.15t]}{faint} ${sys:SHOW_LOG_LOCATION_LAYOUT} %clr{::}{faint} ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</property>
+        <Property name="FILE_LOG_PATTERN">f %d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} - [%15.15t] %c{1.} :: ${MARKER_PATTERN}${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
         <!--@formatter:on-->
     </Properties>
 
@@ -21,6 +22,7 @@
     </CustomLevels>
 
     <Appenders>
+        <xi:include href="appender-console.xml"/>
         <xi:include href="appender-file-all.xml"/>
         <xi:include href="appender-file-trace.xml"/>
         <xi:include href="appender-file-debug.xml"/>
@@ -33,24 +35,22 @@
         <!-- 使用 Log4j2 原生 include -->
         <include file="loggers.xml"/>
 
+        <!-- 对包进行更详细的配置 -->
         <Logger name="sql.timing" level="WARN" additivity="false">
             <AppenderRef ref="SQL_FILE"/>
         </Logger>
-        <!-- 对包进行更详细的配置 -->
         <!-- additivity表示是否追加,防止重复,因为root已经接收过一次了 -->
-        <Logger name="dev.dong4j.zeka" level="INFO" additivity="false">
+        <Logger name="io.github.atom" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
             <AppenderRef ref="ROUTING_APPENDER"/>
-            <AppenderRef ref="ALL_FILE"/>
-            <AppenderRef ref="DEBUG_FILE"/>
-            <AppenderRef ref="TRACE_FILE"/>
-            <AppenderRef ref="ERROR_FILE"/>
         </Logger>
-        <Root level="WARN">
-            <AppenderRef ref="ROUTING_APPENDER"/>
+        <Root level="DEBUG">
+            <AppenderRef ref="CONSOLE"/>
             <AppenderRef ref="ALL_FILE"/>
-            <AppenderRef ref="DEBUG_FILE"/>
-            <AppenderRef ref="TRACE_FILE"/>
             <AppenderRef ref="ERROR_FILE"/>
+            <AppenderRef ref="DEBUG_FILE"/>
+            <AppenderRef ref="ROUTING_APPENDER"/>
         </Root>
     </Loggers>
+
 </Configuration>

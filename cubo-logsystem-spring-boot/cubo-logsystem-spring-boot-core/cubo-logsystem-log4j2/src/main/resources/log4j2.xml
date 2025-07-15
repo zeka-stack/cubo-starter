@@ -13,7 +13,9 @@
         <!--@formatter:on-->
     </Properties>
 
-    <xi:include href="appender.xml"/>
+    <Appenders>
+        <xi:include href="appender-console.xml"/>
+    </Appenders>
 
     <Loggers>
         <!-- other -->

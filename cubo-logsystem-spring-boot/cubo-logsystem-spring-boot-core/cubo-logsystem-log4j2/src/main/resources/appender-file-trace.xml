@@ -1,0 +1,23 @@
+<!-- 新增 tace.log, 用于记录 trace 日志 -->
+<RollingRandomAccessFile name="TRACE_FILE"
+                         fileName="${LOG_BASE_FOLDER}/trace.log"
+                         filePattern="${LOG_BASE_FOLDER}/%d{yyyy-MM-dd}/trace-${sys:ROLLING_FILE_NAME_PATTERN}"
+                         immediateFlush="false">
+    <PatternLayout charset="${LOG_CHARSET}">
+        <MarkerPatternSelector defaultPattern="${sys:FILE_LOG_PATTERN}">
+            <PatternMatch key="banner" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="properties" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="processor" pattern="${MARKER_PATTERN}"/>
+            <PatternMatch key="tracer" pattern="${sys:TRACER_MARKER_PATTERN}"/>
+        </MarkerPatternSelector>
+    </PatternLayout>
+    <Filters>
+        <!-- 只保留 TRACE 级别日志, DEBUG 及以上日志全拒绝 -->
+        <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+        <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+    </Filters>
+    <Policies>
+        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+        <SizeBaseDTriggeringPolicy size="${LOG_FILE_MAX_SIZE}"/>
+    </Policies>
+</RollingRandomAccessFile>
