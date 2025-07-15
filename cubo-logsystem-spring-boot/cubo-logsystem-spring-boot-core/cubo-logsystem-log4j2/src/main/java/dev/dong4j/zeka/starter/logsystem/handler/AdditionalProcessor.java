@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.logsystem.handler;
 
+import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
@@ -64,8 +65,13 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
         MDC.put("env", "本地开发");
         LogAppenderType appenderType = LogAppenderType.CONSOLE;
 
-        // 本地开发环境, 特指使用 IDE 启动的应用环境
-        if (!isLocalLaunch) {
+        // docker 启动方式: atom-maven-plugin/atom-container-maven-plugin/docker/Dockerfile
+        final String startType = System.getProperty(App.START_TYPE);
+        if (App.START_DOCKER.equals(startType)) {
+            MDC.put("env", "Docker 启动");
+            appenderType = LogAppenderType.DOCKER;
+        } else if (!isLocalLaunch) {
+            // 不是 docker 启动且使用 server.sh 启动时才将日志输出到文件
             MDC.put("env", "服务器部署");
             appenderType = LogAppenderType.FILE;
         }

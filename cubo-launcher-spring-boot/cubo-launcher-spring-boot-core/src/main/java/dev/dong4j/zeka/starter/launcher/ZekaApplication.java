@@ -16,6 +16,14 @@ import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.common.util.Tools;
 import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
 import dev.dong4j.zeka.starter.launcher.enums.SpringApplicationType;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
@@ -28,15 +36,6 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.ServiceLoader;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 /**
  * <p>Description: 启动类封装</p>
@@ -252,7 +251,7 @@ public final class ZekaApplication {
         String version = StringPool.NULL_STRING;
         Properties properties = new Properties();
         // shell 脚本启动, 优先从 jar 的 MANIFEST.MF 读取
-        if (StringUtils.isNotBlank(startType) && startType.equals(App.START_SHELL)) {
+        if (StringUtils.isNotBlank(startType) && (startType.equals(App.START_SHELL) || startType.equals(App.START_DOCKER))) {
             // 优先解析 jar 文件中的 MANIFEST.MF 文件, jar.file 环境变量通过 server.sh 启动脚本设置
             try (JarFile jarFile = new JarFile(System.getProperty("jar.file"))) {
                 Manifest manifest = jarFile.getManifest();

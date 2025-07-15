@@ -18,7 +18,9 @@ public enum LogAppenderType {
     /** Console log appender type */
     CONSOLE("log4j2-console.xml"),
     /** File log appender type */
-    FILE("log4j2-file.xml");
+    FILE("log4j2-file.xml"),
+    /** Docker log appender type */
+    DOCKER("log4j2-docker.xml");
 
     /** Config */
     private final String config;
