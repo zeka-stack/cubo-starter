@@ -78,8 +78,7 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         }
 
         JustOnceLogger.printOnce(LogFileProcessor.class.getName(),
-            "logging file: "
-                + FileUtils.appendPath(this.path, appName, this.name));
+            "logging file: " + FileUtils.appendPath(this.path, appName, this.name));
     }
 
     /**
