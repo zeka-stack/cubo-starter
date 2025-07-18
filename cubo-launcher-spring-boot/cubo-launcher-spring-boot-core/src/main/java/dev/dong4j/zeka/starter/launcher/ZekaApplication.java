@@ -304,7 +304,7 @@ public final class ZekaApplication {
                 File file = new File(configFilePath);
                 // 直接解析文件目录, 使用当前目录名作为应用名 (target 上一级目录)
                 applicationName = file.getParentFile().getParentFile().getName();
-                log.warn("未显式设置 application name 或者未正确解析 ${package.name} (可能需要重新编译项目), 读取当前模块名作为应用名: [{}]",
+                log.debug("未显式设置 application name 或者未正确解析 ${package.name} (可能需要重新编译项目), 读取当前模块名作为应用名: [{}]",
                     applicationName);
                 if (StringUtils.isBlank(startType)) {
                     // 如果 startType 为 null, 则是从 IDE 中启动
@@ -340,7 +340,7 @@ public final class ZekaApplication {
     private static void deprecatedPropertiesCheck(@NotNull PropertySource<?> propertySource) {
         Object property = propertySource.getProperty(ConfigKey.SpringConfigKey.PROFILE_ACTIVE);
         if (ObjectUtils.isNotNull(property)) {
-            log.error("1.4.0+ 开始不需要在配置文件 (bootstrap.yml/application.yml) 中配置 spring.profiles.active 属性, 请删除此配置以修复错误.");
+            log.debug("1.4.0+ 开始不需要在配置文件 (bootstrap.yml/application.yml) 中配置 spring.profiles.active 属性, 请删除此配置以修复错误.");
         }
     }
 }

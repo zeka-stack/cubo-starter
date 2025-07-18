@@ -126,7 +126,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
                 }
                 currentProfileActive = active;
             } catch (Exception e) {
-                log.debug("未监测到 target/arco-maven-plugin/profile/spring.profiles.active 文件, 将自动设置为 [local].");
+                log.trace("未监测到 target/arco-maven-plugin/profile/spring.profiles.active 文件, 将自动设置为 [local].");
                 System.setProperty("profile.active", currentProfileActive);
             }
 
