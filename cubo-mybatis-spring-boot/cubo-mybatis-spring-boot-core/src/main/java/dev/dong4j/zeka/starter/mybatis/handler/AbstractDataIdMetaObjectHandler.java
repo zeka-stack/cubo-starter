@@ -29,7 +29,7 @@ public abstract class AbstractDataIdMetaObjectHandler implements MetaObjectChain
         // agent 解析的 header，同一对象，不清除，只获取值.
         ExpandIds expandIds = ExpandIdsContext.context().get();
         if (null == expandIds) {
-            log.debug("无法从当前线程获取 expandIds");
+            log.trace("无法从当前线程获取 expandIds");
             return;
         }
         this.setFieldValue(metaObject, expandIds);

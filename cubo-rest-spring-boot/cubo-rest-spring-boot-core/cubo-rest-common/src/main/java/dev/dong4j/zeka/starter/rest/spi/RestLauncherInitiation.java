@@ -50,7 +50,7 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
         String undertowLogDir = FileUtils.toTempDirPath(ConfigDefaultValue.DEFAULE_ACCESS_LOG_DIR);
         if (!isLocalLaunch) {
             String logPath = System.getProperty(ConfigKey.LogSystemConfigKey.LOG_FILE_PATH, LogSystem.DEFAULT_LOGGING_LOCATION);
-            undertowLogDir = FileUtils.appendPath(logPath, appName, ConfigDefaultValue.DEFAULE_ACCESS_LOG_DIR);
+            undertowLogDir = FileUtils.appendPath(logPath, ConfigDefaultValue.DEFAULE_ACCESS_LOG_DIR);
         }
         System.out.println("access log: " + undertowLogDir + File.separator + "access.log");
 

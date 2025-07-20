@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.logsystem.constant;
 
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
 
 /**
  * <p>Description: </p>
@@ -40,5 +41,15 @@ public final class LogSystem {
         PROPERTIES,
         /** Processor marker */
         PROCESSOR
+    }
+
+    /**
+     * 是相对路径
+     *
+     * @param logPath 日志路径
+     * @return boolean
+     */
+    public static boolean isRelativePath(String logPath) {
+        return StringUtils.isNotBlank(logPath) && (logPath.startsWith("./") || !logPath.startsWith("/"));
     }
 }

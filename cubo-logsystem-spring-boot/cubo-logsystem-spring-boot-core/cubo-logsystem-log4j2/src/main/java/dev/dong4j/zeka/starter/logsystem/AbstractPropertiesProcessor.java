@@ -1,12 +1,11 @@
 package dev.dong4j.zeka.starter.logsystem;
 
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import java.util.Arrays;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.core.env.PropertySourcesPropertyResolver;
 import org.springframework.util.Assert;
-
-import java.util.Arrays;
 
 /**
  * <p>Description: 抽象的参数处理器, 将配置文件中的配置(Environment) 写入到 JVM, logsystem 才能读取. </p>
@@ -80,7 +79,7 @@ public abstract class AbstractPropertiesProcessor {
     }
 
     /**
-     * Sets system property *
+     * 设置系统环境变量, 如果已存在就不设置, 因此优先级比启动脚本或 docker 设置的环境变量优先级低
      *
      * @param value value
      * @param names names
@@ -88,7 +87,7 @@ public abstract class AbstractPropertiesProcessor {
      */
     protected void setSystemProperty(String value, String... names) {
         Arrays.stream(names).forEach(name -> {
-            if (System.getProperty(name) == null && value != null) {
+            if (StringUtils.isBlank(System.getProperty(name)) && StringUtils.isNotBlank(value)) {
                 System.setProperty(name, value);
             }
         });

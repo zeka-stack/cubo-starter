@@ -32,6 +32,8 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
     @Getter
     private String path;
 
+    private String appName;
+
     /**
      * 初始化处理器, 第一步需要处理 name 和 path
      *
@@ -40,6 +42,7 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
      */
     public LogFileProcessor(ConfigurableEnvironment environment) {
         super(environment);
+        this.setLogAppName();
         this.processorNameAndPath(environment);
     }
 
@@ -53,6 +56,11 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         String tempName = this.getProperty(ConfigKey.LogSystemConfigKey.LOG_FILE_NAME,
             Constants.DEPRECATED_FILE_NAME_PROPERTY,
             Constants.DEFAULT_FILE_NAME);
+
+        // 获取日志目录:
+        // 1. 如果是脚本启动, 会设置: -Dzeka-stack.logging.file.path=${FINAL_LOG_PATH}
+        // 2. 如果非脚本启动, 或者说没有在任何地方配置 zeka-stack.logging.file.path, 则会使用默认配置: /mnt/syslogs/zeka.stack
+        // 3. 如果在 application.yml 显式配置了 zeka-stack.logging.file.path 或 logging.file.path 则会直接使用
         String tempPath = this.getProperty(ConfigKey.LogSystemConfigKey.LOG_FILE_PATH,
             Constants.DEPRECATED_FILE_PATH_PROPERTY,
             LogSystem.DEFAULT_LOGGING_LOCATION);
@@ -66,19 +74,22 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         }
 
         this.name = tempName;
+        // 如果路径不存在, 则创建, 返回的就是 tempPath, 比如 ./logs
         this.path = FileUtils.toPath(tempPath);
 
-        String appName = ConfigKit.getProperty(environment, ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
-        if (StringUtils.isBlank(appName)) {
-            appName = ConfigKit.getProperty(environment, ConfigKey.SpringConfigKey.APPLICATION_NAME);
+        this.appName = ConfigKit.getProperty(environment, ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
+        if (StringUtils.isBlank(this.appName)) {
+            this.appName = ConfigKit.getProperty(environment, ConfigKey.SpringConfigKey.APPLICATION_NAME);
         }
+    }
 
-        if (tempPath.startsWith("./") || !tempPath.startsWith("/")) {
-            appName = "";
-        }
-
-        JustOnceLogger.printOnce(LogFileProcessor.class.getName(),
-            "logging file: " + FileUtils.appendPath(this.path, appName, this.name));
+    /**
+     * 设置日志配置文件中的变量, 从配置文件中读取, 有则设置, 没有则不设置, 将使用日志配置文件中的默认配置
+     *
+     * @since 1.0.0
+     */
+    private void setLogAppName() {
+        this.setSystemProperty(StringUtils.isBlank(this.appName) ? "Please-Inherit-ZekaStarter" : this.appName, Constants.APP_NAME);
     }
 
     /**
@@ -90,17 +101,26 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
     public void apply() {
         // 提前将配置绑定到配置类
         Binder binder = Binder.get(this.environment);
-        LogFile logFile = binder.bind(ConfigKey.LogSystemConfigKey.LOG_FILE, LogFile.class).orElse(new LogFile(this.toString(), this.path));
 
-        if (logFile.getPath() == null) {
+        // 绑定 zeka-stack.logging.file 到 LogFile, 如果没有显式配置 zeka-stack.logging.file, 则使用默认配置
+        LogFile logFile = binder.bind(ConfigKey.LogSystemConfigKey.LOG_FILE, LogFile.class)
+            .orElse(new LogFile(this.toString(), this.path));
+        if (StringUtils.isBlank(logFile.getPath())) {
             logFile.setPath(this.path);
         }
-        if (logFile.getName() == null) {
+        if (StringUtils.isBlank(logFile.getName())) {
             logFile.setName(this.name);
         }
+
+        // 优先使用显式配置的 zeka-stack.logging.file.path(-Dzeka-stack.logging.file.path 优先级最高), 没有的话则使用默认配置
+        String finalLogPath = FileUtils.toPath(logFile.getPath());
+        String message = "logging file: " + FileUtils.appendPath(finalLogPath, this.name);
+        JustOnceLogger.printOnce(LogFileProcessor.class.getName(), message);
+
         // zeka-stack.logging.file.path
-        this.setSystemProperty(FileUtils.toPath(logFile.getPath()), LoggingSystemProperties.LOG_PATH,
+        this.setSystemProperty(finalLogPath, Constants.LOG_BASE_FOLDER,
             ConfigKey.LogSystemConfigKey.LOG_FILE_PATH);
+
         // zeka-stack.logging.file.name
         this.setSystemProperty(logFile.getName(), LoggingSystemProperties.LOG_FILE, ConfigKey.LogSystemConfigKey.LOG_FILE_NAME);
         // zeka-stack.logging.file.clean-history-on-start
@@ -114,7 +134,6 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         // zeka-stack.logging.file.total-size-cap
         this.setSystemProperty(String.valueOf(logFile.getTotalSizeCap()), ConfigKey.LogSystemConfigKey.LOG_FILE_TOTAL_SIZE_CAP,
             Constants.FILE_TOTAL_SIZE_CAP);
-
     }
 
     /**

@@ -18,6 +18,7 @@ public final class Constants {
 
     /** 当前应用名 */
     public static final String APP_NAME = "APP_NAME";
+    public static final String LOG_BASE_FOLDER = "LOG_BASE_FOLDER";
     /** 日志输出跳转信息, 本地开发时默认开启 */
     public static final String SHOW_LOG_LOCATION = "SHOW_LOG_LOCATION";
     /** location 未开启时的 layout 配置 */

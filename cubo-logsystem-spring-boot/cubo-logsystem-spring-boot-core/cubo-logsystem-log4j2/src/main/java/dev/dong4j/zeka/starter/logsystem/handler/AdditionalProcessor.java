@@ -47,7 +47,6 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
         // 1. 设置使用到日志配置
         this.setLogConfigFile(isLocalLaunch);
         this.setShowLogLocation(isLocalLaunch);
-        this.setLogAppName();
     }
 
     /**
@@ -106,28 +105,6 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
         }
 
         System.setProperty(Constants.SHOW_LOG_LOCATION, String.valueOf(enableShowLocation));
-    }
-
-    /**
-     * 设置日志配置文件中的 APP_NAME, 如果配置了 zeka-stack.logging.file.path 且是相对路径 (不是以 / 开头或者 ./ 开头), APP_NAME 就设置为空字符串
-     * 这样就不会将日志写入到应用名目录中(因为本身已经使用相对路径, 说明是能够确认日志所属的应用的)
-     *
-     * @since 1.0.0
-     */
-    private void setLogAppName() {
-        final String filePath = ConfigKit.getProperty(this.environment, ConfigKey.LogSystemConfigKey.LOG_FILE_PATH);
-        if (StringUtils.isNotBlank(filePath) && (filePath.startsWith("./") || !filePath.startsWith("/"))) {
-            this.setSystemProperty("", Constants.APP_NAME);
-            return;
-        }
-
-        String applicationName = ConfigKit.getProperty(this.environment, ConfigKey.LogSystemConfigKey.LOG_APP_NAME);
-        if (StringUtils.isBlank(applicationName)) {
-            applicationName = this.environment.getProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME);
-        }
-        // zeka-stack.logging.app-name
-        this.setSystemProperty(StringUtils.isBlank(applicationName) ? "Please-Inherit-ZekaStarter" : applicationName, Constants.APP_NAME);
-
     }
 
 }

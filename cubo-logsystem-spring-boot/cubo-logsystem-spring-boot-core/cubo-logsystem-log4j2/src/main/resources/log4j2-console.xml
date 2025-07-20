@@ -3,7 +3,7 @@
                xmlns:xi="http://www.w3.org/2001/XInclude">
     <Properties>
         <!-- (各应用需要修改) 日志文件本地存放目录路径 建议各个环境跟生产环境统一起来,方便维护 -->
-        <property name="LOG_BASE_FOLDER">${sys:LOG_PATH}/${sys:APP_NAME}</property>
+        <property name="LOG_BASE_FOLDER">${sys:LOG_BASE_FOLDER}</property>
         <!-- 日志文件最小切割单位 值不做强制要求, 建议100MB -->
         <property name="LOG_FILE_MAX_SIZE">${sys:LOG_FILE_MAX_SIZE}</property>
         <property name="LOG_FILE_MAX_HISTORY">${sys:LOG_FILE_MAX_HISTORY}</property>
