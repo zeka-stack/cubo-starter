@@ -1,12 +1,12 @@
 package dev.dong4j.zeka.starter.logsystem.handler;
 
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.starter.logsystem.AbstractLoggingLevelConfiguration;
+import java.util.Collections;
+import java.util.Map;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
-
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * Listener that looks for {@link EnvironmentChangeEvent} and rebinds logger levels if any
@@ -33,7 +33,7 @@ public class AutoChangeLogLevelEventHandler extends AbstractLoggingLevelConfigur
     @Override
     protected Map<String, String> changedLevels(EnvironmentChangeEvent event) {
         return Binder.get(this.environment)
-            .bind("zeka-stack.logging.level", STRING_STRING_MAP)
+            .bind(ConfigKey.PREFIX + "logging.level", STRING_STRING_MAP)
             .orElseGet(Collections::emptyMap);
     }
 

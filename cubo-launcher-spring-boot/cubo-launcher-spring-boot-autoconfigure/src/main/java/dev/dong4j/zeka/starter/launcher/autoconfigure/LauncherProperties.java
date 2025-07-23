@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ import org.springframework.boot.context.properties.DeprecatedConfigurationProper
 public class LauncherProperties extends ZekaProperties {
 
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.app";
+    public static final String PREFIX = ConfigKey.PREFIX + "app";
     /** 装载自定义配置 zeka-stack.app.custom.xxx */
     private Map<String, Object> custom;
     /** App */
@@ -43,7 +44,7 @@ public class LauncherProperties extends ZekaProperties {
      * @param app app
      * @since 1.0.0
      */
-    @DeprecatedConfigurationProperty(replacement = "zeka-stack.app.custom", reason = "添加 app 配置层级, 与其他项目区分")
+    @DeprecatedConfigurationProperty(replacement = ConfigKey.PREFIX + "app.custom", reason = "添加 app 配置层级, 与其他项目区分")
     public void setApp(Map<String, Object> app) {
         this.app = app;
     }

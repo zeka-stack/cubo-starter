@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.openapi.spi;
 
 import dev.dong4j.zeka.kernel.common.constant.App;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
@@ -27,7 +28,7 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
 
         return ChainMap.build(16)
             // 序列化时只包含不为空的字段
-            .put("zeka-stack.openapi.enabled", "true")
+            .put(ConfigKey.PREFIX + "openapi.enabled", "true")
             .put("springdoc.swagger-ui.path", "/swagger-ui.html")
             .put("springdoc.swagger-ui.tags-sorter", "alpha")
             .put("springdoc.swagger-ui.operations-sorter", "alpha")

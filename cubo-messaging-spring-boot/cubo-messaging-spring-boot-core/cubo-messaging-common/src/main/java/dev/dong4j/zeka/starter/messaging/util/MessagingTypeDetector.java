@@ -1,6 +1,7 @@
 // MQTypeDetector.java
 package dev.dong4j.zeka.starter.messaging.util;
 
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class MessagingTypeDetector {
     }
 
     // 默认配置属性前缀
-    public static final String DEFAULT_CONFIG_PREFIX = "zeka-stack.messaging";
+    public static final String DEFAULT_CONFIG_PREFIX = ConfigKey.PREFIX + "messaging";
 
     private final Environment environment;
     private final List<MessagingType> availableTypes = new ArrayList<>();

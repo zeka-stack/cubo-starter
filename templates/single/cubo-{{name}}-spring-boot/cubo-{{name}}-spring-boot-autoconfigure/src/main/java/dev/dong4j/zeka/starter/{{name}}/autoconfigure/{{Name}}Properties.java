@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.{{name}}.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,5 +20,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = {{Name}}Properties.PREFIX)
 public class {{Name}}Properties extends ZekaProperties {
     /** 组件配置前缀 */
-    public static final String PREFIX = "zeka-stack.{{name}}";
+    public static final String PREFIX = ConfigKey.PREFIX + "{{name}}";
 }

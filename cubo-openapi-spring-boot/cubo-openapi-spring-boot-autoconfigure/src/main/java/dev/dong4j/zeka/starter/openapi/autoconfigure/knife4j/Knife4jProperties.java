@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j;
 
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -16,6 +17,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = Knife4jProperties.PREFIX)
 public class Knife4jProperties {
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.openapi.knife4j";
+    public static final String PREFIX = ConfigKey.PREFIX + "openapi.knife4j";
 
 }

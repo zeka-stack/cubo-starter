@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure.extend;
 
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -17,7 +18,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ExtendProperties {
 
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.extend";
+    public static final String PREFIX = ConfigKey.PREFIX + "extend";
     /** 是否允许 @Resource 注入的 bean 为 null */
     private boolean enableResourceIsNull = Boolean.FALSE;
     /** 全局设置是否允许 @Autowired 注入的 bean 为 null */

@@ -79,7 +79,7 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
 
         // 通过配置文件或使用 JVM 参数修改日志配置
         System.setProperty(LoggingApplicationListener.CONFIG_PROPERTY, StringUtils.format("classpath:{}", logConfig));
-        JustOnceLogger.printOnce(AdditionalProcessor.class.getName(), "zeka-stack.logging.config=" + logConfig);
+        JustOnceLogger.printOnce(AdditionalProcessor.class.getName(), ConfigKey.PREFIX + "logging.config=" + logConfig);
     }
 
     /**

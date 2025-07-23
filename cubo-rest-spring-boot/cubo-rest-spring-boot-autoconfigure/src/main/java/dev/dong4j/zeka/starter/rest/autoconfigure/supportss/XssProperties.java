@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -18,7 +19,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(XssProperties.PREFIX)
 public class XssProperties {
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.rest.xss";
+    public static final String PREFIX = ConfigKey.PREFIX + "rest.xss";
 
     /** xss 处理器 */
     private boolean enableXssFilter = Boolean.TRUE;

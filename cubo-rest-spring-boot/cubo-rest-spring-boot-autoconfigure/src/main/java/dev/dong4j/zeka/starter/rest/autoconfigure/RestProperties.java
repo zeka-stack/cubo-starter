@@ -2,6 +2,7 @@ package dev.dong4j.zeka.starter.rest.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(prefix = RestProperties.PREFIX)
 public class RestProperties extends ZekaProperties {
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.rest";
+    public static final String PREFIX = ConfigKey.PREFIX + "rest";
 
     /** Read timeout */
     private Integer readTimeout = 5000;

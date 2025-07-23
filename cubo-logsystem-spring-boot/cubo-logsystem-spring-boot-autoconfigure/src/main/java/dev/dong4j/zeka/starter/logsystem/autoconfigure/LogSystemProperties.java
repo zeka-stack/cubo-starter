@@ -1,11 +1,11 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.starter.logsystem.Constants;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
 import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
 import dev.dong4j.zeka.starter.logsystem.entity.Pattern;
-import dev.dong4j.zeka.starter.logsystem.handler.AdditionalProcessor;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
@@ -29,12 +29,11 @@ import org.springframework.boot.logging.LogLevel;
 public class LogSystemProperties extends ZekaProperties {
 
     /** PREFIX */
-    public static final String PREFIX = "zeka-stack.logging";
+    public static final String PREFIX = ConfigKey.PREFIX + "logging";
 
     /**
      * 使用此配置来区分不同应用的日志目录, 默认为应用名, 此配置只对 log4j2-flie.xml 有效.
      * 最终保存的日志位置为: ${path}/${appName}/${name.log}
-     * @see AdditionalProcessor#setLogAppName()
      */
     private String appName;
 
