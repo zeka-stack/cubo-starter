@@ -24,7 +24,7 @@ import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
  * @since 1.0.0
  */
 @Configuration
-@ConditionalOnEnabled(prefix = MessagingProperties.PREFIX)
+@ConditionalOnEnabled(value = MessagingProperties.PREFIX)
 @EnableConfigurationProperties(MessagingProperties.class)
 public class MessagingContainerConfiguration {
 

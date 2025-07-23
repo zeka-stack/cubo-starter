@@ -44,7 +44,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletAutoConfiguration implements ZekaAutoConfiguration {
 
@@ -128,7 +128,7 @@ public class ServletAutoConfiguration implements ZekaAutoConfiguration {
     @Slf4j
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnBean(RequestMappingHandlerAdapter.class)
-    @ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+    @ConditionalOnEnabled(value = RestProperties.PREFIX)
     static class ConsumerMethodReturnValueHandlerAutoConfiguration implements ZekaAutoConfiguration {
         /** Adapter */
         private final RequestMappingHandlerAdapter adapter;

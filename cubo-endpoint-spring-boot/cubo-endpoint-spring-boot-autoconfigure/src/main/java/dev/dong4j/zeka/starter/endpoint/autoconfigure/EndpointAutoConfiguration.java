@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = EndpointProperties.PREFIX)
+@ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnWebApplication
 @AutoConfigureAfter({
     ServletStartInfoAutoConfiguration.class,

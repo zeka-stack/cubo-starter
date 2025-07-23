@@ -43,7 +43,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = EndpointProperties.PREFIX)
+@ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ReactiveEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration {

@@ -46,7 +46,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @EnableConfigurationProperties(RestProperties.class)
 @ConditionalOnMissingClass("dev.dong4j.zeka.agent.adapter.config.AgentAdapterRestConfiguration")
 public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {

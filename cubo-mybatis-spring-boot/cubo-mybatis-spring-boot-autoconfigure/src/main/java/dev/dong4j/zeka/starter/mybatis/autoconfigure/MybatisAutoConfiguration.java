@@ -56,7 +56,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = MybatisProperties.PREFIX)
+@ConditionalOnEnabled(value = MybatisProperties.PREFIX)
 @ConditionalOnClass(MybatisPlusAutoConfiguration.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 public class MybatisAutoConfiguration implements ZekaAutoConfiguration {

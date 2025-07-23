@@ -27,7 +27,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ZekaWebfluxExceptionErrorAttributes.class})
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 public class WebFluxAutoConfiguration implements ZekaAutoConfiguration {
 
     public WebFluxAutoConfiguration() {

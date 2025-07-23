@@ -38,7 +38,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = EndpointProperties.PREFIX)
+@ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ServletEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration {

@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Slf4j
 @Configuration
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class, ZekaServletExceptionErrorAttributes.class})
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)

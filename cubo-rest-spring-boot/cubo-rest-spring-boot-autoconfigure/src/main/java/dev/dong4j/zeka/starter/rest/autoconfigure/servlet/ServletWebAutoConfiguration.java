@@ -91,7 +91,7 @@ import org.springframework.web.util.UrlPathHelper;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(JacksonConfiguration.class)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class, WebProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)

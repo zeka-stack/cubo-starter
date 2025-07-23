@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(ZekaStarter.class)
-@ConditionalOnEnabled(prefix = LauncherProperties.PREFIX)
+@ConditionalOnEnabled(value = LauncherProperties.PREFIX)
 @EnableConfigurationProperties(LauncherProperties.class)
 public class LauncherAutoConfiguration implements ZekaAutoConfiguration {
 

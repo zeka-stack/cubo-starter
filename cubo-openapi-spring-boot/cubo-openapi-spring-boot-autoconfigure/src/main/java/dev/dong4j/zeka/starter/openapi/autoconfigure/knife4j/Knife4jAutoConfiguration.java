@@ -35,7 +35,7 @@ import org.springframework.web.servlet.DispatcherServlet;
     Servlet.class,
     DispatcherServlet.class,
 })
-@ConditionalOnEnabled(prefix = OpenAPIProperties.PREFIX)
+@ConditionalOnEnabled(value = OpenAPIProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @EnableConfigurationProperties(value = {Knife4jProperties.class})
 @Slf4j

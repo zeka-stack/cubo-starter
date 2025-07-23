@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Primary;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnClass(value = {ObjectMapper.class})
 @EnableConfigurationProperties(JacksonProperties.class)
 @AutoConfigureBefore(JacksonAutoConfiguration.class)

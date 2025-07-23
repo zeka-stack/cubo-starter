@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @EnableConfigurationProperties(RestProperties.class)
 @ConditionalOnClass(RestLauncherInitiation.class)

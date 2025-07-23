@@ -40,7 +40,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(RestProperties.class)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class, Undertow.class})
 public class UndertowAutoConfiguration implements ZekaAutoConfiguration, WebServerFactoryCustomizer<UndertowServletWebServerFactory> {

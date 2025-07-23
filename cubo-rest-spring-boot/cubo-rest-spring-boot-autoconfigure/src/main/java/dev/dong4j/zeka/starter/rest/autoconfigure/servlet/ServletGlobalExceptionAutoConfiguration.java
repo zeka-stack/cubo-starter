@@ -40,7 +40,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 @EnableConfigurationProperties(ServerProperties.class)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletGlobalExceptionAutoConfiguration implements ZekaAutoConfiguration {

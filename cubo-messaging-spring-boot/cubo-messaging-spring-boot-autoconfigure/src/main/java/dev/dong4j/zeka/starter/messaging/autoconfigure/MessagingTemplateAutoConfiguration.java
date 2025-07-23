@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
-@ConditionalOnEnabled(prefix = MessagingProperties.PREFIX)
+@ConditionalOnEnabled(value = MessagingProperties.PREFIX)
 public class MessagingTemplateAutoConfiguration {
 
     @Bean

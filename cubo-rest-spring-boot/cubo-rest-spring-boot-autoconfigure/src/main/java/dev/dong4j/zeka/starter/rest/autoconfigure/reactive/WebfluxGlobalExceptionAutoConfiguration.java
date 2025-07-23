@@ -45,7 +45,7 @@ import org.springframework.web.reactive.result.view.ViewResolver;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ZekaWebfluxExceptionErrorAttributes.class})
 @AutoConfigureBefore(WebFluxAutoConfiguration.class)
-@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
+@ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @EnableConfigurationProperties(value = {ServerProperties.class, ResourceProperties.class})
 public class WebfluxGlobalExceptionAutoConfiguration implements ZekaAutoConfiguration {

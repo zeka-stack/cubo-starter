@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnEnabled(prefix = OpenAPIProperties.PREFIX)
+@ConditionalOnEnabled(value = OpenAPIProperties.PREFIX)
 @AutoConfigureAfter({
     Knife4jAutoConfiguration.class,
 })
