@@ -113,7 +113,13 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
         }
 
         // 优先使用显式配置的 zeka-stack.logging.file.path(-Dzeka-stack.logging.file.path 优先级最高), 没有的话则使用默认配置
-        String finalLogPath = FileUtils.toPath(logFile.getPath());
+        // 获取绝对路径表示
+        String rawPath = logFile.getPath();
+        File pathFile = new File(rawPath);
+        String absolutePath = pathFile.getAbsolutePath();
+
+        // 使用绝对路径
+        String finalLogPath = FileUtils.toPath(absolutePath);
         String message = "logging file: " + FileUtils.appendPath(finalLogPath, this.name);
         JustOnceLogger.printOnce(LogFileProcessor.class.getName(), message);
 
