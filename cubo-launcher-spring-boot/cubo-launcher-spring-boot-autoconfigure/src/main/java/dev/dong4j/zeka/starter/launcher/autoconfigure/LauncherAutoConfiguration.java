@@ -1,11 +1,10 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.launcher.ZekaStarter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,11 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(ZekaStarter.class)
-@ConditionalOnProperty(
-    prefix = LauncherProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = LauncherProperties.PREFIX)
 @EnableConfigurationProperties(LauncherProperties.class)
 public class LauncherAutoConfiguration implements ZekaAutoConfiguration {
 

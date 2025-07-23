@@ -1,13 +1,12 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.reactive;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaWebfluxExceptionErrorAttributes;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +27,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ZekaWebfluxExceptionErrorAttributes.class})
-@ConditionalOnProperty(
-    prefix = RestProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
 public class WebFluxAutoConfiguration implements ZekaAutoConfiguration {
 
     public WebFluxAutoConfiguration() {

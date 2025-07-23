@@ -1,7 +1,7 @@
 // UnifiedTemplateAutoConfiguration.java
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.template.KafkaMessagingTemplateAdapter;
 import dev.dong4j.zeka.starter.messaging.template.RocketMQMessagingTemplateAdapter;
@@ -10,18 +10,12 @@ import dev.dong4j.zeka.starter.messaging.template.core.DefaultMessagingTemplate;
 import java.util.List;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
-@ConditionalOnProperty(
-    prefix = MessagingProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true
-)
+@ConditionalOnEnabled(prefix = MessagingProperties.PREFIX)
 public class MessagingTemplateAutoConfiguration {
 
     @Bean

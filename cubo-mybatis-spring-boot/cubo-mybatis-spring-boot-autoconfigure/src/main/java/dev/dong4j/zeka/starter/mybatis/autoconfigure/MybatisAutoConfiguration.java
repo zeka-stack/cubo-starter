@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
@@ -56,11 +56,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-    prefix = MybatisProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = MybatisProperties.PREFIX)
 @ConditionalOnClass(MybatisPlusAutoConfiguration.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 public class MybatisAutoConfiguration implements ZekaAutoConfiguration {

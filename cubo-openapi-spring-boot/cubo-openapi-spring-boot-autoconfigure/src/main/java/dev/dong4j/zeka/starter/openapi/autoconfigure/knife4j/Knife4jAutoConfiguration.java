@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.github.xiaoymin.knife4j.spring.filter.ProductionSecurityFilter;
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.enums.LibraryEnum;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
@@ -11,7 +11,6 @@ import dev.dong4j.zeka.starter.openapi.autoconfigure.OpenAPIProperties;
 import javax.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,11 +35,7 @@ import org.springframework.web.servlet.DispatcherServlet;
     Servlet.class,
     DispatcherServlet.class,
 })
-@ConditionalOnProperty(
-    prefix = OpenAPIProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = OpenAPIProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @EnableConfigurationProperties(value = {Knife4jProperties.class})
 @Slf4j

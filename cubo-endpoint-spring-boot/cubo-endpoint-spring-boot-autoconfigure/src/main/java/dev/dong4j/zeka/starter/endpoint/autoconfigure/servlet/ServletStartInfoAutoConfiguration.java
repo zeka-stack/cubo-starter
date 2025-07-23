@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.constant.App;
@@ -22,7 +22,6 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,11 +38,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-    prefix = EndpointProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = EndpointProperties.PREFIX)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ServletEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration {

@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -45,11 +44,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
-@ConditionalOnProperty(
-    prefix = RestProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ServletAutoConfiguration implements ZekaAutoConfiguration {
 
@@ -133,11 +128,7 @@ public class ServletAutoConfiguration implements ZekaAutoConfiguration {
     @Slf4j
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnBean(RequestMappingHandlerAdapter.class)
-    @ConditionalOnProperty(
-        prefix = RestProperties.PREFIX,
-        name = ZekaProperties.ENABLED,
-        havingValue = ZekaProperties.ON,
-        matchIfMissing = true)
+    @ConditionalOnEnabled(prefix = RestProperties.PREFIX)
     static class ConsumerMethodReturnValueHandlerAutoConfiguration implements ZekaAutoConfiguration {
         /** Adapter */
         private final RequestMappingHandlerAdapter adapter;

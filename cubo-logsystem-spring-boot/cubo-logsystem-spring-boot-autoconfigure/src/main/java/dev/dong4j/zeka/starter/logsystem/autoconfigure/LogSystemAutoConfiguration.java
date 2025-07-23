@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactory;
@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,12 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(LogPrintStream.class)
-@ConditionalOnProperty(
-    prefix = LogSystemProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true
-)
+@ConditionalOnEnabled(prefix = LogSystemProperties.PREFIX)
 @EnableConfigurationProperties(LogSystemProperties.class)
 public class LogSystemAutoConfiguration implements ZekaAutoConfiguration {
 

@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.jackson.JavaTimeModule;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.JsonUtils;
@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,11 +29,7 @@ import org.springframework.context.annotation.Primary;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(
-    prefix = RestProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
+@ConditionalOnEnabled(prefix = RestProperties.PREFIX)
 @ConditionalOnClass(value = {ObjectMapper.class})
 @EnableConfigurationProperties(JacksonProperties.class)
 @AutoConfigureBefore(JacksonAutoConfiguration.class)

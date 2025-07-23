@@ -1,14 +1,13 @@
 // UnifiedMQConfiguration.java
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.starter.messaging.factory.DefaultRocketMQContainerRegistry;
 import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
 import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
 import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
 import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +24,7 @@ import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
  * @since 1.0.0
  */
 @Configuration
-@ConditionalOnProperty(
-    prefix = MessagingProperties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true
-)
+@ConditionalOnEnabled(prefix = MessagingProperties.PREFIX)
 @EnableConfigurationProperties(MessagingProperties.class)
 public class MessagingContainerConfiguration {
 
