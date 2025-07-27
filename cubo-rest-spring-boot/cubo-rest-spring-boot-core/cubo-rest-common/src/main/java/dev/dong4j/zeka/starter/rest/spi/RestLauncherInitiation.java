@@ -64,8 +64,8 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
             .put(ConfigKey.UndertowConfigKye.ENABLE_ACCESSLOG, ConfigDefaultValue.TRUE)
             .put(ConfigKey.UndertowConfigKye.ACCESSLOG_DIR, undertowLogDir)
             .put(ConfigKey.UndertowConfigKye.ACCESSLOG_PATTERN, LOG_DEFAULT_PATTERN)
-            .put(ConfigKey.UndertowConfigKye.ACCESSLOG_PREFIX, "access")
-            .put(ConfigKey.UndertowConfigKye.ACCESSLOG_SUFFIX, ".log")
+            .put(ConfigKey.UndertowConfigKye.ACCESSLOG_PREFIX, "access.")
+            .put(ConfigKey.UndertowConfigKye.ACCESSLOG_SUFFIX, "log")
 
             .put(ConfigKey.MvcConfigKey.NO_HANDLER_FOUND, ConfigDefaultValue.TRUE)
             .put(ConfigKey.MvcConfigKey.ENCODING_ENABLED, ConfigDefaultValue.TRUE)
