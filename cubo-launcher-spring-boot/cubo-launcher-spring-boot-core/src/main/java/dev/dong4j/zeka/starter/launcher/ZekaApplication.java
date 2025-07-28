@@ -262,7 +262,7 @@ public final class ZekaApplication {
         Properties properties = new Properties();
         // shell 脚本启动, 优先从 jar 的 MANIFEST.MF 读取
         if (StringUtils.isNotBlank(startType) && (startType.equals(App.START_SHELL) || startType.equals(App.START_DOCKER))) {
-            // 优先解析 jar 文件中的 MANIFEST.MF 文件, jar.file 环境变量通过 server.sh 启动脚本设置
+            // 优先解析 jar 文件中的 MANIFEST.MF 文件, jar.file 环境变量通过 launcher 启动脚本设置
             try (JarFile jarFile = new JarFile(System.getProperty("jar.file"))) {
                 Manifest manifest = jarFile.getManifest();
                 log.info("MANIFEST.MF Info:");

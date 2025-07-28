@@ -70,7 +70,7 @@ public class AdditionalProcessor extends AbstractPropertiesProcessor {
             MDC.put("env", "Docker 启动");
             appenderType = LogAppenderType.DOCKER;
         } else if (!isLocalLaunch) {
-            // 不是 docker 启动且使用 server.sh 启动时才将日志输出到文件
+            // 不是 docker 启动且使用 launcher 启动时才将日志输出到文件
             MDC.put("env", "服务器部署");
             appenderType = LogAppenderType.FILE;
         }
