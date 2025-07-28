@@ -11,7 +11,10 @@ import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
 import java.io.File;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -24,6 +27,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @date 2020.01.27 11:17
  * @since 1.0.0
  */
+@Slf4j
 public abstract class RestLauncherInitiation implements LauncherInitiation {
     // formatter:off
     /** NOT_LOCALLAUNCHER_LOG_DEFAULT_PATTERN @see io.undertow.server.handlers.accesslog.AccessLogHandler */
@@ -44,15 +48,16 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
      */
     @Override
     @SuppressWarnings("checkstyle:Regexp")
-    public Map<String, Object> launcher(ConfigurableEnvironment env,
-                                        String appName,
-                                        boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
+                                                    String appName,
+                                                    boolean isLocalLaunch) {
+        // 容器日志输出的默认路径(临时目录)
         String undertowLogDir = FileUtils.toTempDirPath(ConfigDefaultValue.DEFAULE_ACCESS_LOG_DIR);
         if (!isLocalLaunch) {
+            // 非本地环境, 设置默认路径
             String logPath = System.getProperty(ConfigKey.LogSystemConfigKey.LOG_FILE_PATH, LogSystem.DEFAULT_LOGGING_LOCATION);
             undertowLogDir = FileUtils.appendPath(logPath, ConfigDefaultValue.DEFAULE_ACCESS_LOG_DIR);
         }
-        System.out.println("access log: " + undertowLogDir + File.separator + "access.log");
 
         // 如果存在 START_APPLICATION 环境变量, 则表示使用了 cubo-launcher-spring-boot-starter 依赖
         Object port = 8080;
@@ -74,6 +79,29 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
             .put(ConfigKey.SpringConfigKey.SERVER_PORT, port)
             // 序列化时只包含不为空的字段
             .put(ConfigKey.SpringConfigKey.JACKSON_DEFAULT_PROPERTY_INCLUSION, ConfigDefaultValue.DEFAULT_PROPERTY_INCLUSION_VALUE);
+    }
+
+    /**
+     * 后
+     *
+     * @param context     语境
+     * @param localLaunch 本地发布
+     */
+    @Override
+    public void after(ConfigurableApplicationContext context, @NotNull Boolean localLaunch) {
+        log.debug("[{}] 容器启动完成, 开始注入自定义逻辑", getName());
+        final ConfigurableEnvironment environment = context.getEnvironment();
+        final String logPrefix = environment.getProperty(ConfigKey.UndertowConfigKye.ACCESSLOG_PREFIX);
+        final String logSuffix = environment.getProperty(ConfigKey.UndertowConfigKye.ACCESSLOG_SUFFIX);
+
+        final String undertowLogDir = environment.getProperty(ConfigKey.UndertowConfigKye.ACCESSLOG_DIR);
+        if (StringUtils.isNotBlank(undertowLogDir)) {
+            File pathFile = new File(undertowLogDir);
+            String absolutePath = pathFile.getAbsolutePath();
+            // 使用绝对路径
+            String finalLogPath = FileUtils.toPath(absolutePath);
+            System.out.println("access log: " + FileUtils.appendPath(finalLogPath, logPrefix + logSuffix));
+        }
     }
 
     /**

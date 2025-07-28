@@ -49,7 +49,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
     @SneakyThrows
     @Override
     @SuppressWarnings(value = {"rawtypes"})
-    public void advance(String appName) {
+    public void before(String appName) {
         // 构建 Reflections 扫描器，仅扫描指定包下的子类
         Reflections reflections = new Reflections(
             new ConfigurationBuilder()
@@ -103,7 +103,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
         ChainMap chainMap = ChainMap.build(8)
             // Spring Boot 2.1 需要设定, 存在相同的 bean name 时, 后一个覆盖前一个, 主要用于覆写默认 bean
             .put(ConfigKey.SpringConfigKey.MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING, ConfigDefaultValue.TRUE)

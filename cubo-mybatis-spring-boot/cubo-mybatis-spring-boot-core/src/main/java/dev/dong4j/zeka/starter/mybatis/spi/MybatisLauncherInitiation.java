@@ -31,9 +31,9 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env,
-                                        String appName,
-                                        boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
+                                                    String appName,
+                                                    boolean isLocalLaunch) {
         return ChainMap.build(8)
             // 支持 mappers 和里面的子目录, 包括 jar 中的 xml 文件
             .put(ConfigKey.MybatisConfigKey.MAPPER_LOCATIONS, "classpath*:/mappers/**/*.xml")

@@ -19,11 +19,13 @@ import dev.dong4j.zeka.starter.launcher.enums.SpringApplicationType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
@@ -55,6 +57,7 @@ import org.springframework.core.env.SimpleCommandLinePropertySource;
 public final class ZekaApplication {
     /** 保存最主要的配置 */
     private static final Properties MAIN_PROPERTIES;
+    private static List<LauncherInitiation> launcherInitiations;
 
     static {
         MAIN_PROPERTIES = loadMainProperties();
@@ -139,6 +142,9 @@ public final class ZekaApplication {
         SpringApplicationBuilder builder = createSpringApplicationBuilder(appName, source, applicationType, args);
         builder.registerShutdownHook(true);
         context = builder.run(args);
+        // 使用 SPI 在应用启动后注入自定义逻辑
+        launcherInitiations.forEach(launcherService -> launcherService.after(context, ConfigKit.isLocalLaunch()));
+        launcherInitiations = null;
         return context;
     }
 
@@ -169,13 +175,17 @@ public final class ZekaApplication {
         MutablePropertySources propertySources = environment.getPropertySources();
         propertySources.addFirst(new SimpleCommandLinePropertySource(args));
 
-        // 加载自定义 SPI 组件
+        // 加载自定义 SPI 组件, 用于在容器启动前注入自定义逻辑, 比如设置组件的默认配置以减少业务上的配置
         ServiceLoader<LauncherInitiation> loader = ServiceLoader.load(LauncherInitiation.class);
-        CollectionUtils.toList(loader).stream().sorted(Comparator.comparingInt(LauncherInitiation::getOrder))
-            .forEach(launcherService -> launcherService.launcherWrapper(environment,
-                defaultProperties,
-                appName,
-                ConfigKit.isLocalLaunch()));
+        launcherInitiations = CollectionUtils.toList(loader)
+            .stream()
+            .sorted(Comparator.comparingInt(LauncherInitiation::getOrder))
+            .collect(Collectors.toList());
+
+        launcherInitiations.forEach(launcherService -> launcherService.launcherWrapper(environment,
+            defaultProperties,
+            appName,
+            ConfigKit.isLocalLaunch()));
 
         log.debug("应用类型: ApplicationType = {}", applicationType.name());
         ConfigKit.setSystemProperties(App.APPLICATION_TYPE, applicationType.name());

@@ -32,9 +32,9 @@ public class DruidLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env,
-                                        String appName,
-                                        boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
+                                                    String appName,
+                                                    boolean isLocalLaunch) {
         if (ConfigKit.isStartedByJunit()) {
             return ChainMap.build(0);
         }

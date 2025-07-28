@@ -22,9 +22,9 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class OpenAPILauncherInitiation implements LauncherInitiation {
 
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env,
-                                        String appName,
-                                        boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
+                                                    String appName,
+                                                    boolean isLocalLaunch) {
 
         return ChainMap.build(16)
             // 序列化时只包含不为空的字段

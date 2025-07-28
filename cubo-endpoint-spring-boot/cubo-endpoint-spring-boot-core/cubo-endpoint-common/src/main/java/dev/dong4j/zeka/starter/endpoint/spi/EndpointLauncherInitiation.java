@@ -31,9 +31,9 @@ public abstract class EndpointLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env,
-                                        String appName,
-                                        boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
+                                                    String appName,
+                                                    boolean isLocalLaunch) {
         ChainMap map = ChainMap.build(4)
             .put(ConfigKey.ManagementConfigKey.ENABLED, ConfigDefaultValue.TRUE)
             // 输出更多的 health 信息

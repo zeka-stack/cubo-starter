@@ -32,7 +32,7 @@ public class LogSystemRecordInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
-    public Map<String, Object> launcher(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
+    public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
         return ChainMap.build(1)
             .put(ConfigKey.SpringConfigKey.MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING, ConfigDefaultValue.TRUE);
     }

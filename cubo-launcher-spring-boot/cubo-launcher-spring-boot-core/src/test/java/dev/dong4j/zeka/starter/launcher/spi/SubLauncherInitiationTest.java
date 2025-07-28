@@ -1,10 +1,9 @@
 package dev.dong4j.zeka.starter.launcher.spi;
 
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,7 +33,7 @@ class SubLauncherInitiationTest {
 
         // 测试是否存在相同的枚举 value
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-            initiation.advance("conflict-test")
+            initiation.before("conflict-test")
         );
         assertTrue(ex.getMessage().contains("存在相同的枚举 value"));
     }
