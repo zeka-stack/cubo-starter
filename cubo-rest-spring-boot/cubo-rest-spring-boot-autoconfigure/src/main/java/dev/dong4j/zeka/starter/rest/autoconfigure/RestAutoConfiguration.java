@@ -84,14 +84,15 @@ public class RestAutoConfiguration implements ZekaAutoConfiguration {
     @Profile(value = {App.ENV_PROD})
     public Validator validator() {
         log.info("参数验证开启快速失败模式");
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
+        try (ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
             .configure()
             // 快速失败模式
             .failFast(true)
             // 代替默认的 EL 表达式
             .messageInterpolator(new ParameterMessageInterpolator())
-            .buildValidatorFactory();
-        return validatorFactory.getValidator();
+            .buildValidatorFactory()) {
+            return validatorFactory.getValidator();
+        }
     }
 
     /**

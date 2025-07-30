@@ -21,6 +21,7 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -48,6 +49,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @EnableConfigurationProperties(RestProperties.class)
+@AutoConfigureAfter(JacksonConfiguration.class)
 @ConditionalOnMissingClass("dev.dong4j.zeka.agent.adapter.config.AgentAdapterRestConfiguration")
 public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
 
@@ -81,7 +83,8 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory, ObjectMapper objectMapper) {
+    public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory,
+                                     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") ObjectMapper objectMapper) {
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
         this.converters(restTemplate, objectMapper);
         return restTemplate;
