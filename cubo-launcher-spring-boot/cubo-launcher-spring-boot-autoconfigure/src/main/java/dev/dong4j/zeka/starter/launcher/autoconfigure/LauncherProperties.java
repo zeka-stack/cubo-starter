@@ -37,6 +37,8 @@ public class LauncherProperties extends ZekaProperties {
     private String configGroup;
     /** Discovery group */
     private String discoveryGroup;
+    /** 是否开启配置刷新(默认开启[需要显式配置 false 才会关闭], springcloud 环境直接禁用) */
+    private boolean refreshed;
 
     /**
      * Sets app *
