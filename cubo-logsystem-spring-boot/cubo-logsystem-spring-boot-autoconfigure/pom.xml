@@ -28,17 +28,16 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-context</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-logsystem-record</artifactId>
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- 添加其他依赖 -->
         <!--endregion-->
     </dependencies>

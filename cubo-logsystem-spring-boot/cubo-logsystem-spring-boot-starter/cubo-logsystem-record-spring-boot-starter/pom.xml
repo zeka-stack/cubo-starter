@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>dev.dong4j</groupId>
-            <artifactId>cubo-logsystem-log4j2-spring-boot-starter</artifactId>
+            <artifactId>cubo-logsystem-log4j2</artifactId>
         </dependency>
 
         <dependency>
