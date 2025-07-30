@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactory;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactoryAdapter;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(LogStorageFactory.class)
+@ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".record")
 public class LogSystemRecordAutoConfiguration implements ZekaAutoConfiguration {
 
     public LogSystemRecordAutoConfiguration() {

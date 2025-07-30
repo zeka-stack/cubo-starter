@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * <p>Description: </p>
@@ -19,6 +20,7 @@ import org.springframework.boot.context.properties.DeprecatedConfigurationProper
  */
 @Getter
 @Setter
+@RefreshScope
 @ConfigurationProperties(prefix = LauncherProperties.PREFIX)
 public class LauncherProperties extends ZekaProperties {
 
@@ -38,7 +40,7 @@ public class LauncherProperties extends ZekaProperties {
     /** Discovery group */
     private String discoveryGroup;
     /** 是否开启配置刷新(默认开启[需要显式配置 false 才会关闭], springcloud 环境直接禁用) */
-    private boolean refreshed;
+    private boolean refresh;
 
     /**
      * Sets app *

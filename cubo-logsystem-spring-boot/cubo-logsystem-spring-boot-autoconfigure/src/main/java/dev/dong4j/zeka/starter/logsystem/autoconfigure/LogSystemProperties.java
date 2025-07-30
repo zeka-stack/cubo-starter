@@ -8,11 +8,13 @@ import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
 import dev.dong4j.zeka.starter.logsystem.entity.Pattern;
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.logging.LogLevel;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * <p>Description: 日志配置, 此类并没有被使用到, 这里只是为了生成配置的元数据, 方便在配置时进行提示 </p>
@@ -25,6 +27,7 @@ import org.springframework.boot.logging.LogLevel;
  */
 @Getter
 @Setter
+@RefreshScope
 @ConfigurationProperties(prefix = LogSystemProperties.PREFIX)
 public class LogSystemProperties extends ZekaProperties {
 
@@ -86,4 +89,11 @@ public class LogSystemProperties extends ZekaProperties {
      * }
      */
     private Map<String, LogLevel> level;
+
+    private Record record = new Record();
+
+    @Data
+    public static class Record {
+        private boolean enabled;
+    }
 }

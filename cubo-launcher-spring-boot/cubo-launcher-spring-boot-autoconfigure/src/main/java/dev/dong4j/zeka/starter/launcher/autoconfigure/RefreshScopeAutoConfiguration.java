@@ -1,20 +1,28 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.starter.launcher.refresh.ConfigDiffer;
-import dev.dong4j.zeka.starter.launcher.refresh.ConfigFileWatcherRunner;
-import dev.dong4j.zeka.starter.launcher.refresh.DynamicConfigLoader;
-import dev.dong4j.zeka.starter.launcher.refresh.RefreshScopeRefresher;
-import dev.dong4j.zeka.starter.launcher.refresh.RefreshScopeRegistry;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigChangedHandler;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherCustomizer;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherRunner;
+import dev.dong4j.zeka.kernel.common.config.refresh.DynamicConfigLoader;
+import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRefresher;
+import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRegistry;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.support.StrFormatter;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 /**
@@ -35,9 +43,12 @@ import org.springframework.core.env.Environment;
 @ConditionalOnClass(name = "org.springframework.cloud.context.config.annotation.RefreshScope") // 不判断实际类来源
 @ConditionalOnMissingClass("org.springframework.cloud.context.scope.refresh.ContextRefresher") // Spring Cloud 配置刷新不存在时才生效
 @ConditionalOnEnabled(value = LauncherProperties.PREFIX)
-@ConditionalOnProperty(name = LauncherProperties.PREFIX + "refreshed", havingValue = "true", matchIfMissing = true)
-@EnableConfigurationProperties
-public class RefreshScopeAutoConfiguration {
+@ConditionalOnProperty(name = LauncherProperties.PREFIX + "refresh", havingValue = "true", matchIfMissing = true)
+public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
+
+    public RefreshScopeAutoConfiguration() {
+        log.info("启动自动配置: [{}]", this.getClass());
+    }
 
     /**
      * 刷新范围注册表
@@ -64,17 +75,6 @@ public class RefreshScopeAutoConfiguration {
     }
 
     /**
-     * 配置不同
-     *
-     * @return 5:比较新旧配置Map，判断哪些配置项发生了变化，并映射到对应的配置类。
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public ConfigDiffer configDiffer() {
-        return new ConfigDiffer();
-    }
-
-    /**
      * 刷新范围更新
      *
      * @param environment 环境
@@ -87,22 +87,49 @@ public class RefreshScopeAutoConfiguration {
         return new RefreshScopeRefresher(environment, registry, loader);
     }
 
+    @Bean
+    @Order(0)
+    public ConfigChangedHandler yamlConfigChangedHandler(RefreshScopeRefresher refresher) {
+        return (changedFile, changedKeys, latest) -> {
+            if (changedFile.startsWith(ConfigKit.BOOT_CONFIG_FILE_PREFIX)) {
+                refresher.refreshByChangedKeys(changedKeys);
+            }
+        };
+    }
+
     /**
      * 配置文件观察器跑步者
      *
-     * @param loader      加载程序
-     * @param refresher   复习
-     * @param differ      不同
-     * @param environment 环境
+     * @param loader 加载程序
      * @return 配置变更监听执行器
      */
     @Bean
+    @ConditionalOnMissingBean
     public ConfigFileWatcherRunner configFileWatcherRunner(
         DynamicConfigLoader loader,
-        RefreshScopeRefresher refresher,
-        ConfigDiffer differ,
-        Environment environment) {
-        return new ConfigFileWatcherRunner(loader, refresher, differ, environment);
+        ObjectProvider<List<ConfigChangedHandler>> handlerProvider) {
+        return new ConfigFileWatcherRunner(loader, handlerProvider);
+    }
+
+    /**
+     * 添加 springboot 应用配置文件监控
+     * 1. application.yml
+     * 2. application-{env}.yml
+     *
+     * @param environment 环境
+     * @return 自定义需要监听的文件
+     */
+    @Bean
+    public ConfigFileWatcherCustomizer applicationConfigFileWatcher(Environment environment) {
+        return runner -> {
+            Set<String> watched = new HashSet<>();
+            watched.add(ConfigKit.BOOT_CONFIG_FILE_NAME);
+            for (String profile : environment.getActiveProfiles()) {
+                String configFile = StrFormatter.format(ConfigKit.BOOT_ENV_CONFIG_FILE_NAME, profile);
+                watched.add(configFile);
+            }
+            watched.forEach(runner::registerWatchedFile);
+        };
     }
 
 }
