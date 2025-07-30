@@ -11,6 +11,7 @@ import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.processor.annotation.AutoListener;
 import dev.dong4j.zeka.starter.logsystem.Constants;
+import dev.dong4j.zeka.starter.logsystem.enums.LogAppenderType;
 import dev.dong4j.zeka.starter.logsystem.handler.AdditionalProcessor;
 import dev.dong4j.zeka.starter.logsystem.handler.LogFileProcessor;
 import dev.dong4j.zeka.starter.logsystem.handler.PatternProcessor;
@@ -278,7 +279,11 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      */
     private void initializeSystem(ConfigurableEnvironment environment) {
         LoggingInitializationContext initializationContext = new LoggingInitializationContext(environment);
-        String logConfig = environment.getProperty(CONFIG_PROPERTY);
+        String logConfig = environment.getProperty(ConfigKey.LogSystemConfigKey.LOG_CONFIG,
+            environment.getProperty(CONFIG_PROPERTY, LogAppenderType.FILE.getConfig()));
+        if (!logConfig.startsWith("classpath")) {
+            logConfig = "classpath:" + logConfig;
+        }
         try {
             ResourceUtils.getURL(Objects.requireNonNull(logConfig)).openStream().close();
             this.loggingSystem.initialize(initializationContext, logConfig, this.buildLogFile(this.logFileProcessor));
