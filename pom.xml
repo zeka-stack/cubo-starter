@@ -7,7 +7,7 @@
     <parent>
         <groupId>dev.dong4j</groupId>
         <artifactId>arco-component-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -98,7 +98,7 @@
     </modules>
 
     <properties>
-        <revision>0.0.1-SNAPSHOT</revision>
+        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <dependencyManagement>
