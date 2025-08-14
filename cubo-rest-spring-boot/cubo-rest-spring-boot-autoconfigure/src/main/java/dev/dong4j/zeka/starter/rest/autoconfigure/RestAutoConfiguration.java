@@ -9,20 +9,19 @@ import dev.dong4j.zeka.starter.rest.autoconfigure.servlet.ServletAutoConfigurati
 import dev.dong4j.zeka.starter.rest.runner.OpenBrowserRunner;
 import dev.dong4j.zeka.starter.rest.spi.RestLauncherInitiation;
 import dev.dong4j.zeka.starter.rest.support.ZekaRestComponent;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
@@ -36,15 +35,14 @@ import org.springframework.context.annotation.Profile;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = {
+    ServletAutoConfiguration.class,
+    WebFluxAutoConfiguration.class
+})
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @EnableConfigurationProperties(RestProperties.class)
 @ConditionalOnClass(RestLauncherInitiation.class)
-@AutoConfigureAfter({
-    ServletAutoConfiguration.class,
-    WebFluxAutoConfiguration.class
-})
 public class RestAutoConfiguration implements ZekaAutoConfiguration {
 
     public RestAutoConfiguration() {

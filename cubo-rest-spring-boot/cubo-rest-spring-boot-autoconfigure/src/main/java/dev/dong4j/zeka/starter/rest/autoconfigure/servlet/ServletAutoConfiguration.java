@@ -12,12 +12,13 @@ import dev.dong4j.zeka.starter.rest.interceptor.CurrentUserInterceptor;
 import dev.dong4j.zeka.starter.rest.interceptor.TraceInterceptor;
 import dev.dong4j.zeka.starter.rest.support.CurrentUserArgumentResolver;
 import dev.dong4j.zeka.starter.rest.support.CurrentUserService;
+import jakarta.servlet.Servlet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -41,7 +42,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
 @ConditionalOnEnabled(value = RestProperties.PREFIX)

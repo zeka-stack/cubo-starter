@@ -13,11 +13,12 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.RequestDumpingHandler;
 import io.undertow.server.handlers.accesslog.AccessLogHandler;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.Servlet;
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +26,6 @@ import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFa
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
@@ -38,7 +38,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties(RestProperties.class)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)

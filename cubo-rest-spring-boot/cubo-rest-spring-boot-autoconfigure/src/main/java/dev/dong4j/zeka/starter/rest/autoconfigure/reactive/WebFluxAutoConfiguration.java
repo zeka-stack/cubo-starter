@@ -4,12 +4,12 @@ import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaWebfluxExceptionErrorAttributes;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
@@ -23,7 +23,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ZekaWebfluxExceptionErrorAttributes.class})

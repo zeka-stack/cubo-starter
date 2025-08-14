@@ -32,6 +32,8 @@ public class RestProperties extends ZekaProperties {
     private Integer writeTimeout = 5000;
     /** Connect timeout */
     private Integer connectTimeout = 3000;
+    /** 连接池配置 */
+    private ConnectionPool connectionPool = new ConnectionPool();
     /** 启动完成后是否打开浏览器 */
     private boolean enableBrowser = Boolean.FALSE;
     /** 是否开启 undertow 容器的请求日志 */
@@ -50,6 +52,23 @@ public class RestProperties extends ZekaProperties {
     private Multipart multipart = new Multipart();
     /** json 配置 */
     private Json json = new Json();
+
+    /**
+     * <p>Description: 连接池配置 </p>
+     *
+     * @author dong4j
+     * @version 1.0.0
+     * @email "mailto:dong4j@gmail.com"
+     * @date 2025.01.01 00:00
+     * @since 1.0.0
+     */
+    @Data
+    public static class ConnectionPool {
+        /** 最大空闲连接数 */
+        private Integer maxIdleConnections = 5;
+        /** 连接保活时间（分钟） */
+        private Integer keepAliveDuration = 5;
+    }
 
     /**
      * <p>Description: json 序列化/反序列化, 时间格式配置 </p>
@@ -77,7 +96,7 @@ public class RestProperties extends ZekaProperties {
      * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2021.07.13 17:32
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Data
     public static class Multipart {

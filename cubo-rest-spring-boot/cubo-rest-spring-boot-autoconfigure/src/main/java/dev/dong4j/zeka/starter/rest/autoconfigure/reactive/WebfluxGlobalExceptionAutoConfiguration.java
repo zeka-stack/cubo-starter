@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
@@ -25,7 +25,6 @@ import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.codec.support.DefaultServerCodecConfigurer;
@@ -42,19 +41,18 @@ import org.springframework.web.reactive.result.view.ViewResolver;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(value = {WebFluxConfigurer.class, ZekaWebfluxExceptionErrorAttributes.class})
-@AutoConfigureBefore(WebFluxAutoConfiguration.class)
+@AutoConfiguration(before = WebFluxAutoConfiguration.class)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-@EnableConfigurationProperties(value = {ServerProperties.class, ResourceProperties.class})
+@EnableConfigurationProperties(value = {ServerProperties.class, WebProperties.class})
 public class WebfluxGlobalExceptionAutoConfiguration implements ZekaAutoConfiguration {
     /** Server properties */
     private final ServerProperties serverProperties;
     /** Application context */
     private final ApplicationContext applicationContext;
     /** Resource properties */
-    private final ResourceProperties resourceProperties;
+    private final WebProperties resourceProperties;
     /** View resolvers */
     private final List<ViewResolver> viewResolvers;
     /** Server codec configurer */
@@ -71,7 +69,7 @@ public class WebfluxGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
      * @since 1.0.0
      */
     public WebfluxGlobalExceptionAutoConfiguration(ServerProperties serverProperties,
-                                                   ResourceProperties resourceProperties,
+                                                   WebProperties resourceProperties,
                                                    @NotNull ObjectProvider<ViewResolver> viewResolversProvider,
                                                    ServerCodecConfigurer serverCodecConfigurer,
                                                    ApplicationContext applicationContext) {
@@ -108,7 +106,7 @@ public class WebfluxGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
     public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
         log.info("初始化自定义全局异常处理器: {}", JsonErrorWebExceptionHandler.class);
         JsonErrorWebExceptionHandler exceptionHandler = new JsonErrorWebExceptionHandler(errorAttributes,
-            this.resourceProperties,
+            this.resourceProperties.getResources(),
             this.serverProperties.getError(),
             this.applicationContext);
         exceptionHandler.setViewResolvers(this.viewResolvers);

@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +22,14 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -46,10 +45,9 @@ import org.springframework.web.client.RestTemplate;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = JacksonConfiguration.class)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @EnableConfigurationProperties(RestProperties.class)
-@AutoConfigureAfter(JacksonConfiguration.class)
 @ConditionalOnMissingClass("dev.dong4j.zeka.agent.adapter.config.AgentAdapterRestConfiguration")
 public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
 
@@ -60,6 +58,10 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
     /**
      * 使用 okhttp, 忽略 https 证书
      *
+     * 注意：在Spring Boot 3.x中，OkHttp3ClientHttpRequestFactory已被删除
+     * 我们使用自定义的OkHttpClientHttpRequestFactory来替代
+     * 支持连接池配置
+     *
      * @param restProperties rest properties
      * @return the client http request factory
      * @since 1.0.0
@@ -67,11 +69,20 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
     @Bean
     @ConditionalOnClass(OkHttpClient.class)
     public ClientHttpRequestFactory clientHttpRequestFactory(@NotNull RestProperties restProperties) {
-        OkHttp3ClientHttpRequestFactory factory = new OkHttp3ClientHttpRequestFactory(this.getUnsafeOkHttpClient());
-        factory.setConnectTimeout(restProperties.getConnectTimeout());
-        factory.setReadTimeout(restProperties.getReadTimeout());
-        factory.setWriteTimeout(restProperties.getWriteTimeout());
-        return factory;
+        // 获取支持SSL的OkHttpClient基础配置
+        OkHttpClient baseClient = this.getUnsafeOkHttpClient();
+
+        // 使用自定义的OkHttpClientHttpRequestFactory，支持连接池配置
+        // 注意：这里我们需要将SSL配置传递给自定义工厂
+        return new OkHttpClientHttpRequestFactory(
+            baseClient,  // 传递SSL配置的OkHttpClient
+            restProperties.getConnectTimeout(),
+            restProperties.getReadTimeout(),
+            restProperties.getWriteTimeout(),
+            restProperties.getConnectionPool().getMaxIdleConnections(),
+            restProperties.getConnectionPool().getKeepAliveDuration(),
+            TimeUnit.MINUTES
+        );
     }
 
     /**

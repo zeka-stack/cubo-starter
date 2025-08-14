@@ -8,10 +8,10 @@ import dev.dong4j.zeka.kernel.web.handler.ServletErrorController;
 import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -24,7 +24,6 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
@@ -37,8 +36,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
+@AutoConfiguration(before = ErrorMvcAutoConfiguration.class)
 @EnableConfigurationProperties(ServerProperties.class)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})

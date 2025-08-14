@@ -35,13 +35,13 @@ import dev.dong4j.zeka.starter.rest.support.FormdataBodyArgumentResolver;
 import dev.dong4j.zeka.starter.rest.support.RequestAbstractFormMethodArgumentResolver;
 import dev.dong4j.zeka.starter.rest.support.RequestSingleParamHandlerMethodArgumentResolver;
 import dev.dong4j.zeka.starter.rest.xss.XssFilter;
+import jakarta.annotation.Resource;
+import jakarta.servlet.Servlet;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -51,7 +51,6 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.convert.converter.ConverterFactory;
@@ -89,8 +88,7 @@ import org.springframework.web.util.UrlPathHelper;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureAfter(JacksonConfiguration.class)
+@AutoConfiguration(after = JacksonConfiguration.class)
 @ConditionalOnEnabled(value = RestProperties.PREFIX)
 @EnableConfigurationProperties(value = {ServerProperties.class, XssProperties.class, WebProperties.class})
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ZekaServletExceptionErrorAttributes.class})
