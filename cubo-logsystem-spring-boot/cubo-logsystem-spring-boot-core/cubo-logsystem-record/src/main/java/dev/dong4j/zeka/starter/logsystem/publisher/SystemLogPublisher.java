@@ -8,11 +8,10 @@ import dev.dong4j.zeka.starter.logsystem.entity.SystemLog;
 import dev.dong4j.zeka.starter.logsystem.enums.OperationAction;
 import dev.dong4j.zeka.starter.logsystem.event.SystemLogEvent;
 import dev.dong4j.zeka.starter.logsystem.util.LogRecordUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 系统日志信息事件发送

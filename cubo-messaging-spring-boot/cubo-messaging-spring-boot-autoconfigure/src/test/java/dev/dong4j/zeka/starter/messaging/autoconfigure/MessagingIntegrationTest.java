@@ -7,7 +7,7 @@ import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
 import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.rocketmq.common.message.Message;

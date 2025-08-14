@@ -7,11 +7,10 @@ import dev.dong4j.zeka.kernel.common.util.UrlUtils;
 import dev.dong4j.zeka.kernel.common.util.WebUtils;
 import dev.dong4j.zeka.starter.logsystem.entity.AbstractLog;
 import dev.dong4j.zeka.starter.logsystem.storage.ILogStorage;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Description:  </p>

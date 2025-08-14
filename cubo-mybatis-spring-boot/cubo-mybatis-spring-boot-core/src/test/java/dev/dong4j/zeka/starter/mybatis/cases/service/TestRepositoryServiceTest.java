@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.mybatis.cases.service;
 
 import dev.dong4j.zeka.kernel.test.ZekaTest;
 import dev.dong4j.zeka.starter.mybatis.repository.TestRepositoryService;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 

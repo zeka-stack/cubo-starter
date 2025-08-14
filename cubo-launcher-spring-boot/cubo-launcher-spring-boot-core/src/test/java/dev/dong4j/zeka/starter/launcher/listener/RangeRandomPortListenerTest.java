@@ -3,16 +3,15 @@ package dev.dong4j.zeka.starter.launcher.listener;
 import dev.dong4j.zeka.kernel.common.exception.PropertiesException;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.test.ZekaTest;
+import jakarta.annotation.Resource;
+import java.util.Objects;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-
-import javax.annotation.Resource;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * <p>Description: </p>

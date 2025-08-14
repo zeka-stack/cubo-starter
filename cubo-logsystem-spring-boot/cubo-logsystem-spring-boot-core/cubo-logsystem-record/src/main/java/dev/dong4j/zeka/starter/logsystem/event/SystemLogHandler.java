@@ -6,15 +6,14 @@ import dev.dong4j.zeka.starter.logsystem.entity.SystemLog;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactory;
 import dev.dong4j.zeka.starter.logsystem.storage.ILogStorage;
 import dev.dong4j.zeka.starter.logsystem.util.LogRecordUtils;
+import jakarta.annotation.Resource;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * <p>Description: 异步监听日志事件 </p>

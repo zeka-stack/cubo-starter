@@ -10,8 +10,7 @@ import dev.dong4j.zeka.kernel.common.util.WebUtils;
 import dev.dong4j.zeka.starter.logsystem.entity.ErrorLog;
 import dev.dong4j.zeka.starter.logsystem.event.ErrorLogEvent;
 import dev.dong4j.zeka.starter.logsystem.util.LogRecordUtils;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
