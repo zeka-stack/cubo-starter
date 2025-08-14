@@ -10,12 +10,13 @@ import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
 import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
 import dev.dong4j.zeka.kernel.common.util.Exceptions;
 import dev.dong4j.zeka.kernel.common.util.ResultCodeUtils;
+import jakarta.servlet.ServletException;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,14 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
      * @since 1.0.0
      */
     public ZekaServletExceptionErrorAttributes(boolean includeException) {
-        super(includeException);
         this.includeException = includeException;
+    }
+
+    @Override
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+        Map<String, Object> errorAttributes = this.getErrorAttributes(webRequest, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
+        options.retainIncluded(errorAttributes);
+        return errorAttributes;
     }
 
     /**
@@ -59,8 +66,8 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
      * @return the error attribute
      * @since 1.0.0
      */
-    @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
+
+    private Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
         // 根据是否为 prod 环境来获取 map, 不使用原来的配置
         if (!this.includeException) {
             Throwable error = this.getError(webRequest);
@@ -133,7 +140,7 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
     private @NotNull Object buildData(@NotNull WebRequest webRequest) {
         ExceptionInfo exceptionEntity = new ExceptionInfo();
         HttpMethod httpMethod = ((ServletWebRequest) webRequest).getHttpMethod();
-        String method = httpMethod == null ? "" : httpMethod.name();
+        String method = httpMethod.name();
         Map<String, String> headers = Maps.newHashMapWithExpectedSize(16);
         Iterator<String> headerNames = webRequest.getHeaderNames();
         while (headerNames.hasNext()) {
@@ -218,11 +225,11 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
      */
     @Contract("null -> null")
     private BindingResult extractBindingResult(Throwable error) {
-        if (error instanceof BindingResult) {
-            return (BindingResult) error;
-        }
         if (error instanceof MethodArgumentNotValidException) {
             return ((MethodArgumentNotValidException) error).getBindingResult();
+        }
+        if (error instanceof BindingResult) {
+            return (BindingResult) error;
         }
         return null;
     }

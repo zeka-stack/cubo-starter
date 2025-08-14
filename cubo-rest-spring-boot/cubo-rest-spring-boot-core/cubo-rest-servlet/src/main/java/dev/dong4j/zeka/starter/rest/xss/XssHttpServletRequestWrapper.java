@@ -6,12 +6,11 @@ import dev.dong4j.zeka.kernel.common.util.Charsets;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.common.util.WebUtils;
 import dev.dong4j.zeka.kernel.web.support.CacheRequestEnhanceWrapper;
-import java.io.IOException;
+import jakarta.servlet.ServletInputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.servlet.ServletInputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -57,7 +56,6 @@ public class XssHttpServletRequestWrapper extends CacheRequestEnhanceWrapper {
      * Gets input stream *
      *
      * @return the input stream
-     * @throws IOException io exception
      * @since 1.0.0
      */
     @Override

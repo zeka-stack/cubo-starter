@@ -22,8 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
@@ -67,10 +68,24 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
      * @since 1.0.0
      */
     public JsonErrorWebExceptionHandler(ErrorAttributes errorAttributes,
-                                        ResourceProperties resourceProperties,
+                                        WebProperties.Resources resourceProperties,
                                         ErrorProperties errorProperties,
                                         ApplicationContext applicationContext) {
         super(errorAttributes, resourceProperties, errorProperties, applicationContext);
+    }
+
+    /**
+     * 获取错误属性
+     *
+     * @param request 要求
+     * @param options 选项
+     * @return 地图<字符串，对象>
+     */
+    @Override
+    public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
+        Map<String, Object> errorAttributes = this.getErrorAttributes(request, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
+        options.retainIncluded(errorAttributes);
+        return errorAttributes;
     }
 
     /**
@@ -81,9 +96,7 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
      * @return the error attribute
      * @since 1.0.0
      */
-    @Override
-    @SuppressWarnings("all")
-    protected Map<String, Object> getErrorAttributes(@NotNull ServerRequest request, boolean includeStackTrace) {
+    private Map<String, Object> getErrorAttributes(@NotNull ServerRequest request, boolean includeStackTrace) {
         Map<String, Object> map = Maps.newHashMapWithExpectedSize(4);
         Map<String, Object> data = Maps.newHashMapWithExpectedSize(2);
         map.put(R.DATA, data);
@@ -127,9 +140,8 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
         map.put(R.MESSAGE, errorMessage);
         map.put(R.SUCCESS, false);
 
-        if (error instanceof BasicException) {
+        if (error instanceof BasicException baseException) {
             // 捕获自定义异常
-            BasicException baseException = (BasicException) error;
             map.put(R.CODE, baseException.getCode());
             map.put(R.MESSAGE, baseException.getMessage());
             errorMessage = baseException.getMessage();
@@ -138,9 +150,8 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
             map.put(R.CODE, BaseCodes.GATEWAY_NOT_FUND_INSTANCES_ERROR.getCode());
             map.put(R.MESSAGE, BaseCodes.GATEWAY_NOT_FUND_INSTANCES_ERROR.getMessage());
             errorMessage = BaseCodes.GATEWAY_NOT_FUND_INSTANCES_ERROR.getMessage();
-        } else if (error instanceof ResponseStatusException) {
+        } else if (error instanceof ResponseStatusException exception) {
             // 路由配置不正确, 导致直接调用 gateway 的 rest 接口, 而 gateway 根本没有这个接口
-            ResponseStatusException exception = (ResponseStatusException) error;
             map.put(R.CODE, BaseCodes.GATEWAY_ROUTER_ERROR.getCode());
             map.put(R.MESSAGE, BaseCodes.GATEWAY_ROUTER_ERROR.getMessage() + ": " + exception.getMessage());
             errorMessage = BaseCodes.GATEWAY_ROUTER_ERROR.getMessage() + ": " + exception.getMessage();
@@ -160,7 +171,7 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
         ExceptionInfo exceptionEntity = new ExceptionInfo();
         exceptionEntity.setExceptionClass(error.getClass().getName());
         exceptionEntity.setPath(request.path());
-        exceptionEntity.setMethod(request.methodName());
+        exceptionEntity.setMethod(request.method().name());
         exceptionEntity.setTraceId(StringUtils.isBlank(Trace.context().get()) ? StringUtils.getUid() : Trace.context().get());
         Optional<InetSocketAddress> inetSocketAddress = request.remoteAddress();
         String hostName = "";
@@ -187,7 +198,7 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
     @NotNull
     private static String buildMessage(@NotNull ServerRequest request, Throwable ex) {
         StringBuilder message = new StringBuilder("Failed to handle request [");
-        message.append(request.methodName());
+        message.append(request.method().name());
         message.append(" ");
         message.append(request.uri());
         message.append("]");

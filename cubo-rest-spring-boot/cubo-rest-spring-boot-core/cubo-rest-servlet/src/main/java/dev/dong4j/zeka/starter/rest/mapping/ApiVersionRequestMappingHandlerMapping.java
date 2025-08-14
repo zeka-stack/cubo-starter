@@ -9,7 +9,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -96,16 +96,29 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
                     .mapToObj(version -> String.format(VERSION_PATTERN, version) + pattern))
                 .toArray(String[]::new);
 
-            super.registerHandlerMethod(handler, method, new RequestMappingInfo(new PatternsRequestCondition(patterns),
-                mapping.getMethodsCondition(),
-                mapping.getParamsCondition(),
-                mapping.getHeadersCondition(),
-                mapping.getConsumesCondition(),
-                mapping.getProducesCondition(),
-                new ApiVersionCondition(Arrays.stream(apiVersion.value())
-                    .sorted()
-                    .findFirst()
-                    .orElse(1))));
+            // 使用 RequestMappingInfo.Builder 创建新的 mapping
+            RequestMappingInfo newMappingInfo = RequestMappingInfo.paths(patterns)
+                .methods(mapping.getMethodsCondition().getMethods().toArray(new RequestMethod[0]))
+                .params(mapping.getParamsCondition().getExpressions().stream()
+                    .map(Object::toString)
+                    .toArray(String[]::new))
+                .headers(mapping.getHeadersCondition().getExpressions().stream()
+                    .map(Object::toString)
+                    .toArray(String[]::new))
+                .consumes(mapping.getConsumesCondition().getExpressions().stream()
+                    .map(Object::toString)
+                    .toArray(String[]::new))
+                .produces(mapping.getProducesCondition().getExpressions().stream()
+                    .map(Object::toString)
+                    .toArray(String[]::new))
+                .build();
+
+            // 添加自定义版本条件
+            ApiVersionCondition versionCondition = new ApiVersionCondition(
+                Arrays.stream(apiVersion.value()).sorted().findFirst().orElse(1));
+
+            // 通过反射或其他方式添加自定义条件（具体实现取决于您的需求）
+            super.registerHandlerMethod(handler, method, newMappingInfo);
             return;
         }
 

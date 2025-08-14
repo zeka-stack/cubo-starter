@@ -4,7 +4,7 @@ import dev.dong4j.zeka.kernel.auth.CurrentUser;
 import dev.dong4j.zeka.kernel.auth.util.AuthUtils;
 import dev.dong4j.zeka.kernel.auth.util.JwtUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 
 /**

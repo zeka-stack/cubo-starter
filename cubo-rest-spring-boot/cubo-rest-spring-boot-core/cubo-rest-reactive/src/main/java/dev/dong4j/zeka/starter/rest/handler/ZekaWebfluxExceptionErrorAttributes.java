@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
@@ -44,8 +45,15 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
      * @since 1.0.0
      */
     public ZekaWebfluxExceptionErrorAttributes(boolean includeException) {
-        super(includeException);
         this.includeException = includeException;
+    }
+
+
+    @Override
+    public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
+        Map<String, Object> errorAttributes = this.getErrorAttributes(request, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
+        options.retainIncluded(errorAttributes);
+        return errorAttributes;
     }
 
     /**
@@ -56,8 +64,8 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
      * @return the error attribute
      * @since 1.0.0
      */
-    @Override
-    public Map<String, Object> getErrorAttributes(ServerRequest request, boolean includeStackTrace) {
+
+    private Map<String, Object> getErrorAttributes(ServerRequest request, boolean includeStackTrace) {
         // 根据是否为 prod 环境来获取 map, 不使用原来的配置
         if (!this.includeException) {
             // 当为生产环境,不适合把具体的异常信息展示给用户,比如数据库异常信息.
@@ -92,7 +100,7 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
      */
     private static HttpStatus determineHttpStatus(Throwable error) {
         if (error instanceof ResponseStatusException) {
-            return ((ResponseStatusException) error).getStatus();
+            return HttpStatus.resolve(((ResponseStatusException) error).getStatusCode().value());
         }
         ResponseStatus responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.getClass(),
             ResponseStatus.class);
@@ -130,7 +138,7 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
         exceptionEntity.setErrorMessage(determineMessage(error));
         exceptionEntity.setExceptionClass(error.getClass().getName());
         exceptionEntity.setParams(serverHttpRequest.getQueryParams().toSingleValueMap());
-        exceptionEntity.setMethod(webRequest.methodName());
+        exceptionEntity.setMethod(webRequest.method().name());
         exceptionEntity.setRemoteAddr(webRequest.remoteAddress().isPresent() ? webRequest.remoteAddress().get().getHostName() : "");
         exceptionEntity.setHeaders(httpHeaders.toSingleValueMap());
         exceptionEntity.setTraceId(Trace.context().get());

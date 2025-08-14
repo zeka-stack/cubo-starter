@@ -4,9 +4,9 @@ import dev.dong4j.zeka.kernel.auth.CurrentUser;
 import dev.dong4j.zeka.kernel.common.exception.BasicException;
 import dev.dong4j.zeka.starter.rest.annotation.TokenRequired;
 import dev.dong4j.zeka.starter.rest.support.CurrentUserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.method.HandlerMethod;
@@ -42,10 +42,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                              @NotNull Object handler) {
 
         // 如果不是映射到方法直接通过
-        if (!(handler instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
 
         // 判断接口是否需要登录

@@ -1,9 +1,9 @@
 package dev.dong4j.zeka.starter.rest;
 
 import dev.dong4j.zeka.kernel.common.api.GeneralResult;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 
 /**

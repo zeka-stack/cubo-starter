@@ -1,9 +1,9 @@
 package dev.dong4j.zeka.starter.rest.condition;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;

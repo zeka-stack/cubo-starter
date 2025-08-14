@@ -49,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0
  */
 @Slf4j
-@SuppressWarnings(value = {"checkstyle:MemberName", "checkstyle:LocalVariableName"})
+@SuppressWarnings(value = {"ALL"})
 public final class HtmlFilter {
 
     /**
