@@ -10,12 +10,12 @@ import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.starter.openapi.autoconfigure.OpenAPIProperties;
 import jakarta.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @date 2020.05.08 16:14
  * @since 1.4.0
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @Profile(value = {App.ENV_NOT_PROD})
 @ConditionalOnClass(value = {
     EnableKnife4j.class,
@@ -65,7 +65,7 @@ public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
      * @date 2020.05.08 16:52
      * @since 1.4.0
      */
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     @ConditionalOnResource(resources = "classpath:META-INF/resources/doc.html")
     static class Knife4jUiAutoConfiguration implements ZekaAutoConfiguration {
 

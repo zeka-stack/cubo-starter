@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
@@ -39,7 +39,7 @@ import org.springframework.core.env.Environment;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass(name = "org.springframework.cloud.context.config.annotation.RefreshScope") // 不判断实际类来源
 @ConditionalOnMissingClass("org.springframework.cloud.context.scope.refresh.ContextRefresher") // Spring Cloud 配置刷新不存在时才生效
 @ConditionalOnEnabled(value = LauncherProperties.PREFIX)

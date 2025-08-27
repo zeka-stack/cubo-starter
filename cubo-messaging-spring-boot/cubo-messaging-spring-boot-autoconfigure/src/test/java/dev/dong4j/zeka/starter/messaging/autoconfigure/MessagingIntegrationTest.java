@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.test.ZekaTest;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
@@ -92,7 +92,7 @@ class MessagingIntegrationTest {
 
         assertEquals("payments:PAYMENT", destinationCaptor.getValue());
         Message sentMessage = rocketCaptor.getValue();
-        assertEquals(payment, JsonUtils.parse(sentMessage.getBody(), Payment.class));
+        assertEquals(payment, Jsons.parse(sentMessage.getBody(), Payment.class));
         assertEquals("PAYMENT", sentMessage.getProperty(("rocketmq_tag")));
     }
 }
@@ -124,7 +124,7 @@ class PaymentService {
         type = MessagingType.ROCKETMQ
     )
     public void processRocketMQPayment(MessageExt message) {
-        Payment payment = JsonUtils.parse(message.getBody(), Payment.class);
+        Payment payment = Jsons.parse(message.getBody(), Payment.class);
         processPayment(payment);
     }
 

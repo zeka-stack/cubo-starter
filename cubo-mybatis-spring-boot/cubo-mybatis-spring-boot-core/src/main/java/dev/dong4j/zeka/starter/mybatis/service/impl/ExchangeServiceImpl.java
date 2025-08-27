@@ -1,6 +1,5 @@
 package dev.dong4j.zeka.starter.mybatis.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
 import dev.dong4j.zeka.kernel.common.base.AbstractBaseEntity;
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;

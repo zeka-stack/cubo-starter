@@ -8,7 +8,7 @@ import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.kernel.common.util.GsonUtils;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.Tools;
 import dev.dong4j.zeka.starter.rest.entity.GenderEnum;
 import dev.dong4j.zeka.starter.rest.entity.UserForm;
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 class EntityEnumSerializerTest {
 
     /** Object mapper */
-    private final ObjectMapper objectMapper = JsonUtils.getCopyMapper();
+    private final ObjectMapper objectMapper = Jsons.getCopyMapper();
 
     /**
      * 不设置也可以
@@ -99,10 +99,10 @@ class EntityEnumSerializerTest {
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         // JsonUtils 没有序列化/反序列化枚举的功能
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
 
         // 使用 objectMapper 来序列化枚举
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
         Assertions.assertEquals(userForm.getGender(), GenderEnum.MAN);
         Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
     }
@@ -114,10 +114,10 @@ class EntityEnumSerializerTest {
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         // JsonUtils 没有序列化/反序列化枚举的功能
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
 
         // 使用 objectMapper 来序列化枚举
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
         Assertions.assertEquals(userForm.getGender(), GenderEnum.MAN);
         Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
     }
@@ -146,9 +146,9 @@ class EntityEnumSerializerTest {
             "}";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
 
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
         Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
         Assertions.assertNull(userForm.getType());
@@ -178,9 +178,9 @@ class EntityEnumSerializerTest {
             "}";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
 
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
         Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
         Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
@@ -210,9 +210,9 @@ class EntityEnumSerializerTest {
             "}";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
 
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
         Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
         Assertions.assertEquals(userForm.getType(), UserType.SA);
@@ -242,10 +242,10 @@ class EntityEnumSerializerTest {
             "}";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
-        log.info("{}", JsonUtils.toJson(userForm, true));
+        log.info("{}", Jsons.toJson(userForm, true));
         log.info("{}", GsonUtils.toJson(userForm, true));
 
-        log.info("{}", JsonUtils.toJson(this.objectMapper, userForm, true));
+        log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
         Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
         Assertions.assertEquals(userForm.getType(), UserType.SA);
@@ -305,9 +305,9 @@ class EntityEnumSerializerTest {
             "    \"value\": 1,\n" +
             "    \"desc\": \"xxxx\"\n" +
             "}";
-        log.info("{}", JsonUtils.parse(json, UserStatusEnum.class));
+        log.info("{}", Jsons.parse(json, UserStatusEnum.class));
         log.info("{}", Tools.convert(json, UserStatusEnum.class));
-        log.info("{}", JsonUtils.toJson(UserStatusEnum.CHECK_FAILED));
+        log.info("{}", Jsons.toJson(UserStatusEnum.CHECK_FAILED));
     }
 
     /**

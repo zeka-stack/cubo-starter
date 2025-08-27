@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.exception.BaseException;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.rest.annotation.RequestAbstractForm;
@@ -78,11 +78,11 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
         ReflectionUtils.doWithFields(parameter.getParameter().getType(), field -> {
             ReflectionUtils.makeAccessible(field);
             try {
-                Object typeValue = JsonUtils.toMap(inputMessage.getBody(), String.class, Object.class).get(field.getName());
+                Object typeValue = Jsons.toMap(inputMessage.getBody(), String.class, Object.class).get(field.getName());
                 Class<?> type = field.getType();
                 Object convert = this.convert((Class<? extends SerializeEnum<?>>) type, typeValue);
                 SubClassType subClassType = (SubClassType) convert;
-                parse[0] = JsonUtils.parse(inputMessage.getBody(), subClassType.getSubClass());
+                parse[0] = Jsons.parse(inputMessage.getBody(), subClassType.getSubClass());
             } catch (IOException e) {
                 throw new BaseException(e);
             }

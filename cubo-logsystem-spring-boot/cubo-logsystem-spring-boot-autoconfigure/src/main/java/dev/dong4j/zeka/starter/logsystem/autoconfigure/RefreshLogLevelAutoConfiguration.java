@@ -21,13 +21,13 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
@@ -41,7 +41,7 @@ import org.springframework.core.env.Environment;
  * @since x.x.x
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 public class RefreshLogLevelAutoConfiguration {
 
     /**
@@ -53,7 +53,7 @@ public class RefreshLogLevelAutoConfiguration {
      * @date 2025.07.30
      * @since 1.0.0
      */
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     @ConditionalOnClass(LogPrintStream.class)
     @EnableConfigurationProperties(LogSystemProperties.class)
     @ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".refresh")
@@ -158,7 +158,7 @@ public class RefreshLogLevelAutoConfiguration {
      * @date 2025.07.30
      * @since 1.0.0
      */
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     @ConditionalOnClass(EnvironmentChangeEvent.class)
     @ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".refresh")
     static class SpringCloudDynamicChangeLogLevel implements ZekaAutoConfiguration {

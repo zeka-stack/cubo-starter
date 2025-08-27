@@ -26,7 +26,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -127,7 +126,7 @@ public class ServletAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.7.0
      */
     @Slf4j
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     @ConditionalOnBean(RequestMappingHandlerAdapter.class)
     @ConditionalOnEnabled(value = RestProperties.PREFIX)
     static class ConsumerMethodReturnValueHandlerAutoConfiguration implements ZekaAutoConfiguration {

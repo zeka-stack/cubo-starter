@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.jackson.JavaTimeModule;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ public class JacksonConfiguration implements ZekaAutoConfiguration {
     @Bean
     @Primary
     public ObjectMapper jacksonObjectMapper() {
-        ObjectMapper globalObjectMapper = JsonUtils.getCopyMapper();
+        ObjectMapper globalObjectMapper = Jsons.getCopyMapper();
         if (this.jacksonProperties.getDefaultPropertyInclusion() != null) {
             globalObjectMapper.setSerializationInclusion(this.jacksonProperties.getDefaultPropertyInclusion());
         }

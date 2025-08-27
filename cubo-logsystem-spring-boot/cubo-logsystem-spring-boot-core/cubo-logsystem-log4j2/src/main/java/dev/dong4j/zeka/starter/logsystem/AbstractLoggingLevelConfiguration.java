@@ -1,8 +1,10 @@
 package dev.dong4j.zeka.starter.logsystem;
 
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.logsystem.listener.ZekaLoggingListener;
+import java.util.Locale;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.logging.LogLevel;
@@ -12,9 +14,6 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
-
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * <p>Description:  </p>
@@ -74,7 +73,7 @@ public abstract class AbstractLoggingLevelConfiguration<T extends ApplicationEve
      * @since 1.6.0
      */
     public void configureLogLevel(LoggingSystem loggingSystem, @NotNull Map<String, String> levels) {
-        log.info("日志等级修改事件处理: {}", JsonUtils.toJson(levels));
+        log.info("日志等级修改事件处理: {}", Jsons.toJson(levels));
 
         levels.forEach((name, level) -> {
             level = this.environment.resolvePlaceholders(level);

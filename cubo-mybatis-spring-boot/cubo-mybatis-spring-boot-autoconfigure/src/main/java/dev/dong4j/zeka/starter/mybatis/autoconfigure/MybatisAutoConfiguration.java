@@ -35,6 +35,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,7 +43,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClas
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
@@ -55,7 +55,7 @@ import org.springframework.context.annotation.Profile;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnEnabled(value = MybatisProperties.PREFIX)
 @ConditionalOnClass(MybatisPlusAutoConfiguration.class)
 @EnableConfigurationProperties(MybatisProperties.class)
@@ -285,7 +285,7 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      * @date 2021.04.07 21:01
      * @since 1.8.0
      */
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     static class MetaObjectAutoConfiguration implements ZekaAutoConfiguration {
         /**
          * 自动创建时间和更新时间

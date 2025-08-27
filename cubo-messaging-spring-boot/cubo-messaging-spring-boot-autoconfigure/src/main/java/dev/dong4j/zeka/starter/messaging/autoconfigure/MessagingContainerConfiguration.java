@@ -7,10 +7,10 @@ import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
 import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
 import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
 import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 
@@ -23,7 +23,7 @@ import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
  * @date 2025.06.27
  * @since 1.0.0
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnEnabled(value = MessagingProperties.PREFIX)
 @EnableConfigurationProperties(MessagingProperties.class)
 public class MessagingContainerConfiguration {

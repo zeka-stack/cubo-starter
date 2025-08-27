@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
@@ -80,7 +80,7 @@ class RangeRandomPortListenerTest {
      * @date 2020.03.23 15:00
      * @since 1.0.0
      */
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     static class TestAppConfiguration {
     }
 

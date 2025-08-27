@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.endpoint.servlet;
 
 import cn.hutool.http.HttpUtil;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ public class ServletInitializationService implements InitializationService {
     @Override
     public void request(String warmUpEndpoint) {
         try {
-            HttpUtil.post(warmUpEndpoint, JsonUtils.toJson(this.createSampleMessage()));
+            HttpUtil.post(warmUpEndpoint, Jsons.toJson(this.createSampleMessage()));
         } catch (Exception e) {
             log.debug("WarmUp Endpoint request error. warmUpEndpoint: [{}] {}", warmUpEndpoint, e.getMessage());
         }

@@ -11,11 +11,11 @@ import dev.dong4j.zeka.starter.mybatis.plugins.PerformanceInterceptor;
 import java.lang.reflect.Field;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.core.env.Environment;
  */
 @Slf4j
 @SuppressWarnings("all")
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass(P6SpyDriver.class)
 @EnableConfigurationProperties(P6spyProperties.class)
 @ConditionalOnProperty(name = ConfigKey.DruidConfigKey.DRIVER_CLASS, havingValue = "com.p6spy.engine.spy.P6SpyDriver")

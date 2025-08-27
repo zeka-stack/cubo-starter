@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.util.IoUtils;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.WebUtils;
 import dev.dong4j.zeka.starter.rest.annotation.FormDataBody;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class FormdataBodyArgumentResolver extends AbstractMethodArgumentResolver
         Class<?> rawClass = javaType.getRawClass();
 
         try {
-            return JsonUtils.parse(JsonUtils.toJson(WebUtils.converterToMap(IoUtils.toString(inputMessage.getBody()))), rawClass);
+            return Jsons.parse(Jsons.toJson(WebUtils.converterToMap(IoUtils.toString(inputMessage.getBody()))), rawClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

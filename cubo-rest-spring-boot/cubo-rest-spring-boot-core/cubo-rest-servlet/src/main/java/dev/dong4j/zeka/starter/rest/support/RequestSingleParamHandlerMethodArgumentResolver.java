@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.exception.BaseException;
 import dev.dong4j.zeka.kernel.common.util.DataTypeUtils;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
 import dev.dong4j.zeka.starter.rest.annotation.RequestSingleParam;
 import java.util.Map;
@@ -71,7 +71,7 @@ public class RequestSingleParamHandlerMethodArgumentResolver extends AbstractMet
                                     @NotNull RequestSingleParam annotation) {
 
         String key = annotation.value();
-        Map<Object, Object> map = JsonUtils.toMap(inputMessage.getBody(), String.class, Object.class);
+        Map<Object, Object> map = Jsons.toMap(inputMessage.getBody(), String.class, Object.class);
 
         if (annotation.required() && ObjectUtils.isNull(map.get(key))) {
             throw new BaseException("[{}] is required", annotation.value());

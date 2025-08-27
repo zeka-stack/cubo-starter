@@ -9,12 +9,12 @@ import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapt
 import dev.dong4j.zeka.starter.messaging.template.core.DefaultMessagingTemplate;
 import java.util.List;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnEnabled(value = MessagingProperties.PREFIX)
 public class MessagingTemplateAutoConfiguration {
 

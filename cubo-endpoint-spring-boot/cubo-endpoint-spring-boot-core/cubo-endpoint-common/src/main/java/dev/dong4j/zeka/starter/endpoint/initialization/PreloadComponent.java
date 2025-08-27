@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.endpoint.initialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -27,7 +27,7 @@ public class PreloadComponent {
     /** Service */
     private final InitializationService service;
     /** Object mapper */
-    private final ObjectMapper objectMapper = JsonUtils.getInstance();
+    private final ObjectMapper objectMapper = Jsons.getInstance();
 
     /**
      * Preload component

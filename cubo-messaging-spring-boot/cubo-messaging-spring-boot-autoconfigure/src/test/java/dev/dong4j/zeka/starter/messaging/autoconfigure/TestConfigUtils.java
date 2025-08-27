@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
 import java.util.UUID;
@@ -27,7 +27,7 @@ public class TestConfigUtils {
         MessageExt message = new MessageExt();
         message.setTopic(topic);
         message.setTags(tags);
-        message.setBody(JsonUtils.toJsonAsBytes(payload));
+        message.setBody(Jsons.toJsonAsBytes(payload));
         return message;
     }
 }

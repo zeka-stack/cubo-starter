@@ -5,10 +5,10 @@ import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactory;
 import dev.dong4j.zeka.starter.logsystem.factory.LogStorageFactoryAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * <p>Description: </p>
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass(LogStorageFactory.class)
 @ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".record")
 public class LogSystemRecordAutoConfiguration implements ZekaAutoConfiguration {

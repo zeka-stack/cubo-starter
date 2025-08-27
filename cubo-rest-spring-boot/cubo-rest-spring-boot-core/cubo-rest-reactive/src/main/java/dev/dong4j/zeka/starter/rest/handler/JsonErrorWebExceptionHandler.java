@@ -11,7 +11,7 @@ import dev.dong4j.zeka.kernel.common.exception.BasicException;
 import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
 import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.rest.ReactiveConstants;
 import java.net.InetSocketAddress;
@@ -233,7 +233,7 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
         boolean includeStackTrace = this.isIncludeStackTrace(request, MediaType.ALL);
         Map<String, Object> error = this.getErrorAttributes(request, includeStackTrace);
         error.put(R.CODE, "S.G-" + error.get(R.CODE));
-        log.error("router: [{}] \n{}", GlobalContext.get(ReactiveConstants.GATEWAY_ROUTER), JsonUtils.toJson(error, true));
+        log.error("router: [{}] \n{}", GlobalContext.get(ReactiveConstants.GATEWAY_ROUTER), Jsons.toJson(error, true));
         // 修改 http 状态为 200, 使用 body 判断请求是否成功
         return ServerResponse.status(200)
             .contentType(MediaType.APPLICATION_JSON)

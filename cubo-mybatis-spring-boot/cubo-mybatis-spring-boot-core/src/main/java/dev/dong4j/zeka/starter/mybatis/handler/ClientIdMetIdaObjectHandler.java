@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
 import dev.dong4j.zeka.kernel.common.context.ExpandIds;
-import dev.dong4j.zeka.kernel.common.util.JsonUtils;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.mybatis.base.BasePO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
@@ -30,7 +30,7 @@ public class ClientIdMetIdaObjectHandler extends AbstractDataIdMetaObjectHandler
     protected void setFieldValue(MetaObject metaObject, ExpandIds expandIds) {
         if (log.isDebugEnabled()) {
             log.debug("自动写入 clientId, originalObject: [{}], clientId: [{}]",
-                JsonUtils.toJson(metaObject.getOriginalObject()),
+                Jsons.toJson(metaObject.getOriginalObject()),
                 expandIds.getClientId().orElse(null));
         }
         this.setFieldValByName("clientId", expandIds.getClientId().orElse(""), metaObject);

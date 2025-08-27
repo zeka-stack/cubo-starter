@@ -20,11 +20,11 @@ import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
@@ -37,7 +37,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @since 1.3.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, ServletEndpointLauncherInitiation.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)

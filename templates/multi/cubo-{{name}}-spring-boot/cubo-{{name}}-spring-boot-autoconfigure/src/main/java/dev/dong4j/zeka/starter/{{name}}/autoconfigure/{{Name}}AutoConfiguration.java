@@ -5,7 +5,7 @@ import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
  * 组件自动装配类
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnProperty(
     prefix = {{Name}}Properties.PREFIX,
     name = ZekaProperties.ENABLED,

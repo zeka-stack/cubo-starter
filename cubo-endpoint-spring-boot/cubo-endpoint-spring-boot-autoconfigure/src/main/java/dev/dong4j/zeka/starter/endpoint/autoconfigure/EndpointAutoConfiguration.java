@@ -9,13 +9,13 @@ import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.initialization.PreloadComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 组件自动装配类
@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnWebApplication
 @AutoConfigureAfter({
