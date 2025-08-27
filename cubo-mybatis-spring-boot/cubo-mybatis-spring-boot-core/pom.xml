@@ -26,7 +26,7 @@
         <!--region 强依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
+            <artifactId>mybatis-plus-spring</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

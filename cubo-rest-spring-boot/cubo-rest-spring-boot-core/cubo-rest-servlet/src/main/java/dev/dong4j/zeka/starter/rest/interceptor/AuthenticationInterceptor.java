@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.rest.interceptor;
 
 import dev.dong4j.zeka.kernel.auth.CurrentUser;
-import dev.dong4j.zeka.kernel.common.exception.BasicException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.starter.rest.annotation.TokenRequired;
 import dev.dong4j.zeka.starter.rest.support.CurrentUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,7 +53,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (methodAnnotation != null) {
             CurrentUser currentUser = this.currentUserService.getCurrentUser(request);
             if (null == currentUser) {
-                throw new BasicException("B.A-40001", "未授权");
+                throw new LowestException("B.A-40001", "未授权");
             }
         }
         return true;

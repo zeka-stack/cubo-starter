@@ -7,9 +7,9 @@ import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.context.GlobalContext;
 import dev.dong4j.zeka.kernel.common.context.Trace;
 import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
-import dev.dong4j.zeka.kernel.common.exception.BasicException;
 import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
 import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
@@ -140,11 +140,11 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
         map.put(R.MESSAGE, errorMessage);
         map.put(R.SUCCESS, false);
 
-        if (error instanceof BasicException baseException) {
+        if (error instanceof LowestException LowestException) {
             // 捕获自定义异常
-            map.put(R.CODE, baseException.getCode());
-            map.put(R.MESSAGE, baseException.getMessage());
-            errorMessage = baseException.getMessage();
+            map.put(R.CODE, dev.dong4j.zeka.kernel.common.exception.LowestException.getCode());
+            map.put(R.MESSAGE, LowestException.getMessage());
+            errorMessage = LowestException.getMessage();
         } else if (GATEWAY_NOTFOUNDEXCEPTION.equals(error.getClass().getName())) {
             // 能找到路由配置, 但是对应的服务不存在 (未在注册中心找到服务)
             map.put(R.CODE, BaseCodes.GATEWAY_NOT_FUND_INSTANCES_ERROR.getCode());

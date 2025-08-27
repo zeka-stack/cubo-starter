@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
 import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 import dev.dong4j.zeka.kernel.common.enums.EnabledEnum;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
@@ -36,10 +36,10 @@ class UserAllWrapperTest {
         User po = UserAllWrapper.INSTANCE.po(dto);
         log.info("po = [{}]", po);
         Assertions.assertEquals(po.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(BaseException::new));
+            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new));
         Assertions.assertEquals(po.getEnable(),
-            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new));
-        Assertions.assertEquals(po.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new));
+            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new));
+        Assertions.assertEquals(po.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new));
     }
 
     /**
@@ -53,10 +53,10 @@ class UserAllWrapperTest {
         UserVO vo = UserAllWrapper.INSTANCE.vo(dto);
         log.info("vo = [{}]", vo);
         Assertions.assertEquals(vo.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(BaseException::new).getDesc());
+            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new).getDesc());
         Assertions.assertEquals(vo.getEnable(),
-            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(BaseException::new).getDesc());
-        Assertions.assertEquals(vo.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(BaseException::new).getDesc());
+            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new).getDesc());
+        Assertions.assertEquals(vo.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new).getDesc());
     }
 
     /**
@@ -95,7 +95,7 @@ class UserAllWrapperTest {
         UserVO vo = new UserVO().setGender("男");
         User po = UserAllWrapper.INSTANCE.po(vo);
         log.info("po = [{}]", po);
-        Assertions.assertEquals(po.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(BaseException::new));
+        Assertions.assertEquals(po.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new));
     }
 
     /**
@@ -108,7 +108,7 @@ class UserAllWrapperTest {
         UserVO vo = new UserVO().setGender("男");
         UserDTO dto = UserAllWrapper.INSTANCE.dto(vo);
         log.info("dto = [{}]", dto);
-        Assertions.assertEquals(dto.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(BaseException::new).getValue());
+        Assertions.assertEquals(dto.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new).getValue());
     }
 
 }

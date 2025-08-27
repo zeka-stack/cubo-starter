@@ -1,20 +1,19 @@
 package dev.dong4j.zeka.starter.launcher.env;
 
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.exception.PropertiesException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.kernel.common.util.NetUtils;
 import dev.dong4j.zeka.kernel.common.util.NumberUtils;
 import dev.dong4j.zeka.kernel.common.util.RandomUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.util.regex.Pattern;
 
 /**
  * <p>Description: 扩展 {@link RandomValuePropertySource}
@@ -242,7 +241,7 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
             end = end == null ? END : Math.min(end, END);
             if (start > end) {
                 // 说明未找到满足条件的端口, 抛出异常
-                throw new BaseException("在端口范围内[" + start + "," + end + "]未找到可用端口, 请修改随机端口范围");
+                throw new LowestException("在端口范围内[" + start + "," + end + "]未找到可用端口, 请修改随机端口范围");
             }
             serverPort = RandomUtils.nextInt(start, end + 1);
             // 端口没有占用, 直接返回
@@ -262,7 +261,7 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
             }
             if (serverPort == end + 1) {
                 // 说明 while 循环结束都没找到可用端口或者最后一次找到了, 但超过了end返回, 仍然不满足条件
-                throw new BaseException("在端口范围内[" + start + "," + end + "]未找到可用端口, 请修改随机端口范围");
+                throw new LowestException("在端口范围内[" + start + "," + end + "]未找到可用端口, 请修改随机端口范围");
             }
             return serverPort;
         }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
@@ -93,7 +93,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
         if (ObjectUtils.isNull(request)) {
-            throw new BaseException("不是 servle 请求!");
+            throw new LowestException("不是 servle 请求!");
         }
 
         ServletServerHttpRequest inputMessage = this.createInputMessage(request);
@@ -107,7 +107,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
             Type type = parameter.getGenericParameterType();
             return this.read(parameter, type, inputMessage, annotation);
         } catch (Exception ex) {
-            throw new BaseException("参数绑定失败: [{}]", ex.getMessage());
+            throw new LowestException("参数绑定失败: [{}]", ex.getMessage());
         }
     }
 

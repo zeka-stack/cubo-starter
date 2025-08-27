@@ -3,7 +3,7 @@ package dev.dong4j.zeka.starter.rest.filter;
 import dev.dong4j.zeka.kernel.auth.constant.AuthConstant;
 import dev.dong4j.zeka.kernel.auth.entity.AuthorizationUser;
 import dev.dong4j.zeka.kernel.auth.util.JwtUtils;
-import dev.dong4j.zeka.kernel.common.exception.BasicException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.web.support.CacheRequestEnhanceWrapper;
@@ -125,7 +125,7 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
                             this.cachingRequestWrapper.getPathInfo(),
                             CURRENT_USER_ID,
                             CURRENT_TENANT_ID);
-                        throw new BasicException("B.A-40001", "请求未授权");
+                        throw new LowestException("B.A-40001", "请求未授权");
                     }
 
                     if (CURRENT_USER_ID.equals(name)) {
@@ -139,7 +139,7 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
                         CURRENT_USER_ID,
                         CURRENT_TENANT_ID);
 
-                    throw new BasicException("B.A-40001", "请求未授权");
+                    throw new LowestException("B.A-40001", "请求未授权");
                 }
             }
             return super.getParameterValues(name);

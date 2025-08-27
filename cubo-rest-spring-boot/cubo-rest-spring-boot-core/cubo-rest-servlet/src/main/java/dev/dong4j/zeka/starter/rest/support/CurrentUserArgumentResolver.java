@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.rest.support;
 
 import dev.dong4j.zeka.kernel.auth.CurrentUser;
 import dev.dong4j.zeka.kernel.auth.constant.AuthConstant;
-import dev.dong4j.zeka.kernel.common.exception.BasicException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.starter.rest.interceptor.CurrentUserInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                                   WebDataBinderFactory binderFactory) {
         Object currentUserInfo = webRequest.getAttribute(AuthConstant.CURRENT_LOGIN_USER, 0);
         if (null == currentUserInfo) {
-            throw new BasicException("B.A-40001", "未授权");
+            throw new LowestException("B.A-40001", "未授权");
         }
         return currentUserInfo;
     }

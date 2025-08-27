@@ -4,8 +4,7 @@ import com.google.common.collect.Lists;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.util.SecurityUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class ProjectInfoEndpointAutoConfiguration {
      * @return the result
      * @since 1.0.0
      */
-    @ApiOperation("获取应用所有接口")
+    @Operation(summary = "获取应用所有接口")
     @GetMapping(value = "/request-urls")
     public Result<List<RequestToMethodItem>> index() {
         List<RequestToMethodItem> list = Lists.newArrayList();

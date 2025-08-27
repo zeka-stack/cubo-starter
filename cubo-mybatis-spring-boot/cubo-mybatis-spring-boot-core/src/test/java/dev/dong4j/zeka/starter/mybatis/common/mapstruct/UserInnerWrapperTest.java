@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
@@ -44,6 +44,6 @@ class UserInnerWrapperTest {
         User po = UserInnerWrapper.INSTANCE.from(dto);
         log.info("po = [{}]", po);
         Assertions.assertEquals(po.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(BaseException::new));
+            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new));
     }
 }

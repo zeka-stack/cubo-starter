@@ -5,11 +5,10 @@ import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.kernel.common.api.IResultCode;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.context.Trace;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
 import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
 import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.Exceptions;
-import dev.dong4j.zeka.kernel.common.util.ResultCodeUtils;
 import jakarta.servlet.ServletException;
 import java.util.Iterator;
 import java.util.Map;
@@ -72,8 +71,8 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
         if (!this.includeException) {
             Throwable error = this.getError(webRequest);
             // 如果是系统自定义异常
-            if (error instanceof BaseException) {
-                return R.failMap(((BaseException) error).getResultCode());
+            if (error instanceof LowestException) {
+                return R.failMap(((LowestException) error).getResultCode());
             }
             return R.failMap(BaseCodes.FAILURE);
         }
@@ -108,16 +107,16 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
         if (error != null) {
             log.debug("处理异常信息: [{}]", error.getClass());
             // 如果是系统自定义异常
-            if (error instanceof BaseException) {
-                resultCode = ((BaseException) error).getResultCode();
+            if (error instanceof LowestException) {
+                resultCode = ((LowestException) error).getResultCode();
             }
-            if (error.getCause() instanceof BaseException) {
-                resultCode = ((BaseException) error.getCause()).getResultCode();
+            if (error.getCause() instanceof LowestException) {
+                resultCode = ((LowestException) error.getCause()).getResultCode();
             }
         }
 
         if (resultCode != null) {
-            errorAttributes.put(R.CODE, ResultCodeUtils.generateCode(resultCode));
+            errorAttributes.put(R.CODE, resultCode.getCode());
             errorAttributes.put(R.MESSAGE, resultCode.getMessage());
         } else {
             Integer code = this.getAttribute(webRequest, "javax.servlet.error.status_code");
@@ -157,7 +156,7 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
 
         Throwable error = this.getError(webRequest);
         if (error != null) {
-            while ((error instanceof BaseException || error instanceof ServletException) && error.getCause() != null) {
+            while ((error instanceof LowestException || error instanceof ServletException) && error.getCause() != null) {
                 error = error.getCause();
             }
             exceptionEntity.setExceptionClass(error.getClass().getName());

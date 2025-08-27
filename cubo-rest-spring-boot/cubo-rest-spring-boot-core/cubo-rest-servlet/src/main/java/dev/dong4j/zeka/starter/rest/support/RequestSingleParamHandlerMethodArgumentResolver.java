@@ -3,7 +3,7 @@ package dev.dong4j.zeka.starter.rest.support;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.DataTypeUtils;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
@@ -74,7 +74,7 @@ public class RequestSingleParamHandlerMethodArgumentResolver extends AbstractMet
         Map<Object, Object> map = Jsons.toMap(inputMessage.getBody(), String.class, Object.class);
 
         if (annotation.required() && ObjectUtils.isNull(map.get(key))) {
-            throw new BaseException("[{}] is required", annotation.value());
+            throw new LowestException("[{}] is required", annotation.value());
         }
 
         Class<?> rawClass = javaType.getRawClass();

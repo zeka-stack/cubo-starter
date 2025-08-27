@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.jackson.MappingApiJackson2HttpMessageConverter;
 import dev.dong4j.zeka.kernel.common.ssl.DisableValidationTrustManager;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
@@ -177,7 +177,7 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
             builder.hostnameVerifier((hostname, session) -> true);
             return builder.build();
         } catch (Exception e) {
-            throw new BaseException(e);
+            throw new LowestException(e);
         }
 
     }

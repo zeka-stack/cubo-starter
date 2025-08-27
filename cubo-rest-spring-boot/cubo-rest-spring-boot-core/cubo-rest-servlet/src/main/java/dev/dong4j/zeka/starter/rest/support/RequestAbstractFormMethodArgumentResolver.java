@@ -3,7 +3,7 @@ package dev.dong4j.zeka.starter.rest.support;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.exception.BaseException;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
@@ -70,7 +70,7 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
         Class<? extends SubClassType> subClass = annotation.value();
 
         if (!SerializeEnum.class.isAssignableFrom(subClass)) {
-            throw new BaseException(
+            throw new LowestException(
                 StringUtils.format("参数转换失败, [{}] 需要实现 SerializeEnum 接口. "
                     + "RequestAbstractForm.value: [{}]", subClass.getSimpleName(), subClass));
         }
@@ -84,7 +84,7 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
                 SubClassType subClassType = (SubClassType) convert;
                 parse[0] = Jsons.parse(inputMessage.getBody(), subClassType.getSubClass());
             } catch (IOException e) {
-                throw new BaseException(e);
+                throw new LowestException(e);
             }
         }, field -> field.getType().getName().equals(subClass.getName()));
         return parse[0];
