@@ -40,7 +40,7 @@ public class ServletExtendExceptionHandler implements ZekaAutoConfiguration {
     @ExceptionHandler(value = {
         org.springframework.dao.DuplicateKeyException.class
     })
-    public Result<Void> handleDuplicateKeyException(@NotNull Exception e) {
+    public Result<Void> handleDuplicateKeyException(@NotNull org.springframework.dao.DuplicateKeyException e) {
         log.warn("已存在被定义为唯一索引的相同数据: [{}]", e.getMessage());
         return R.failed(BaseCodes.FAILURE, "已存在相同的数据");
     }

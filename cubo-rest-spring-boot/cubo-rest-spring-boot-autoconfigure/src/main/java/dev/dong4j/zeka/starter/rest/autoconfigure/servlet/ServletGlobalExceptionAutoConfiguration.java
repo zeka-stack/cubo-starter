@@ -62,16 +62,18 @@ public class ServletGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
     /**
      * Basic error controller basic error controller
      *
-     * @param errorAttributes  error attributes
-     * @param serverProperties server properties
+     * @param errorAttributes               error attributes
+     * @param serverProperties              server properties
+     * @param servletGlobalExceptionHandler servlet global exception handler
      * @return the basic error controller
-     * @since 1.0.0
+     * @since 2024.1.1
      */
     @Bean
     @ConditionalOnMissingBean(value = ErrorController.class, search = SearchStrategy.CURRENT)
     public BasicErrorController basicErrorController(ErrorAttributes errorAttributes,
-                                                     @NotNull ServerProperties serverProperties) {
-        return new ServletErrorController(errorAttributes, serverProperties.getError());
+                                                     @NotNull ServerProperties serverProperties,
+                                                     ServletGlobalExceptionHandler servletGlobalExceptionHandler) {
+        return new ServletErrorController(errorAttributes, serverProperties.getError(), servletGlobalExceptionHandler);
     }
 
     /**

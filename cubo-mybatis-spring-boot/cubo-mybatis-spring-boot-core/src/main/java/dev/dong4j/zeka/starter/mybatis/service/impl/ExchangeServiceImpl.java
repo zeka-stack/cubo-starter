@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.mybatis.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
 import dev.dong4j.zeka.kernel.common.base.AbstractBaseEntity;
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;
@@ -219,7 +220,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void updateBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(this.updateBatchById(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.updateBatchById(this.serviceConverter.po(dtos), batchSize));
     }
 
     /**
@@ -291,7 +292,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @since 1.8.0
      */
     @Override
-    public int counts() {
+    public long counts() {
         return super.count();
     }
 

@@ -12,7 +12,6 @@ import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
 import java.io.File;
 import lombok.Getter;
 import org.springframework.boot.context.properties.bind.Binder;
-import org.springframework.boot.logging.LoggingSystemProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
@@ -128,7 +127,7 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
             ConfigKey.LogSystemConfigKey.LOG_FILE_PATH);
 
         // zeka-stack.logging.file.name
-        this.setSystemProperty(logFile.getName(), LoggingSystemProperties.LOG_FILE, ConfigKey.LogSystemConfigKey.LOG_FILE_NAME);
+        this.setSystemProperty(logFile.getName(), "LOG_FILE", ConfigKey.LogSystemConfigKey.LOG_FILE_NAME);
         // zeka-stack.logging.file.clean-history-on-start
         this.setSystemProperty(String.valueOf(logFile.isCleanHistoryOnStart()), ConfigKey.LogSystemConfigKey.LOG_FILE_CLEAN_HISTORY,
             Constants.FILE_CLEAN_HISTORY_ON_START);

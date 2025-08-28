@@ -5,6 +5,7 @@ import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.util.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@Api(tags = "应用接口信息")
+@Tag(name = "应用接口信息")
 public class ProjectInfoEndpointAutoConfiguration {
     /** Application context */
     @Resource
@@ -52,31 +53,61 @@ public class ProjectInfoEndpointAutoConfiguration {
     @GetMapping(value = "/request-urls")
     public Result<List<RequestToMethodItem>> index() {
         List<RequestToMethodItem> list = Lists.newArrayList();
-        RequestMappingHandlerMapping requestMappingHandlerMapping = this.applicationContext.getBean(RequestMappingHandlerMapping.class);
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> requestMappingInfoHandlerMethodEntry : handlerMethods.entrySet()) {
-            RequestMappingInfo requestMappingInfo = requestMappingInfoHandlerMethodEntry.getKey();
-            HandlerMethod mappingInfoValue = requestMappingInfoHandlerMethodEntry.getValue();
-            RequestMethodsRequestCondition methodCondition = requestMappingInfo.getMethodsCondition();
-            String requestType = methodCondition.getMethods().stream().map(String::valueOf).collect(Collectors.joining(","));
-            PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-            Class<?>[] methodParamTypes = mappingInfoValue.getMethod().getParameterTypes();
-            String requestUrl = patternsCondition.getPatterns().stream().map(String::valueOf).collect(Collectors.joining(","));
+        RequestMappingHandlerMapping requestMappingHandlerMapping =
+            this.applicationContext.getBean(RequestMappingHandlerMapping.class);
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods =
+            requestMappingHandlerMapping.getHandlerMethods();
 
-            boolean allMatch = SecurityUtils.DEFAULT_SKIP_URL.stream().allMatch(pattern -> this.pathMatcher.matchStart(pattern,
-                requestUrl));
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+            RequestMappingInfo requestMappingInfo = entry.getKey();
+            HandlerMethod handlerMethod = entry.getValue();
+
+            // HTTP 请求类型 (GET, POST ...)
+            RequestMethodsRequestCondition methodCondition = requestMappingInfo.getMethodsCondition();
+            String requestType = methodCondition.getMethods().stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+            // 兼容 Spring Boot 2.x 和 3.x 的 URL 路径解析
+            String requestUrl;
+            PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+            if (patternsCondition != null) {
+                // Spring 5.x / Boot 2.x
+                requestUrl = patternsCondition.getPatterns().stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+            } else if (requestMappingInfo.getPathPatternsCondition() != null) {
+                // Spring 6.x / Boot 3.x
+                requestUrl = requestMappingInfo.getPathPatternsCondition().getPatterns().stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(","));
+            } else {
+                requestUrl = "";
+            }
+
+            // 方法参数类型
+            Class<?>[] methodParamTypes = handlerMethod.getMethod().getParameterTypes();
+
+            // 过滤掉默认跳过的 URL
+            boolean allMatch = SecurityUtils.DEFAULT_SKIP_URL.stream()
+                .allMatch(pattern -> this.pathMatcher.matchStart(pattern, requestUrl));
             if (allMatch) {
                 continue;
             }
 
-            String controllerName = mappingInfoValue.getBeanType().toString();
-            String requestMethodName = mappingInfoValue.getMethod().getName();
+            // Controller 类名
+            String controllerName = handlerMethod.getBeanType().toString();
+            // 方法名
+            String requestMethodName = handlerMethod.getMethod().getName();
+
             RequestToMethodItem item = RequestToMethodItem.builder()
                 .requestType(requestType)
                 .requestUrl(requestUrl)
                 .controllerName(controllerName)
                 .requestMethodName(requestMethodName)
-                .methodParamTypes(methodParamTypes).build();
+                .methodParamTypes(methodParamTypes)
+                .build();
+
             list.add(item);
         }
         return R.succeed(list);

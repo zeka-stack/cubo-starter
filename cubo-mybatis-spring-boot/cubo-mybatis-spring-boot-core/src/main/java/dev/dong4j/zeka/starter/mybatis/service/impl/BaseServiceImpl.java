@@ -100,7 +100,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
     private boolean saveBatch(@NotNull Collection<PO> entityList, int batchSize, MybatisSqlMethod sqlMethod) {
         Assertions.notEmpty(entityList);
         String sqlStatement = this.mybatisSqlStatement(sqlMethod);
-        try (SqlSession batchSqlSession = SqlHelper.sqlSessionBatch(this.entityClass)) {
+        try (SqlSession batchSqlSession = SqlHelper.sqlSessionBatch(getEntityClass())) {
             int i = 0;
             for (PO anEntityList : entityList) {
                 batchSqlSession.insert(sqlStatement, anEntityList);
@@ -122,7 +122,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      * @since 1.0.0
      */
     protected String mybatisSqlStatement(@NotNull MybatisSqlMethod sqlMethod) {
-        return SqlHelper.table(this.currentModelClass()).getSqlStatement(sqlMethod.getMethod());
+        return SqlHelper.table(getEntityClass()).getSqlStatement(sqlMethod.getMethod());
     }
 
     /**

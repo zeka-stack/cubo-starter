@@ -4,10 +4,8 @@ import dev.dong4j.zeka.kernel.common.ZekaApplicationListener;
 import dev.dong4j.zeka.processor.annotation.AutoListener;
 import dev.dong4j.zeka.starter.launcher.env.RangeRandomValuePropertySource;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.core.Ordered;
-
 
 /**
  * <p>Description: range.random 配置监听器 </p>
@@ -17,7 +15,6 @@ import org.springframework.core.Ordered;
  * @version 1.3.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.23 14:18
- * @see ConfigFileApplicationListener
  * @since 1.0.0
  */
 @AutoListener

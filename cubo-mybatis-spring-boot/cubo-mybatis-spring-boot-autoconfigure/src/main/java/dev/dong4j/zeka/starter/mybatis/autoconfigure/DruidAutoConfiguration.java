@@ -29,7 +29,7 @@ import org.springframework.core.Ordered;
  */
 @Slf4j
 @AutoConfiguration
-@ConditionalOnClass(value = {DruidDataSourceAutoConfigure.class, DruidStatProperties.class})
+@ConditionalOnClass(value = {DruidDataSourceAutoConfigure.class, DruidStatProperties.class, Filter.class})
 @EnableConfigurationProperties(DruidStatProperties.class)
 public class DruidAutoConfiguration implements ZekaAutoConfiguration {
 

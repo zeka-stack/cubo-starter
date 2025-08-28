@@ -5,6 +5,7 @@ import dev.dong4j.zeka.starter.mybatis.entity.dto.TestDTO;
 import dev.dong4j.zeka.starter.mybatis.entity.form.TestQuery;
 import dev.dong4j.zeka.starter.mybatis.provider.TestProvider;
 import jakarta.annotation.Resource;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.SneakyThrows;
@@ -38,6 +39,7 @@ public class TestProviderTest {
         this.testProvider.find(1L);
         this.testProvider.delete(1L);
         List<Long> longs = new ArrayList<Long>() {
+            @Serial
             private static final long serialVersionUID = 429666079236455736L;
 
             {

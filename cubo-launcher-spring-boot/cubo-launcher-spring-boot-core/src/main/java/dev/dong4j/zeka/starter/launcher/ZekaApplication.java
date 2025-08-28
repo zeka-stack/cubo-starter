@@ -31,7 +31,6 @@ import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
@@ -50,7 +49,6 @@ import org.springframework.core.env.SimpleCommandLinePropertySource;
  * @version 1.2.3
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.26 19:23
- * @see ConfigFileApplicationListener
  * @since 1.0.0
  */
 @Slf4j
@@ -156,7 +154,6 @@ public final class ZekaApplication {
      * @param applicationType application type
      * @param args            the args
      * @return the spring application builder
-     * @see ConfigFileApplicationListener
      * @since 1.0.0
      */
     @NotNull
@@ -250,6 +247,7 @@ public final class ZekaApplication {
      * @return the properties
      * @since 1.0.0
      */
+    @SuppressWarnings("D")
     @NotNull
     private static Properties loadMainProperties() {
         log.info("App NameSpace: [{}], 如果不正确请设置 JVM 变量/系统环境变量: 「user.namespace」或: [ZEKA_NAME_SPACE]", App.ZEKA_NAME_SPACE);

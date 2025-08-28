@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.sql.SqlScriptUtils;
 import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
-import lombok.RequiredArgsConstructor;
+import java.io.Serial;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
@@ -24,12 +24,20 @@ import org.jetbrains.annotations.NotNull;
  * @date 2019.12.26 21:38
  * @since 1.0.0
  */
-@RequiredArgsConstructor
 public class AbstractInsertMethod extends AbstractMethod {
 
+    @Serial
     private static final long serialVersionUID = -8858194763848035688L;
     /** Sql method */
     private final MybatisSqlMethod sqlMethod;
+
+    /**
+     * @since 3.5.0
+     */
+    protected AbstractInsertMethod(MybatisSqlMethod sqlMethod) {
+        super(sqlMethod.getMethod());
+        this.sqlMethod = sqlMethod;
+    }
 
     /**
      * Inject mapped statement mapped statement

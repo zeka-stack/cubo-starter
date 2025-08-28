@@ -6,7 +6,6 @@ import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 import java.util.concurrent.CompletableFuture;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.util.concurrent.ListenableFuture;
 
 public class KafkaMessagingTemplateAdapter implements MessagingTemplateAdapter {
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -18,7 +17,7 @@ public class KafkaMessagingTemplateAdapter implements MessagingTemplateAdapter {
     @Override
     public SendResult sendSync(UnifiedMessage message) {
         ProducerRecord<String, Object> record = createProducerRecord(message);
-        ListenableFuture<org.springframework.kafka.support.SendResult<String, Object>> future =
+        CompletableFuture<org.springframework.kafka.support.SendResult<String, Object>> future =
             kafkaTemplate.send(record);
 
         try {
@@ -32,10 +31,7 @@ public class KafkaMessagingTemplateAdapter implements MessagingTemplateAdapter {
     @Override
     public CompletableFuture<SendResult> sendAsync(UnifiedMessage message) {
         ProducerRecord<String, Object> record = createProducerRecord(message);
-        ListenableFuture<org.springframework.kafka.support.SendResult<String, Object>> future =
-            kafkaTemplate.send(record);
-
-        return future.completable()
+        return kafkaTemplate.send(record)
             .thenApply(this::convertSendResult)
             .exceptionally(ex -> {
                 throw new RuntimeException("Async send failed", ex);

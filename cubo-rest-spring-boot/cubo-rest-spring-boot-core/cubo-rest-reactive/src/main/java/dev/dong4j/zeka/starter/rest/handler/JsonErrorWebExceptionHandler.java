@@ -3,7 +3,6 @@ package dev.dong4j.zeka.starter.rest.handler;
 import com.google.common.collect.Maps;
 import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.kernel.common.api.R;
-import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.context.GlobalContext;
 import dev.dong4j.zeka.kernel.common.context.Trace;
 import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
@@ -114,7 +113,6 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
     @Contract("_ -> param1")
     @NotNull
     private static Map<String, Object> response(@NotNull Map<String, Object> map) {
-        map.put("type", Result.TYPE_NAME);
         map.put(R.CODE, BaseCodes.SERVER_BUSY.getCode());
         map.put(R.MESSAGE, BaseCodes.SERVER_BUSY.getMessage());
         map.put(R.SUCCESS, false);
@@ -134,15 +132,13 @@ public class JsonErrorWebExceptionHandler extends DefaultErrorWebExceptionHandle
     private Map<String, Object> response(ServerRequest request, @NotNull Map<String, Object> map) {
         Throwable error = super.getError(request);
         String errorMessage = buildMessage(request, error);
-        // todo-dong4j : (2020-06-30 22:54) [待删除]
-        map.put("type", Result.TYPE_NAME);
         map.put(R.CODE, request.attribute(R.CODE).orElse(HttpStatus.SERVICE_UNAVAILABLE.value()));
         map.put(R.MESSAGE, errorMessage);
         map.put(R.SUCCESS, false);
 
         if (error instanceof LowestException LowestException) {
             // 捕获自定义异常
-            map.put(R.CODE, dev.dong4j.zeka.kernel.common.exception.LowestException.getCode());
+            map.put(R.CODE, LowestException.getResultCode());
             map.put(R.MESSAGE, LowestException.getMessage());
             errorMessage = LowestException.getMessage();
         } else if (GATEWAY_NOTFOUNDEXCEPTION.equals(error.getClass().getName())) {

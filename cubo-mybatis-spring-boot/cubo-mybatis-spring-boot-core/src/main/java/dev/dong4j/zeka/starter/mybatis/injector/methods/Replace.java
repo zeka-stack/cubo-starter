@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.injector.methods;
 
 import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
+import java.io.Serial;
 
 /**
  * <p>Description: 插入一条数据 (选择字段插入)</p>
@@ -14,6 +15,7 @@ import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
  */
 public class Replace extends AbstractInsertMethod {
 
+    @Serial
     private static final long serialVersionUID = 2783717166289508211L;
 
     /**

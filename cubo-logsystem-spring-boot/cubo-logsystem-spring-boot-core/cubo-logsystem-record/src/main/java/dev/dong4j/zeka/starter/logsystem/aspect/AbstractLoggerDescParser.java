@@ -1,18 +1,17 @@
 package dev.dong4j.zeka.starter.logsystem.aspect;
 
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * <p>Description: 日志描述解析(支持SpEL表达式)</p>
@@ -30,7 +29,7 @@ public abstract class AbstractLoggerDescParser {
     private static final ExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
 
     /** 参数名发现器 */
-    private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new LocalVariableTableParameterNameDiscoverer();
+    private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new StandardReflectionParameterNameDiscoverer();
 
     /** evaluationContext */
     private static final StandardEvaluationContext EVALUATION_CONTEXT = new StandardEvaluationContext();
