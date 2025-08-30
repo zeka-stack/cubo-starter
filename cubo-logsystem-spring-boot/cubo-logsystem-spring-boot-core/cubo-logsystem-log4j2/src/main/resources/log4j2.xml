@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF" monitorInterval="10" packages="dev.dong4j.zeka.starter.logsystem.plugin"
+<Configuration status="OFF" monitorInterval="10"
                xmlns:xi="http://www.w3.org/2001/XInclude">
     <!-- 在初始化日志系统之前使用此配置文件 -->
     <Properties>

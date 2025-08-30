@@ -6,8 +6,7 @@
 <!-- 5. 如果将日志等级设置为 trace, 会将 agent service, rest api, gateway 服务中特定阶段的 trace 日志分别输出 agent.service.log, rest.log 和 gateway.log 文件, 但不会输出到 all.log 和 error.log 中 -->
 <!-- status="OFF", 可以去掉, 它的含义为是否记录log4j2本身的event信息, 默认是OFF -->
 <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
-<Configuration status="OFF" monitorInterval="30" shutdownHook="disable"
-               xmlns:xi="http://www.w3.org/2001/XInclude">
+<Configuration status="OFF" monitorInterval="30" shutdownHook="disable" xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <xi:include href="properties.xml"/>
 

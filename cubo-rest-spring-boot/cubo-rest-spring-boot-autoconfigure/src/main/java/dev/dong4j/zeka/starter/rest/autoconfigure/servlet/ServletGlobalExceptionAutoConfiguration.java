@@ -5,17 +5,16 @@ import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.web.exception.ServletGlobalExceptionHandler;
 import dev.dong4j.zeka.kernel.web.handler.ServletErrorController;
-import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
 import jakarta.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -54,7 +53,7 @@ public class ServletGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
      * @since 1.0.0
      */
     @Bean
-    @ConditionalOnMissingBean(value = ErrorAttributes.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = ErrorAttributes.class)
     public DefaultErrorAttributes errorAttributes() {
         return new ZekaServletExceptionErrorAttributes(!ConfigKit.isProd());
     }
@@ -62,28 +61,19 @@ public class ServletGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
     /**
      * Basic error controller basic error controller
      *
-     * @param errorAttributes               error attributes
-     * @param serverProperties              server properties
-     * @param servletGlobalExceptionHandler servlet global exception handler
+     * @param errorAttributes  error attributes
+     * @param serverProperties server properties
+     * @param handlerProvider  servlet global exception handler
      * @return the basic error controller
      * @since 2024.1.1
      */
     @Bean
-    @ConditionalOnMissingBean(value = ErrorController.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = ErrorController.class)
     public BasicErrorController basicErrorController(ErrorAttributes errorAttributes,
                                                      @NotNull ServerProperties serverProperties,
-                                                     ServletGlobalExceptionHandler servletGlobalExceptionHandler) {
-        return new ServletErrorController(errorAttributes, serverProperties.getError(), servletGlobalExceptionHandler);
+                                                     ObjectProvider<ServletGlobalExceptionHandler> handlerProvider) {
+        ServletGlobalExceptionHandler servletHandler = handlerProvider.getIfAvailable();
+        return new ServletErrorController(errorAttributes, serverProperties.getError(), servletHandler);
     }
 
-    /**
-     * Rest global exception handler
-     *
-     * @return the servlet global exception handler
-     * @since 2022.1.1
-     */
-    @Bean
-    public ServletGlobalExceptionHandler restGlobalExceptionHandler() {
-        return new RestGlobalExceptionHandler();
-    }
 }

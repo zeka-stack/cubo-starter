@@ -30,7 +30,7 @@ public final class LogFileProcessor extends AbstractPropertiesProcessor {
     /** Path */
     @Getter
     private String path;
-
+    /** 应用名称 */
     private String appName;
 
     /**

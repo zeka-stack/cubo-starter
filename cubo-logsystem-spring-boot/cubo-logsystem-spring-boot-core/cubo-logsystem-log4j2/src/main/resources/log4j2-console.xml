@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF" monitorInterval="10" shutdownHook="disable" packages="dev.dong4j.zeka.starter.logsystem.plugin"
+<Configuration status="OFF" monitorInterval="10" shutdownHook="disable"
                xmlns:xi="http://www.w3.org/2001/XInclude">
     <Properties>
         <!-- (各应用需要修改) 日志文件本地存放目录路径 建议各个环境跟生产环境统一起来,方便维护 -->

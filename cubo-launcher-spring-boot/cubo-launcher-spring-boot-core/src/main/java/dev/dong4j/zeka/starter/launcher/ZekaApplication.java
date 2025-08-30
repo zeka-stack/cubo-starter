@@ -92,12 +92,11 @@ public final class ZekaApplication {
      * @param source  source
      * @param args    args
      * @return the configurable application context
-     * @throws Exception exception
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(String appName,
                                                      Class<?> source,
-                                                     String... args) throws Exception {
+                                                     String... args) {
         return run(appName, source, ApplicationType.deduceFromClasspath(), args);
     }
 
@@ -108,11 +107,9 @@ public final class ZekaApplication {
      * @param applicationType application type
      * @param args            the args
      * @return the configurable application context
-     * @throws Exception exception
      * @since 1.0.0
      */
-    public static ConfigurableApplicationContext run(Class<?> source, ApplicationType applicationType, String... args)
-        throws Exception {
+    public static ConfigurableApplicationContext run(Class<?> source, ApplicationType applicationType, String... args) {
         // 没有设置 application name 时, 使用默认应用名
         return run(MAIN_PROPERTIES.getProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME), source, applicationType, args);
     }

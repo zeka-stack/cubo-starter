@@ -1,9 +1,11 @@
 package dev.dong4j.zeka.starter.rest;
 
 import dev.dong4j.zeka.kernel.common.api.GeneralResult;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -19,15 +21,20 @@ import org.springframework.validation.annotation.Validated;
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public abstract class ServletController implements GeneralResult {
 
-    /**
-     * The Request.
-     */
-    @Resource
-    protected HttpServletRequest request;
-    /**
-     * The Response.
-     */
-    @Resource
-    protected HttpServletResponse response;
+    @Autowired
+    @Lazy
+    protected ObjectFactory<HttpServletRequest> requestFactory;
+
+    @Autowired
+    @Lazy
+    protected ObjectFactory<HttpServletResponse> responseFactory;
+
+    protected HttpServletRequest getRequest() {
+        return requestFactory.getObject();
+    }
+
+    protected HttpServletResponse getResponse() {
+        return responseFactory.getObject();
+    }
 
 }

@@ -1,15 +1,18 @@
 package dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
-import com.github.xiaoymin.knife4j.spring.filter.ProductionSecurityFilter;
+import com.github.xiaoymin.knife4j.spring.extension.Knife4jOpenApiCustomizer;
+import com.github.xiaoymin.knife4j.spring.filter.JakartaProductionSecurityFilter;
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.enums.LibraryEnum;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.starter.openapi.MyKnife4jOpenApiCustomizer;
 import dev.dong4j.zeka.starter.openapi.autoconfigure.OpenAPIProperties;
 import jakarta.servlet.Servlet;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
@@ -28,7 +31,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @date 2020.05.08 16:14
  * @since 1.4.0
  */
-@AutoConfiguration
+@AutoConfiguration(before = com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration.class)
 @Profile(value = {App.ENV_NOT_PROD})
 @ConditionalOnClass(value = {
     EnableKnife4j.class,
@@ -37,12 +40,18 @@ import org.springframework.web.servlet.DispatcherServlet;
 })
 @ConditionalOnEnabled(value = OpenAPIProperties.PREFIX)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@EnableConfigurationProperties(value = {Knife4jProperties.class})
+@EnableConfigurationProperties(value = {Knife4jProperties.class, com.github.xiaoymin.knife4j.spring.configuration.Knife4jProperties.class})
 @Slf4j
 public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
 
     public Knife4jAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
+    }
+
+    @Bean
+    public Knife4jOpenApiCustomizer knife4jOpenApiCustomizer(com.github.xiaoymin.knife4j.spring.configuration.Knife4jProperties properties, SpringDocConfigProperties docProperties) {
+        log.debug("Register Knife4jOpenApiCustomizer");
+        return new MyKnife4jOpenApiCustomizer(properties, docProperties);
     }
 
     /**
@@ -52,8 +61,8 @@ public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
      * @since 1.4.0
      */
     @Bean
-    public ProductionSecurityFilter productionSecurityFilter() {
-        return new ProductionSecurityFilter(!ConfigKit.isLocalLaunch() && ConfigKit.isProd());
+    public JakartaProductionSecurityFilter productionSecurityFilter() {
+        return new JakartaProductionSecurityFilter(!ConfigKit.isLocalLaunch() && ConfigKit.isProd());
     }
 
     /**
@@ -80,4 +89,5 @@ public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
             return LibraryEnum.SWAGGER_REST_BOOTSTRAP;
         }
     }
+
 }

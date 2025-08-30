@@ -7,6 +7,12 @@ import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.launcher.annotation.RunningType;
 import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
@@ -17,13 +23,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
-
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>Description: 此类在 Spring Boot 启动之前初始化
@@ -85,14 +84,13 @@ public abstract class ZekaStarter implements CommandLineRunner {
 
             Set<Class<? extends ZekaStarter>> subTypesOf = reflections.getSubTypesOf(ZekaStarter.class);
             if (CollectionUtils.isEmpty(subTypesOf)) {
-                throw new IllegalStateException("错误原因: \n"
-                    + "\n"
-                    + "没有找到 ZekaStarter 的子类: 不能直接通过 ZekaStarter.main() 启动, 必须通过子类启动, 写法如下: \n"
-                    + "\n"
-                    + "@SpringBootApplication\n"
-                    + "public class DemoApplication extends ZekaStarter {\n"
-                    + "    // 不需要写 main()\n"
-                    + "}");
+                throw new IllegalStateException("""
+                    错误原因: 没有找到 ZekaStarter 的子类: 不能直接通过 ZekaStarter.main() 启动, 必须通过子类启动, 写法如下:
+
+                    @SpringBootApplication
+                    public class DemoApplication extends ZekaStarter {
+                        // 不需要写 main()
+                    }""");
             }
 
             if (subTypesOf.size() > 1) {
@@ -293,10 +291,9 @@ public abstract class ZekaStarter implements CommandLineRunner {
      * @param source source
      * @param args   args
      * @return the configurable application context
-     * @throws Exception exception
      * @since 1.0.0
      */
-    public static ConfigurableApplicationContext run(Class<?> source, String... args) throws Exception {
+    public static ConfigurableApplicationContext run(Class<?> source, String... args) {
         return ZekaApplication.run(source, applicationType, args);
     }
 
