@@ -29,7 +29,7 @@ public enum ApplicationType {
 
     /** SERVLET_INDICATOR_CLASSES */
     private static final String[] SERVLET_INDICATOR_CLASSES = {
-        "javax.servlet.Servlet",
+        "jakarta.servlet.Servlet",
         "org.springframework.web.context.ConfigurableWebApplicationContext"
     };
 
