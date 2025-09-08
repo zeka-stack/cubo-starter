@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2025.08.30 15:55
- * @since x.x.x
+ * @since 1.0.0
  */
 @Slf4j
 public class MyKnife4jOpenApiCustomizer extends Knife4jOpenApiCustomizer {

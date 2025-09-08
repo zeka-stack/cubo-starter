@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2025.06.25 21:28
- * @since x.x.x
+ * @since 1.0.0
  */
 @ZekaTest(classes = MessagingContainerConfiguration.class)
 class MessagingContainerConfigurationTest {

@@ -55,7 +55,7 @@ import org.springframework.core.env.Environment;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2025.07.30 15:37
- * @since x.x.x
+ * @since 1.0.0
  */
 @Slf4j
 @AutoConfiguration

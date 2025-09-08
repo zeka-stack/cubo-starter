@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2025.06.24 22:05
- * @since x.x.x
+ * @since 1.0.0
  */
 @Slf4j
 class SubLauncherInitiationTest {
