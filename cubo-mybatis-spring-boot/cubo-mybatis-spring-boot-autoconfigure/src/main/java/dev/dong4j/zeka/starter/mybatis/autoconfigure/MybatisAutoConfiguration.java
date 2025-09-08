@@ -46,7 +46,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 组件自动装配类
+ * MyBatis Plus 自动配置类
+ *
+ * 该配置类负责自动配置 MyBatis Plus 相关组件，包括：
+ * 1. SQL 拦截器配置（非法 SQL 拦截、攻击拦截、分页拦截等）
+ * 2. 性能监控插件配置
+ * 3. 敏感字段加解密插件配置
+ * 4. 元数据处理器配置（自动填充创建时间、更新时间等）
+ * 5. 类型处理器配置（枚举类型、ID 类型等）
+ * 6. SQL 注入器配置
+ *
+ * 注意：
+ * - 部分插件仅在非生产环境下生效
+ * - 支持通过配置属性动态开启/关闭功能
+ * - 与 P6spy 插件互斥，避免重复功能
  *
  * @author dong4j
  * @version 1.0.0
@@ -66,27 +79,33 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 非法 SQL 语句拦截器: SQL 严格模式
-     * 1.必须使用到索引,包含 left jion 连接字段,符合索引最左原则
-     * 必须使用索引好处:
-     * 1.1 如果因为动态 SQL,bug 导致 update 的 where 条件没有带上,全表更新上万条数据
-     * 1.2 如果检查到使用了索引,SQL 性能基本不会太差
-     * <p>
-     * 2.SQL 尽量单表执行,有查询 left jion 的语句,必须在注释里面允许该 SQL 运行,否则会被拦截,有 left jion 的语句,如果不能拆成单表执行的 SQL,请 leader 商量再做决定
-     * <a href="http://gaoxianglong.github.io/shark/">...</a>
-     * SQL 尽量单表执行的好处:
-     * 2.1 查询条件简单、易于开理解和维护;
-     * 2.2 扩展性极强;  (可为分库分表做准备)
-     * 2.3 缓存利用率高;
-     * <p>
-     * 2.在字段上使用函数
-     * 3.where 条件为空
-     * 4.where 条件使用了: !=
-     * 5.where 条件使用了: not 关键字
-     * 6.where 条件使用了: or 关键字
-     * 7.where 条件使用了: 子查询
+     * 创建非法 SQL 语句拦截器
      *
-     * @return the illegal sql interceptor
+     * 该拦截器用于在开发和测试环境中检测和拦截可能存在性能问题的 SQL 语句。
+     * 主要检测规则包括：
+     *
+     * 1. 索引使用检查：
+     *    - 必须使用到索引，包含 left join 连接字段，符合索引最左原则
+     *    - 防止因动态 SQL bug 导致全表更新等危险操作
+     *    - 确保 SQL 性能基本可控
+     *
+     * 2. SQL 复杂度控制：
+     *    - 推荐单表执行，减少复杂的 join 操作
+     *    - 提高查询条件的简单性和可维护性
+     *    - 为分库分表等扩展性需求做准备
+     *    - 提高缓存利用率
+     *
+     * 3. 危险语法检测：
+     *    - 在字段上使用函数
+     *    - where 条件为空
+     *    - 使用 != 操作符
+     *    - 使用 not 关键字
+     *    - 使用 or 关键字
+     *    - 使用子查询
+     *
+     * 注意：该拦截器仅在非生产环境下生效，且需要通过配置开启
+     *
+     * @return IllegalSQLInnerInterceptor 非法 SQL 拦截器实例
      * @since 1.0.0
      */
     @Bean
@@ -99,9 +118,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * SQL执行分析插件, 拦截一些整表操作,在生产环境最好关闭.
+     * 创建 SQL 攻击拦截器
      *
-     * @return the sql explain interceptor
+     * 该拦截器用于防止恶意的 SQL 攻击操作，主要功能包括：
+     * - 拦截全表 update 操作
+     * - 拦截全表 delete 操作
+     * - 防止无 where 条件的危险操作
+     *
+     * 注意：该插件仅在非生产环境下生效，生产环境建议关闭以提高性能
+     *
+     * @return BlockAttackInnerInterceptor SQL 攻击拦截器实例
      * @since 1.0.0
      */
     @Bean
@@ -115,10 +141,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 分页插件, 不需要设置方言, mybatis-plus 自动判断
+     * 创建分页拦截器
      *
-     * @param mybatisProperties mybatis properties
-     * @return the pagination interceptor
+     * 该拦截器提供分页查询功能，主要特性包括：
+     * - 自动识别数据库方言，无需手动配置
+     * - 支持多种数据库（MySQL、PostgreSQL、Oracle 等）
+     * - 可配置单页最大查询数量，防止大数据量查询影响性能
+     * - 自动优化 count 查询语句
+     *
+     * @param mybatisProperties MyBatis 配置属性，用于获取分页限制等配置
+     * @return PaginationInnerInterceptor 分页拦截器实例
      * @since 1.0.0
      */
     @Bean
@@ -131,10 +163,17 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Mybatis plus interceptor
+     * 创建 MyBatis Plus 拦截器链
      *
-     * @param interceptors interceptors
-     * @return the mybatis plus interceptor
+     * 该方法将所有已配置的内部拦截器组装成一个拦截器链，统一管理。
+     * 拦截器的执行顺序按照添加顺序进行，常见的拦截器包括：
+     * - 分页拦截器
+     * - SQL 攻击拦截器
+     * - 非法 SQL 拦截器
+     * - 性能监控拦截器等
+     *
+     * @param interceptors 所有已配置的内部拦截器列表
+     * @return MybatisPlusInterceptor MyBatis Plus 拦截器链实例
      * @since 1.0.0
      */
     @Bean
@@ -146,9 +185,15 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * sql 注入
+     * 创建自定义 SQL 注入器
      *
-     * @return the sql injector
+     * 该注入器用于扩展 MyBatis Plus 的默认 SQL 方法，提供额外的数据库操作方法。
+     * 主要功能包括：
+     * - 注入 insertIgnore 方法（MySQL 的 INSERT IGNORE 语法）
+     * - 注入 replace 方法（MySQL 的 REPLACE INTO 语法）
+     * - 支持批量操作的扩展方法
+     *
+     * @return ISqlInjector 自定义 SQL 注入器实例
      * @since 1.0.0
      */
     @Bean
@@ -157,11 +202,21 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * mybatis-plus SQL执行效率插件 (生产环境最好关闭)
-     * 不存在 com.p6spy.engine.spy.P6SpyDriver 则使用此插件.
+     * 创建 SQL 性能监控拦截器
      *
-     * @param mybatisProperties 配置类
-     * @return the performance interceptor
+     * 该拦截器用于监控 SQL 执行性能，主要功能包括：
+     * - 记录 SQL 执行时间
+     * - 格式化输出 SQL 语句（可配置）
+     * - 设置 SQL 执行超时阈值
+     * - 限制 SQL 输出长度，避免日志过长
+     *
+     * 注意：
+     * - 仅在非生产环境下生效，生产环境建议关闭
+     * - 当类路径中不存在 P6spy 驱动时才会创建此插件
+     * - 与 P6spy 功能互斥，避免重复监控
+     *
+     * @param mybatisProperties MyBatis 配置属性，包含性能监控相关配置
+     * @return PerformanceInterceptor 性能监控拦截器实例
      * @since 1.0.0
      */
     @Bean
@@ -181,9 +236,17 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * SQL执行超时处理程序: 写入单独的 sql.log
+     * 创建 SQL 执行超时处理器
      *
-     * @return <p>Description:异步监听日志事件</p>
+     * 该处理器用于监听和处理 SQL 执行超时事件，主要功能包括：
+     * - 异步监听 SQL 执行超时事件
+     * - 将超时的 SQL 语句记录到单独的 sql.log 文件中
+     * - 便于后续分析和优化慢查询
+     *
+     * 注意：需要通过配置属性开启该功能
+     *
+     * @return SqlExecuteTimeoutHandler SQL 执行超时处理器实例
+     * @since 1.0.0
      */
     @Bean
     @ConditionalOnProperty(
@@ -196,11 +259,19 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 脱敏插件-解码
+     * 创建敏感字段解密拦截器
      *
-     * @param mybatisProperties mybatis properties
-     * @return the sensitive field decrypt intercepter
-     * @since 1.5.0
+     * 该拦截器用于在查询结果返回时自动解密敏感字段，主要功能包括：
+     * - 自动识别标记为敏感的字段
+     * - 使用配置的密钥对敏感字段进行解密
+     * - 支持多种加密算法
+     * - 透明化处理，业务代码无需关心加解密逻辑
+     *
+     * 注意：需要配置敏感字段加密功能才会生效
+     *
+     * @param mybatisProperties MyBatis 配置属性，包含敏感字段加密密钥等配置
+     * @return SensitiveFieldDecryptIntercepter 敏感字段解密拦截器实例
+     * @since 1.0.0
      */
     @Bean
     @ConditionalOnMissingBean(SensitiveFieldDecryptIntercepter.class)
@@ -214,11 +285,20 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 脱敏插件-编码
+     * 创建敏感字段加密拦截器
      *
-     * @param mybatisProperties mybatis properties
-     * @return the sensitive field encrypt intercepter
-     * @since 1.5.0
+     * 该拦截器用于在数据写入数据库前自动加密敏感字段，主要功能包括：
+     * - 自动识别标记为敏感的字段
+     * - 使用配置的密钥对敏感字段进行加密
+     * - 支持多种加密算法
+     * - 透明化处理，业务代码无需关心加解密逻辑
+     * - 与解密拦截器配合使用，实现完整的敏感数据保护
+     *
+     * 注意：需要配置敏感字段加密功能才会生效
+     *
+     * @param mybatisProperties MyBatis 配置属性，包含敏感字段加密密钥等配置
+     * @return SensitiveFieldEncryptIntercepter 敏感字段加密拦截器实例
+     * @since 1.0.0
      */
     @Bean
     @ConditionalOnMissingBean(SensitiveFieldEncryptIntercepter.class)
@@ -233,9 +313,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 使用 MybatisEnumTypeHandler 代替默认的 EnumTypeHandler, 实现 EntityEnum 子类的类型转换(数据库存 value, 返回 Entity)
+     * 创建枚举类型处理器配置定制器
      *
-     * @return the configuration customizer
+     * 该定制器用于配置自定义的枚举类型处理器，替换 MyBatis 默认的枚举处理器。
+     * 主要功能包括：
+     * - 使用 GeneralEnumTypeHandler 代替默认的 EnumTypeHandler
+     * - 支持 EntityEnum 接口的枚举类型自动转换
+     * - 数据库存储枚举的 value 值，程序中使用枚举对象
+     * - 提供更灵活的枚举类型映射机制
+     *
+     * @return ConfigurationCustomizer MyBatis 配置定制器
      * @since 1.0.0
      */
     @Bean
@@ -246,9 +333,15 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * id 类型转换
+     * 创建 ID 类型处理器配置定制器
      *
-     * @return the configuration customizer
+     * 该定制器用于注册自定义的 ID 类型处理器，主要功能包括：
+     * - 注册 SerializableIdTypeHandler 处理器
+     * - 支持 Serializable 类型的 ID 字段自动转换
+     * - 处理不同数据库中 ID 类型的差异
+     * - 提供统一的 ID 类型映射机制
+     *
+     * @return ConfigurationCustomizer MyBatis 配置定制器
      * @since 1.0.0
      */
     @Bean
@@ -258,10 +351,18 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Mybatis component bean
+     * 创建 MyBatis 组件 Bean 提供者
      *
-     * @return the object provider
-     * @since 1.7.1
+     * 该方法用于处理 P6spy 与性能拦截器的冲突问题。
+     * 当检测到类路径中存在 P6spy 但未正确配置时，会发出警告并返回 null。
+     *
+     * 主要功能：
+     * - 检测 P6spy 驱动的存在性
+     * - 避免与 PerformanceInterceptor 功能重复
+     * - 提供配置建议和警告信息
+     *
+     * @return ObjectProvider<ZekaComponentBean> 组件 Bean 提供者，如果存在冲突则返回 null
+     * @since 1.0.0
      */
     @Bean
     @ConditionalOnProperty(
@@ -277,21 +378,38 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * <p>Description: </p>
+     * 元数据对象处理器自动配置类
+     *
+     * 该内部配置类负责配置 MyBatis Plus 的元数据自动填充功能，包括：
+     * 1. 创建元数据处理器链，统一管理所有元数据处理器
+     * 2. 配置时间字段自动填充处理器（创建时间、更新时间）
+     * 3. 配置租户 ID 自动填充处理器（多租户场景）
+     * 4. 配置客户端 ID 自动填充处理器（多客户端场景）
+     *
+     * 这些处理器会在数据插入和更新时自动填充相应的字段值，
+     * 减少业务代码中的重复操作，确保数据的一致性和完整性。
      *
      * @author dong4j
      * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2021.04.07 21:01
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @AutoConfiguration
     static class MetaObjectAutoConfiguration implements ZekaAutoConfiguration {
         /**
-         * 自动创建时间和更新时间
+         * 创建元数据处理器链
          *
-         * @param chains chains
-         * @return global config
+         * 该方法将所有已配置的元数据处理器组装成一个处理器链，统一管理。
+         * 处理器链会在数据插入和更新时按顺序执行，自动填充相关字段。
+         *
+         * 主要功能：
+         * - 统一管理所有元数据处理器
+         * - 按顺序执行处理器链
+         * - 支持插入和更新时的字段自动填充
+         *
+         * @param chains 所有已配置的元数据处理器列表
+         * @return MetaObjectHandler 元数据处理器链实例
          * @since 1.0.0
          */
         @Bean
@@ -301,10 +419,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
         }
 
         /**
-         * Time meta handler
+         * 创建时间字段元数据处理器
          *
-         * @return the meta object chain
-         * @since 1.8.0
+         * 该处理器负责自动填充时间相关字段，主要功能包括：
+         * - 插入时自动设置创建时间（create_time）
+         * - 更新时自动设置更新时间（update_time）
+         * - 使用当前系统时间作为默认值
+         * - 支持 Date 类型的时间字段
+         *
+         * @return MetaObjectChain 时间字段元数据处理器实例
+         * @since 1.0.0
          */
         @Bean
         @ConditionalOnMissingBean(name = "timeMetaObjectHandler")
@@ -313,10 +437,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
         }
 
         /**
-         * Tenant meta handler
+         * 创建租户 ID 元数据处理器
          *
-         * @return the meta object chain
-         * @since 1.8.0
+         * 该处理器负责在多租户场景下自动填充租户 ID 字段，主要功能包括：
+         * - 插入时自动设置租户 ID（tenant_id）
+         * - 从当前上下文中获取租户信息
+         * - 支持多租户数据隔离
+         * - 确保数据归属的正确性
+         *
+         * @return MetaObjectChain 租户 ID 元数据处理器实例
+         * @since 1.0.0
          */
         @Bean
         @ConditionalOnMissingBean(name = "tenantMetaObjectHandler")
@@ -325,10 +455,16 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
         }
 
         /**
-         * Client id meta object handler
+         * 创建客户端 ID 元数据处理器
          *
-         * @return the meta object chain
-         * @since 1.8.0
+         * 该处理器负责在多客户端场景下自动填充客户端 ID 字段，主要功能包括：
+         * - 插入时自动设置客户端 ID（client_id）
+         * - 从当前上下文中获取客户端信息
+         * - 支持多客户端数据标识
+         * - 便于数据来源追踪和统计
+         *
+         * @return MetaObjectChain 客户端 ID 元数据处理器实例
+         * @since 1.0.0
          */
         @Bean
         @ConditionalOnMissingBean(name = "clientMetaObjectHandler")
@@ -339,9 +475,12 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Gets library type *
+     * 获取库类型标识
      *
-     * @return the library type
+     * 该方法返回当前配置类所属的库类型，用于框架内部的组件识别和管理。
+     * 返回 DRUID 表示该配置类主要用于 Druid 数据源相关的 MyBatis 配置。
+     *
+     * @return LibraryEnum 库类型枚举，返回 DRUID
      * @since 1.0.0
      */
     @Override

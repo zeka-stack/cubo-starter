@@ -1,6 +1,5 @@
 package dev.dong4j.zeka.starter.mybatis.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
 import dev.dong4j.zeka.kernel.common.base.AbstractBaseEntity;
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;
@@ -19,22 +18,39 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * <p>Description: 此类中的方法不能与 {@link IService 一样}, 因此使用相近的单词代替
- * 1. save -> create
- * 2. updateById -> update
- * 3. getById -> find
- * 4. removeById -> delete
- * </p>
+ * 实体转换服务实现类
  *
- * @param <DAO> BaseDao 的子类
- * @param <PO>  BasePO 的子类
- * @param <DTO> AbstractBaseEntity 的子类
- * @param <C>   ServiceConverter 的子类
+ * 该类提供了 PO（持久化对象）和 DTO（数据传输对象）之间的转换服务实现。
+ * 为了避免与 MyBatis Plus 的 IService 方法名冲突，使用了相近的单词代替：
+ *
+ * 方法名映射：
+ * - save -> create（创建）
+ * - updateById -> update（更新）
+ * - getById -> find（查找）
+ * - removeById -> delete（删除）
+ *
+ * 主要功能：
+ * 1. 提供 DTO 到 PO 的自动转换
+ * 2. 支持各种插入操作（普通、忽略、替换）
+ * 3. 支持批量操作，提高性能
+ * 4. 提供完整的 CRUD 操作
+ * 5. 自动处理 ID 回写
+ *
+ * 设计特点：
+ * - 使用 ServiceConverter 进行对象转换
+ * - 支持泛型，类型安全
+ * - 自动参数校验和异常处理
+ * - 支持事务管理
+ *
+ * @param <DAO> 数据访问对象类型，继承自 BaseDao
+ * @param <PO> 持久化对象类型，继承自 BasePO
+ * @param <DTO> 数据传输对象类型，继承自 AbstractBaseEntity
+ * @param <C> 服务转换器类型，继承自 ServiceConverter
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.03.15 19:08
- * @since 1.8.0
+ * @since 1.0.0
  */
 @Slf4j
 public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, PO>, DTO extends AbstractBaseEntity<?>,
@@ -52,7 +68,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param dto dto
      * @return the boolean
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> I create(@NotNull DTO dto) {
@@ -69,7 +85,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param dto dto
      * @return 是否成功 boolean
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> I createIgnore(@NotNull DTO dto) {
@@ -86,7 +102,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param dto dto
      * @return 是否成功 boolean
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> I createReplace(@NotNull DTO dto) {
@@ -103,7 +119,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param dto dto
      * @return the boolean
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> I createOrUpdate(@NotNull DTO dto) {
@@ -118,7 +134,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Create batch
      *
      * @param dtos dtos
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createBatch(Collection<DTO> dtos) {
@@ -130,7 +146,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param dtos      dtos
      * @param batchSize batch size
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createBatch(Collection<DTO> dtos, int batchSize) {
@@ -142,7 +158,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Create ignore batch
      *
      * @param dtos dtos
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createIgnoreBatch(Collection<DTO> dtos) {
@@ -154,7 +170,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param dtos      实体对象集合
      * @param batchSize 批次大小
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createIgnoreBatch(Collection<DTO> dtos, int batchSize) {
@@ -166,7 +182,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Create replace batch
      *
      * @param dtos dtos
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createReplaceBatch(Collection<DTO> dtos) {
@@ -178,7 +194,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param dtos      实体对象集合
      * @param batchSize 批次大小
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createReplaceBatch(Collection<DTO> dtos, int batchSize) {
@@ -190,7 +206,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * 通过 DTO 更新数据.
      *
      * @param dto dto
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void update(@NotNull DTO dto) {
@@ -202,7 +218,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Update batch
      *
      * @param dtos dtos
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void updateBatch(Collection<DTO> dtos) {
@@ -215,7 +231,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param dtos      dtos
      * @param batchSize batch size
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void updateBatch(Collection<DTO> dtos, int batchSize) {
@@ -227,7 +243,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Create or update batch
      *
      * @param dtos dtos
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createOrUpdateBatch(Collection<DTO> dtos) {
@@ -239,7 +255,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param dtos      dtos
      * @param batchSize batch size
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void createOrUpdateBatch(Collection<DTO> dtos, int batchSize) {
@@ -252,7 +268,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param <I> parameter
      * @param id  id
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> void delete(@NotNull I id) {
@@ -265,7 +281,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      *
      * @param <I> parameter
      * @param ids ids
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> void delete(Collection<I> ids) {
@@ -277,7 +293,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Remove
      *
      * @param columnMap column map
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void delete(@NotNull Map<String, Object> columnMap) {
@@ -289,7 +305,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * Count
      *
      * @return the int
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public long counts() {
@@ -302,7 +318,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <Q>   parameter
      * @param query query
      * @return the int
-     * @since 2.1.0
+     * @since 1.0.0
      */
     @Override
     public <Q extends BaseQuery<? extends Serializable>> int counts(@NotNull Q query) {
@@ -315,7 +331,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param id  id
      * @return the d
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> DTO find(@NotNull I id) {
@@ -329,7 +345,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> parameter
      * @param ids ids
      * @return the list
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <I extends Serializable> List<DTO> find(Collection<I> ids) {
@@ -342,7 +358,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * 查询所有的 DTO 数据
      *
      * @return the list
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public List<DTO> find() {
@@ -355,7 +371,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <Q>   parameter
      * @param query query
      * @return the dto
-     * @since 2.1.0
+     * @since 1.0.0
      */
     @Override
     public <Q extends BaseQuery<? extends Serializable>> DTO find(@NotNull Q query) {
@@ -373,7 +389,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      * @param <I> id
      * @param po  数据库操作实体
      * @return 返回 id 值
-     * @since 2.1.0
+     * @since 1.0.0
      */
     private <I extends Serializable> I getId(@NotNull PO po) {
         // noinspection unchecked

@@ -25,11 +25,27 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 
 /**
- * <p>Description: 此类在 Spring Boot 启动之前初始化
- * 注意: 不能直接运行, 必须通过子类运行 </p>
+ * Spring Boot 应用启动器基类，负责应用的初始化和生命周期管理
+ *
+ * 该类在 Spring Boot 启动之前初始化，提供了应用启动的标准流程和扩展点。
+ * 设计为抽象类，必须通过子类继承并运行，不能直接实例化。
+ *
+ * 主要功能：
+ * 1. 自动检测和验证启动类
+ * 2. 处理应用类型和运行模式
+ * 3. 提供应用生命周期钩子（before、run、after）
+ * 4. 支持服务型应用的守护线程管理
+ *
+ * 使用方式：
+ * ```java
+ * @SpringBootApplication
+ * public class MyApplication extends ZekaStarter {
+ *     // 不需要编写 main 方法，继承即可
+ * }
+ * ```
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.11.27 01:18
  * @since 1.0.0
@@ -56,9 +72,12 @@ public abstract class ZekaStarter implements CommandLineRunner {
     public static final String START_CLASS_ARGS = "--start.class=";
 
     /**
-     * 从参数中获取启动类名, 此方法主要用于处理使用 shell 脚本启动时的增强处理
+     * 从命令行参数中解析启动类名
      *
-     * @param args args
+     * 此方法主要用于处理使用 shell 脚本启动时的增强处理，
+     * 通过 --start.class=xxx 参数指定启动类。
+     *
+     * @param args 命令行参数数组
      * @since 1.0.0
      */
     private static void processorArgs(String @NotNull [] args) {
@@ -71,7 +90,10 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 检查启动类: 一个应用只允许存在一个被 @SpringBootApplication 标识的主类.
+     * 检查并验证启动类
+     *
+     * 确保应用中只存在一个被 @SpringBootApplication 标识的主类。
+     * 如果未通过参数指定启动类，则会自动扫描项目中的 ZekaStarter 子类作为启动类。
      *
      * @since 1.0.0
      */
@@ -103,9 +125,12 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * Verification start class *
+     * 验证启动类是否符合要求
      *
-     * @param startClassName start class name
+     * 检查指定的启动类是否使用了 @SpringBootApplication 或 @EnableAutoConfiguration 注解，
+     * 确保它是一个有效的 Spring Boot 应用启动类。
+     *
+     * @param startClassName 启动类的全限定名
      * @since 1.0.0
      */
     private static void verificationStartClass(String startClassName) {
@@ -126,7 +151,10 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 判断应用类型
+     * 确定应用的运行类型
+     *
+     * 通过检查启动类上的 @RunningType 注解来确定应用类型，
+     * 如果未指定，则使用自动推断的类型。
      *
      * @since 1.0.0
      */
@@ -139,7 +167,10 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * Process running type  @param configurableApplicationContext configurable application context
+     * 处理应用运行类型的兼容性检查
+     *
+     * 验证指定的应用类型与实际依赖是否匹配，防止类型配置错误。
+     * 例如：设置为 WEB 应用但缺少 WEB 依赖时会抛出异常。
      *
      * @since 1.0.0
      */
@@ -174,9 +205,12 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 处理主类上的启动标识, 如果是 {@link ApplicationType#SERVICE} 则启动一个守护线程, 防止主线程退出
+     * 添加应用关闭钩子，处理优雅停机
      *
-     * @param applicationContext application context
+     * 如果应用类型是 {@link ApplicationType#SERVICE}，则启动一个守护线程防止主线程退出。
+     * 当收到关闭信号时，会停止 Spring 上下文并释放锁，允许应用正常退出。
+     *
+     * @param applicationContext Spring 应用上下文
      * @since 1.0.0
      */
     @SuppressWarnings("checkstyle:Regexp")
@@ -208,11 +242,16 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * Start *
+     * 启动应用并执行生命周期回调
      *
-     * @param args args
-     * @return the configurable application context
-     * @throws Exception exception
+     * 完成应用启动流程，并按顺序执行：
+     * 1. 启动 Spring 上下文
+     * 2. 发布自定义事件
+     * 3. 调用所有 ZekaStarter 实例的 after 方法
+     *
+     * @param args 命令行参数
+     * @return 配置好的 Spring 应用上下文
+     * @throws Exception 启动过程中可能抛出的异常
      * @since 1.0.0
      */
     private ConfigurableApplicationContext start(String[] args) throws Exception {
@@ -224,10 +263,13 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 启动完成后执行逻辑
+     * 在应用启动完成后调用所有 ZekaStarter 实例的 after 方法
      *
-     * @param context context
-     * @since 1.5.0
+     * 查找上下文中所有 ZekaStarter 类型的 Bean，并执行它们的 after 方法，
+     * 用于在应用完全启动后执行自定义逻辑。
+     *
+     * @param context Spring 应用上下文
+     * @since 1.0.0
      */
     private void callRunners(@NotNull ApplicationContext context) {
         Collection<ZekaStarter> values = context.getBeansOfType(ZekaStarter.class).values();
@@ -235,11 +277,14 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 内部使用
+     * 内部使用的运行方法
      *
-     * @param args args
-     * @return the configurable application context
-     * @throws Exception exception
+     * 调用 ZekaApplication.run 方法启动应用，
+     * 使用已确定的应用类和参数。
+     *
+     * @param args 命令行参数
+     * @return 配置好的 Spring 应用上下文
+     * @throws Exception 启动过程中可能抛出的异常
      * @since 1.0.0
      */
     private static ConfigurableApplicationContext runing(String[] args) throws Exception {
@@ -247,7 +292,10 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 在 spring 容器启动之前执行自定义逻辑.
+     * 在 Spring 容器启动之前执行自定义逻辑
+     *
+     * 子类可以重写此方法，在 Spring 容器初始化前执行准备工作，
+     * 如环境检查、资源预加载等。
      *
      * @since 1.0.0
      */
@@ -256,9 +304,13 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 在容器刷新完成后执行逻辑, {@link CommandLineRunner#run(java.lang.String...)}
+     * 在容器刷新完成后执行逻辑
      *
-     * @param args args
+     * 实现 {@link CommandLineRunner} 接口的 run 方法，
+     * 在 Spring 容器完全初始化后但在 after() 方法之前执行。
+     * 子类可重写此方法添加自定义启动逻辑。
+     *
+     * @param args 命令行参数
      * @since 1.0.0
      */
     @Override
@@ -267,9 +319,12 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 在启动完成后且在 {@link ZekaStarter#after()} 之前发送事件.
+     * 在启动完成后且在 {@link ZekaStarter#after()} 之前发送事件
      *
-     * @param context the context
+     * 子类可重写此方法，在应用启动完成后发布自定义事件，
+     * 用于通知其他组件应用已启动。
+     *
+     * @param context Spring 应用上下文
      * @since 1.0.0
      */
     protected void publishEvent(ConfigurableApplicationContext context) {
@@ -277,7 +332,10 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 在 spring 容器启动完成后执行自定义逻辑.
+     * 在 Spring 容器启动完成后执行自定义逻辑
+     *
+     * 应用完全启动后的最终回调方法，子类可重写此方法执行
+     * 需要在应用完全就绪后才能执行的操作。
      *
      * @since 1.0.0
      */
@@ -286,11 +344,14 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 单元测试时使用, 作为内嵌应用.
+     * 运行应用并返回上下文，主要用于单元测试
      *
-     * @param source source
-     * @param args   args
-     * @return the configurable application context
+     * 提供一个静态方法用于在单元测试中启动应用作为内嵌服务，
+     * 直接调用 ZekaApplication.run 方法。
+     *
+     * @param source 包含 @SpringBootApplication 注解的主类
+     * @param args   命令行参数
+     * @return 配置好的 Spring 应用上下文
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(Class<?> source, String... args) {
@@ -298,10 +359,17 @@ public abstract class ZekaStarter implements CommandLineRunner {
     }
 
     /**
-     * 启动入口
-     * org.apache.logging.log4j.core.util.DefaultShutdownCallbackRegistry
+     * 应用启动入口方法
      *
-     * @param args the input arguments
+     * 主要启动流程：
+     * 1. 设置日志系统属性
+     * 2. 处理启动参数
+     * 3. 检查启动类
+     * 4. 处理应用类型
+     * 5. 实例化启动类并调用生命周期方法
+     * 6. 对于服务型应用，添加守护线程防止退出
+     *
+     * @param args 命令行参数
      * @see AbstractApplicationContext#registerShutdownHook()
      * @since 1.0.0
      */

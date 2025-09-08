@@ -14,10 +14,23 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * <p>Description: 启动完成后输出信息 </p>
+ * 启动信息输出运行器，在应用启动完成后输出相关信息
+ *
+ * 该类实现了 ApplicationRunner 接口，会在应用启动完成后执行，
+ * 主要功能包括：
+ * 1. 显示调试信息（配置信息和 Spring 上下文信息）
+ * 2. 根据启动类型决定是否输出启动信息
+ * 3. 输出库组件信息和简单启动信息
+ *
+ * 使用场景：
+ * 1. 开发环境调试
+ * 2. 生产环境启动日志
+ * 3. 单元测试环境
+ *
+ * 注意：在单元测试环境下会跳过信息输出
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.27 18:09
  * @since 1.0.0
@@ -28,9 +41,9 @@ import org.springframework.stereotype.Component;
 public class StarterInfoRunner implements ApplicationRunner {
 
     /**
-     * Run *
+     * 运行方法，在应用启动完成后执行
      *
-     * @param args args
+     * @param args 应用启动参数
      * @since 1.0.0
      */
     @Override

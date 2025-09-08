@@ -12,10 +12,26 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * <p>Description: 通过 SPI 加载 druid 默认配置</p>
+ * Druid 数据源启动初始化器
+ *
+ * 该类通过 SPI 机制自动加载 Druid 数据源的默认配置，在应用启动时
+ * 为 Druid 数据源提供合理的默认配置值。
+ *
+ * 主要功能：
+ * 1. 配置 Druid 数据源的基本参数（连接池大小、超时时间等）
+ * 2. 配置 Druid 监控功能（SQL 监控、Web 监控等）
+ * 3. 配置 Druid 安全参数（防火墙、访问控制等）
+ * 4. 提供生产环境友好的默认配置
+ *
+ * 配置项包括：
+ * - 连接池配置：初始连接数、最大连接数、超时时间等
+ * - 监控配置：SQL 统计、慢查询记录、Web 监控界面等
+ * - 安全配置：访问白名单、用户认证、防火墙规则等
+ *
+ * 注意：该配置仅在非 JUnit 测试环境下生效
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.27 11:19
  * @since 1.0.0
@@ -23,12 +39,23 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @AutoService(LauncherInitiation.class)
 public class DruidLauncherInitiation implements LauncherInitiation {
     /**
-     * Launcher *
+     * 设置默认属性
      *
-     * @param env           env
-     * @param appName       app name
-     * @param isLocalLaunch is local launch
-     * @return the map
+     * 该方法在应用启动时被调用，用于设置 Druid 数据源的默认配置。
+     * 如果是 JUnit 测试环境，则不加载任何配置以避免影响测试。
+     *
+     * 配置的主要参数：
+     * 1. 数据库驱动和连接池类型
+     * 2. 连接池大小和超时配置
+     * 3. 连接有效性检查配置
+     * 4. SQL 监控和统计配置
+     * 5. Web 监控界面配置
+     * 6. 安全访问控制配置
+     *
+     * @param env Spring 环境配置对象
+     * @param appName 应用名称
+     * @param isLocalLaunch 是否为本地启动
+     * @return Map<String, Object> 默认配置属性映射
      * @since 1.0.0
      */
     @Override
@@ -78,9 +105,13 @@ public class DruidLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Gets order *
+     * 获取执行顺序
      *
-     * @return the order
+     * 该方法返回初始化器的执行顺序，数值越小优先级越高。
+     * 设置为 HIGHEST_PRECEDENCE + 200，确保在大部分配置之前执行，
+     * 但在核心框架配置之后执行。
+     *
+     * @return int 执行顺序值
      * @since 1.0.0
      */
     @Override
@@ -89,9 +120,12 @@ public class DruidLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Gets name *
+     * 获取初始化器名称
      *
-     * @return the name
+     * 该方法返回初始化器的唯一标识名称，用于日志记录和调试。
+     * 名称格式为 "模块名/功能名"，便于识别和管理。
+     *
+     * @return String 初始化器名称
      * @since 1.0.0
      */
     @Override

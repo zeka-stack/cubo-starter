@@ -17,10 +17,30 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * <p>Description: 分页工具 </p>
+ * 查询条件工具类
+ *
+ * 该工具类提供了查询条件构建和分页处理的通用方法，主要用于简化
+ * MyBatis Plus 的查询条件构建和分页参数处理。
+ *
+ * 主要功能：
+ * 1. 分页参数转换：将 BaseQuery 转换为 MyBatis Plus 的 IPage
+ * 2. 查询条件构建：构建 QueryWrapper 查询条件
+ * 3. 排序处理：支持多字段升序和降序排序
+ * 4. 时间范围校验：验证开始时间和结束时间的合理性
+ * 5. SQL 关键字过滤：防止 SQL 注入攻击
+ *
+ * 工具方法：
+ * - getPage：构建分页对象，支持排序和时间校验
+ * - getQueryWrapper：构建查询条件包装器
+ * - checkTime：校验时间范围的合理性
+ *
+ * 安全特性：
+ * - 自动过滤 SQL 关键字，防止注入攻击
+ * - 参数校验，确保查询条件的合法性
+ * - 时间范围校验，防止不合理的查询条件
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.24 15:33
  * @since 1.0.0
@@ -54,7 +74,7 @@ public class Condition {
      * 时间检查: 开始时间不能大于结束时间
      *
      * @param query query
-     * @since 2024.2.0
+     * @since 1.0.0
      */
     public static void checkTime(@NotNull BaseQuery<?> query) {
         if (query.getStartTime() != null && query.getEndTime() != null) {

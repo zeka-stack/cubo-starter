@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.09.26 10:52
- * @since 2.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
@@ -34,7 +34,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
      *
      * @param handlerType handler type
      * @return the custom type condition
-     * @since 2.0.0
+     * @since 1.0.0
      */
     @Override
     protected RequestCondition<ApiVersionCondition> getCustomTypeCondition(@NotNull Class<?> handlerType) {
@@ -47,7 +47,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
      *
      * @param method method
      * @return the custom method condition
-     * @since 2.0.0
+     * @since 1.0.0
      */
     @Override
     protected RequestCondition<ApiVersionCondition> getCustomMethodCondition(@NotNull Method method) {
@@ -60,7 +60,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
      *
      * @param apiVersion api version
      * @return the request condition
-     * @since 2.0.0
+     * @since 1.0.0
      */
     private RequestCondition<ApiVersionCondition> createCondition(ApiVersion apiVersion) {
         if (apiVersion == null || 0 == apiVersion.value().length) {
@@ -76,7 +76,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
      * @param handler handler
      * @param method  method
      * @param mapping mapping
-     * @since 2.0.0
+     * @since 1.0.0
      */
     @Override
     protected void registerHandlerMethod(@NotNull Object handler, @NotNull Method method, @NotNull RequestMappingInfo mapping) {

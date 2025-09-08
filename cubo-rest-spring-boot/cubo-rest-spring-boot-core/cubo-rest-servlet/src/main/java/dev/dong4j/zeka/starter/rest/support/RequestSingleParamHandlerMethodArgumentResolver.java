@@ -45,7 +45,7 @@ public class RequestSingleParamHandlerMethodArgumentResolver extends AbstractMet
      * Supports annotation
      *
      * @return the class
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @Override
     protected Class<RequestSingleParam> supportsAnnotation() {
@@ -60,7 +60,7 @@ public class RequestSingleParamHandlerMethodArgumentResolver extends AbstractMet
      * @param inputMessage input message
      * @param annotation   request single param
      * @return the object
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @SneakyThrows
     @Override

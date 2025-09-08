@@ -3,20 +3,34 @@ package dev.dong4j.zeka.starter.mybatis.base;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import dev.dong4j.zeka.starter.mybatis.handler.TimeMetaObjectHandler;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>Description: </p>
- * 1. 新增记录时, 不需要以下 4 个公共字段, 将根据注解自动生成;
- * 2. 更新记录时, 也不需设置 updateTime, 会自动更新时间 {@link TimeMetaObjectHandler}
- * 注意: 子类不能使用 builder 模式! 子类不能使用 builder 模式! 子类不能使用 builder 模式!
+ * 带时间字段的基础持久化对象抽象类
  *
- * @param <T> parameter
- * @param <M> parameter
+ * 该抽象类继承自 BasePO，并实现了 AuditTime 接口，为数据库实体提供
+ * 自动时间字段管理功能。
+ *
+ * 主要功能：
+ * 1. 自动管理创建时间字段（create_time）
+ * 2. 自动管理更新时间字段（update_time）
+ * 3. 配合 TimeMetaObjectHandler 实现时间字段的自动填充
+ * 4. 支持链式调用的 setter 方法
+ *
+ * 字段填充策略：
+ * - 创建时间：仅在插入时填充（FieldFill.INSERT）
+ * - 更新时间：在插入和更新时都填充（FieldFill.INSERT_UPDATE）
+ *
+ * 使用说明：
+ * 1. 新增记录时，时间字段会自动生成，无需手动设置
+ * 2. 更新记录时，更新时间会自动刷新
+ * 3. 子类不建议使用 @Builder 模式，可能导致字段丢失
+ *
+ * @param <T> 主键类型，必须实现 Serializable 接口
+ * @param <M> 模型类型，继承自 Model
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.22 22:49
  * @since 1.0.0
@@ -33,9 +47,12 @@ public abstract class BaseWithTimePO<T extends Serializable, M extends Model<M>>
     private Date updateTime;
 
     /**
-     * Gets create time *
+     * 获取创建时间
      *
-     * @return the create time
+     * 该方法实现了 AuditTime 接口的 getCreateTime 方法，
+     * 用于获取数据记录的创建时间。
+     *
+     * @return Date 创建时间
      * @since 1.0.0
      */
     @Override
@@ -44,10 +61,13 @@ public abstract class BaseWithTimePO<T extends Serializable, M extends Model<M>>
     }
 
     /**
-     * Sets create time *
+     * 设置创建时间
      *
-     * @param createTime create time
-     * @return the create time
+     * 该方法用于设置数据记录的创建时间，支持链式调用。
+     * 通常情况下不需要手动调用，会由 TimeMetaObjectHandler 自动填充。
+     *
+     * @param createTime 要设置的创建时间
+     * @return M 当前实例，支持链式调用
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
@@ -57,10 +77,13 @@ public abstract class BaseWithTimePO<T extends Serializable, M extends Model<M>>
     }
 
     /**
-     * Sets update time *
+     * 设置更新时间
      *
-     * @param updateTime update time
-     * @return the update time
+     * 该方法用于设置数据记录的更新时间，支持链式调用。
+     * 通常情况下不需要手动调用，会由 TimeMetaObjectHandler 自动填充。
+     *
+     * @param updateTime 要设置的更新时间
+     * @return M 当前实例，支持链式调用
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
@@ -70,9 +93,12 @@ public abstract class BaseWithTimePO<T extends Serializable, M extends Model<M>>
     }
 
     /**
-     * Gets update time *
+     * 获取更新时间
      *
-     * @return the update time
+     * 该方法实现了 AuditTime 接口的 getUpdateTime 方法，
+     * 用于获取数据记录的最后更新时间。
+     *
+     * @return Date 更新时间
      * @since 1.0.0
      */
     @Override

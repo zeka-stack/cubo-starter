@@ -23,13 +23,32 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
- * <p>Description: Knife4j 基础自动配置类 </p>
+ * Knife4j自动配置类
+ *
+ * 该类负责配置Knife4j相关的Bean和功能，提供API文档的增强功能。
+ * 通过Spring Boot自动配置机制，在非生产环境下启用Knife4j功能。
+ *
+ * 主要功能包括：
+ * 1. 配置Knife4jOpenApiCustomizer自定义器
+ * 2. 配置生产环境安全过滤器
+ * 3. 提供Knife4j UI自动配置
+ * 4. 支持OpenAPI文档的增强显示
+ *
+ * 使用场景：
+ * - API文档的自动生成和展示
+ * - Swagger UI的增强功能
+ * - OpenAPI规范的扩展支持
+ * - 开发环境的API调试工具
+ *
+ * 设计意图：
+ * 通过自动配置简化Knife4j的集成，提供开箱即用的API文档功能，
+ * 支持开发人员快速构建和调试API接口。
  *
  * @author dong4j
- * @version 1.4.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.05.08 16:14
- * @since 1.4.0
+ * @since 1.0.0
  */
 @AutoConfiguration(before = com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration.class)
 @Profile(value = {App.ENV_NOT_PROD})
@@ -44,10 +63,28 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Slf4j
 public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
 
+    /**
+     * 构造Knife4j自动配置对象
+     * <p>
+     * 初始化Knife4j自动配置，记录启动日志。
+     *
+     * @since 1.0.0
+     */
     public Knife4jAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }
 
+    /**
+     * 创建Knife4j OpenAPI自定义器
+     *
+     * 创建自定义的Knife4j OpenAPI自定义器，用于增强API文档的显示和功能。
+     * 该自定义器支持标签排序、文档扩展等高级功能。
+     *
+     * @param properties Knife4j配置属性
+     * @param docProperties SpringDoc配置属性
+     * @return Knife4jOpenApiCustomizer实例
+     * @since 1.0.0
+     */
     @Bean
     public Knife4jOpenApiCustomizer knife4jOpenApiCustomizer(com.github.xiaoymin.knife4j.spring.configuration.Knife4jProperties properties, SpringDocConfigProperties docProperties) {
         log.debug("Register Knife4jOpenApiCustomizer");
@@ -55,10 +92,13 @@ public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Production security filter
+     * 创建生产环境安全过滤器
      *
-     * @return the production security filter
-     * @since 1.4.0
+     * 创建生产环境安全过滤器，用于在生产环境中保护API文档的访问。
+     * 只有在非本地启动且为生产环境时才启用安全过滤。
+     *
+     * @return JakartaProductionSecurityFilter实例
+     * @since 1.0.0
      */
     @Bean
     public JakartaProductionSecurityFilter productionSecurityFilter() {
@@ -66,23 +106,28 @@ public class Knife4jAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * <p>Description: </p>
+     * Knife4j UI自动配置类
+     *
+     * 该类负责配置Knife4j UI相关的功能，仅在存在doc.html资源时启用。
+     * 提供Swagger REST Bootstrap类型的库支持。
      *
      * @author dong4j
-     * @version 1.4.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.05.08 16:52
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @AutoConfiguration
     @ConditionalOnResource(resources = "classpath:META-INF/resources/doc.html")
     static class Knife4jUiAutoConfiguration implements ZekaAutoConfiguration {
 
         /**
-         * Gets library type *
+         * 获取库类型
          *
-         * @return the library type
-         * @since 1.4.0
+         * 返回Swagger REST Bootstrap库类型，用于标识当前使用的API文档库。
+         *
+         * @return SWAGGER_REST_BOOTSTRAP库类型
+         * @since 1.0.0
          */
         @Override
         public LibraryEnum getLibraryType() {

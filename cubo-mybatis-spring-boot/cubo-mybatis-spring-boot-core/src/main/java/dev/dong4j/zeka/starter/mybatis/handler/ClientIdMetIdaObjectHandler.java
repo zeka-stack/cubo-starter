@@ -11,7 +11,7 @@ import org.apache.ibatis.reflection.MetaObject;
  * {@link BasePO}
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.26 20:16
  * @since 1.0.0
@@ -24,7 +24,7 @@ public class ClientIdMetIdaObjectHandler extends AbstractDataIdMetaObjectHandler
      *
      * @param metaObject meta object
      * @param expandIds  expand ids
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     protected void setFieldValue(MetaObject metaObject, ExpandIds expandIds) {

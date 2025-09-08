@@ -16,10 +16,28 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * <p>Description: 抽象的 插入一条数据 (选择字段插入) </p>
+ * 抽象插入方法基类
+ *
+ * 该抽象类为自定义插入方法提供基础实现，支持选择性字段插入。
+ * 继承自 MyBatis Plus 的 AbstractMethod，提供了插入方法的通用逻辑。
+ *
+ * 主要功能：
+ * 1. 处理插入 SQL 的动态生成
+ * 2. 支持主键生成策略（自增、序列等）
+ * 3. 处理字段的选择性插入（只插入非空字段）
+ * 4. 生成对应的 MappedStatement
+ *
+ * 设计特点：
+ * - 使用模板方法模式，子类只需提供具体的 SQL 方法类型
+ * - 自动处理主键生成逻辑
+ * - 支持不同的插入策略（INSERT IGNORE、REPLACE INTO 等）
+ *
+ * 子类实现：
+ * - InsertIgnore：实现 INSERT IGNORE 功能
+ * - Replace：实现 REPLACE INTO 功能
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.26 21:38
  * @since 1.0.0
@@ -28,11 +46,16 @@ public class AbstractInsertMethod extends AbstractMethod {
 
     @Serial
     private static final long serialVersionUID = -8858194763848035688L;
-    /** Sql method */
+    /** SQL 方法枚举 */
     private final MybatisSqlMethod sqlMethod;
 
     /**
-     * @since 3.5.0
+     * 构造方法
+     *
+     * 创建抽象插入方法实例，使用指定的 SQL 方法类型。
+     *
+     * @param sqlMethod SQL 方法枚举，定义了方法名和 SQL 模板
+     * @since 1.0.0
      */
     protected AbstractInsertMethod(MybatisSqlMethod sqlMethod) {
         super(sqlMethod.getMethod());
@@ -40,12 +63,19 @@ public class AbstractInsertMethod extends AbstractMethod {
     }
 
     /**
-     * Inject mapped statement mapped statement
+     * 注入映射语句
      *
-     * @param mapperClass mapper class
-     * @param modelClass  model class
-     * @param tableInfo   table info
-     * @return the mapped statement
+     * 该方法负责生成并注入自定义插入方法的 MappedStatement。
+     * 主要处理以下逻辑：
+     * 1. 根据表信息生成字段和值的 SQL 脚本
+     * 2. 处理主键生成策略（自增、序列等）
+     * 3. 构建完整的 SQL 语句
+     * 4. 创建并返回 MappedStatement
+     *
+     * @param mapperClass Mapper 接口类
+     * @param modelClass 实体模型类
+     * @param tableInfo 表信息对象，包含表结构和字段信息
+     * @return MappedStatement 映射语句对象
      * @since 1.0.0
      */
     @Override

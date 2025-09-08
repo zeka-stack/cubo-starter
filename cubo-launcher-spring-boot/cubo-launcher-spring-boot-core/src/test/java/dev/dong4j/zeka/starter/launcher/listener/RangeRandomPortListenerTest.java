@@ -14,10 +14,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 /**
- * <p>Description: </p>
+ * 随机端口监听器测试类
+ *
+ * 该类测试 RangeRandomPortListener 的功能，包括：
+ * 1. 随机端口生成功能
+ * 2. 随机字符串生成功能
+ * 3. 异常情况处理
+ *
+ * 测试用例覆盖了各种边界条件和错误场景，确保功能的正确性和健壮性。
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.23 14:48
  * @since 1.0.0
@@ -43,7 +50,10 @@ class RangeRandomPortListenerTest {
     private Environment environment;
 
     /**
-     * 集成测试
+     * 集成测试方法
+     *
+     * 测试随机端口和随机字符串生成功能，
+     * 验证各种边界条件和错误场景。
      *
      * @since 1.0.0
      */
@@ -72,10 +82,13 @@ class RangeRandomPortListenerTest {
     }
 
     /**
-     * <p>Description: </p>
+     * 测试应用配置类
+     *
+     * 该类提供了测试所需的 Spring 配置，
+     * 主要用于初始化测试环境。
      *
      * @author dong4j
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.03.23 15:00
      * @since 1.0.0
@@ -85,17 +98,23 @@ class RangeRandomPortListenerTest {
     }
 
     /**
-     * <p>Description: 单元测试 </p>
+     * 单元测试内部类
+     *
+     * 该类包含针对特定方法的单元测试，
+     * 主要用于测试正则表达式匹配逻辑。
      *
      * @author dong4j
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.03.23 17:04
      * @since 1.0.0
      */
     static class UnitTest {
         /**
-         * Test 1
+         * 单元测试方法
+         *
+         * 测试正则表达式匹配逻辑，
+         * 验证各种输入格式的正确性。
          *
          * @since 1.0.0
          */
@@ -109,10 +128,12 @@ class RangeRandomPortListenerTest {
         }
 
         /**
-         * Check pattern boolean
+         * 检查输入范围是否符合预期格式
          *
-         * @param range range
-         * @return the boolean
+         * 使用正则表达式验证输入字符串是否符合 "[数字,数字]" 的格式。
+         *
+         * @param range 输入的范围字符串
+         * @return 如果符合格式返回 true，否则返回 false
          * @since 1.0.0
          */
         private boolean checkPattern(String range) {

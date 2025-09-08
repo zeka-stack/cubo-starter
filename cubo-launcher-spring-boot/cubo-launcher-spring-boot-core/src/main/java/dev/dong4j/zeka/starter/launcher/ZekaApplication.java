@@ -39,14 +39,22 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 /**
- * <p>Description: 启动类封装</p>
- * 1. 加载默认配置
- * 2. SPI 加载其他包的处理类
- * 读取 appName 的优先级
- * 1. JVM 环境变量 --> 2. 配置文件 --> 3. run() 指定 --> 4. 应用所在目录名
+ * Spring Boot 应用启动类封装，提供统一的应用启动流程和配置管理
+ *
+ * 主要功能：
+ * 1. 自动加载默认配置，简化应用启动过程
+ * 2. 通过 SPI 机制加载其他包的处理类，实现模块化扩展
+ * 3. 统一管理应用名称和环境配置
+ * 4. 支持多种应用类型（Web、Service等）的自动识别和配置
+ *
+ * 应用名称(appName)读取优先级：
+ * 1. JVM 环境变量
+ * 2. 配置文件中的设置
+ * 3. run() 方法显式指定
+ * 4. 应用所在目录名（默认值）
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.26 19:23
  * @since 1.0.0
@@ -62,7 +70,9 @@ public final class ZekaApplication {
     }
 
     /**
-     * Zeak application
+     * 私有构造方法，防止实例化
+     *
+     * 该类设计为工具类，不应被直接实例化使用
      *
      * @since 1.0.0
      */
@@ -72,12 +82,14 @@ public final class ZekaApplication {
     }
 
     /**
-     * Run configurable application context
+     * 运行 Spring Boot 应用并返回应用上下文
      *
-     * @param source source
-     * @param args   args
-     * @return the configurable application context
-     * @throws Exception exception
+     * 此方法会自动推断应用类型，并使用默认的应用名称
+     *
+     * @param source 包含 @SpringBootApplication 注解的主类
+     * @param args   命令行参数
+     * @return Spring 应用上下文
+     * @throws Exception 启动过程中可能抛出的异常
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(Class<?> source,
@@ -86,12 +98,14 @@ public final class ZekaApplication {
     }
 
     /**
-     * Run configurable application context
+     * 使用指定的应用名称运行 Spring Boot 应用
      *
-     * @param appName app name
-     * @param source  source
-     * @param args    args
-     * @return the configurable application context
+     * 此方法允许显式指定应用名称，并自动推断应用类型
+     *
+     * @param appName 应用名称，将用作 spring.application.name
+     * @param source  包含 @SpringBootApplication 注解的主类
+     * @param args    命令行参数
+     * @return Spring 应用上下文
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(String appName,
@@ -101,12 +115,14 @@ public final class ZekaApplication {
     }
 
     /**
-     * 应用名处理, 如果未显式设置则使用启动目录名作为应用名
+     * 使用默认应用名称和指定应用类型运行 Spring Boot 应用
      *
-     * @param source          the source
-     * @param applicationType application type
-     * @param args            the args
-     * @return the configurable application context
+     * 如果未显式设置应用名称，则使用从配置中读取的默认应用名
+     *
+     * @param source          包含 @SpringBootApplication 注解的主类
+     * @param applicationType 应用类型（SERVLET、REACTIVE、SERVICE、NONE）
+     * @param args            命令行参数
+     * @return Spring 应用上下文
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(Class<?> source, ApplicationType applicationType, String... args) {
@@ -115,14 +131,16 @@ public final class ZekaApplication {
     }
 
     /**
-     * Create an application context
-     * java -jar app.jar --spring.profiles.active=prod --server.port=2333
+     * 创建并运行 Spring Boot 应用上下文
      *
-     * @param appName         application name
-     * @param source          The sources
-     * @param applicationType application type
-     * @param args            the args
-     * @return an application context created from the current state
+     * 完整的应用启动方法，支持指定应用名称和应用类型
+     * 示例：java -jar app.jar --spring.profiles.active=prod --server.port=2333
+     *
+     * @param appName         应用名称，将用作 spring.application.name
+     * @param source          包含 @SpringBootApplication 注解的主类
+     * @param applicationType 应用类型（SERVLET、REACTIVE、SERVICE、NONE）
+     * @param args            命令行参数
+     * @return 创建的 Spring 应用上下文
      * @since 1.0.0
      */
     public static ConfigurableApplicationContext run(String appName,
@@ -144,13 +162,18 @@ public final class ZekaApplication {
     }
 
     /**
-     * 设置 默认配置和 profiles, 用过 SPI 加载其他包的组件
+     * 创建 SpringApplicationBuilder 并进行配置
      *
-     * @param appName         the app name
-     * @param source          the source
-     * @param applicationType application type
-     * @param args            the args
-     * @return the spring application builder
+     * 该方法负责：
+     * 1. 设置默认配置和环境变量
+     * 2. 通过 SPI 机制加载其他包的组件
+     * 3. 配置应用类型和环境
+     *
+     * @param appName         应用名称
+     * @param source          包含 @SpringBootApplication 注解的主类
+     * @param applicationType 应用类型
+     * @param args            命令行参数
+     * @return 配置好的 SpringApplicationBuilder 实例
      * @since 1.0.0
      */
     @NotNull
@@ -206,10 +229,17 @@ public final class ZekaApplication {
     }
 
     /**
-     * Build default properties properties.
+     * 构建默认的应用属性配置
      *
-     * @param appName the app name
-     * @return the properties
+     * 设置应用的基本信息，包括：
+     * - 版本信息
+     * - 组ID
+     * - 构件ID
+     * - 应用名称
+     * - 包名等
+     *
+     * @param appName 应用名称
+     * @return 包含默认配置的 Properties 对象
      * @since 1.0.0
      */
     @NotNull
@@ -235,13 +265,17 @@ public final class ZekaApplication {
     }
 
     /**
-     * 获取应用名
-     * 1. 默认通过 jar 启动应用, 从 pom.properties 中获取 artifactId 的值
-     * 2. 为空则解析 classpath 路径
-     * 注意: applicationName 规定使用 maven 中的 artifactId, 日志文件保存路径也会使用到 artifactId
-     * maven.artifactId --> spring.application.name --> 日志路径
+     * 加载主要配置属性，并确定应用名称
      *
-     * @return the properties
+     * 应用名称获取逻辑：
+     * 1. 如果是通过 jar 启动应用，从 MANIFEST.MF 或 build-info.properties 中获取 artifactId
+     * 2. 如果是在 IDE 中运行，从配置文件中读取 spring.application.name
+     * 3. 如果以上都为空，则解析 classpath 路径，使用当前目录名
+     *
+     * 注意: applicationName 规定使用 maven 中的 artifactId，日志文件保存路径也会使用到 artifactId
+     * 配置链: maven.artifactId --> spring.application.name --> 日志路径
+     *
+     * @return 包含应用主要配置的 Properties 对象
      * @since 1.0.0
      */
     @SuppressWarnings("D")
@@ -337,10 +371,12 @@ public final class ZekaApplication {
     }
 
     /**
-     * 检查是否存在过时的配置项
+     * 检查配置中是否存在已过时的配置项
      *
-     * @param propertySource property source
-     * @since 1.4.0
+     * 当检测到过时配置时，会输出警告日志提示用户更新配置
+     *
+     * @param propertySource 配置源对象
+     * @since 1.0.0
      */
     private static void deprecatedPropertiesCheck(@NotNull PropertySource<?> propertySource) {
         Object property = propertySource.getProperty(ConfigKey.SpringConfigKey.PROFILE_ACTIVE);

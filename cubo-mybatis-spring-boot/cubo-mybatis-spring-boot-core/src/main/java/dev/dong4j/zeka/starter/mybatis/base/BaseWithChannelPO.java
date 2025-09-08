@@ -6,15 +6,36 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
 /**
- * <p>Description: </p>
- * 1. 新增记录时, 不需要以下 4 个公共字段, 将根据注解自动生成;
- * 2. 更新记录时, 也不需设置 updateClientId, 会自动更新
- * 注意: 子类不能使用 builder 模式! 子类不能使用 builder 模式! 子类不能使用 builder 模式!
+ * 带渠道信息的基础持久化对象抽象类
  *
- * @param <T> parameter
- * @param <M> parameter
+ * 该抽象类继承自 BaseWithTimePO，并实现了 Channel 接口，为数据库实体提供
+ * 多租户和多客户端场景下的渠道信息自动管理功能。
+ *
+ * 主要功能：
+ * 1. 自动管理租户 ID 字段（tenant_id）
+ * 2. 自动管理客户端 ID 字段（client_id）
+ * 3. 继承时间字段的自动填充功能
+ * 4. 支持链式调用的 setter 方法
+ *
+ * 字段填充策略：
+ * - 租户 ID：仅在插入时填充（FieldFill.INSERT）
+ * - 客户端 ID：仅在插入时填充（FieldFill.INSERT）
+ * - 时间字段：继承自父类的填充策略
+ *
+ * 使用说明：
+ * 1. 新增记录时，渠道字段会自动生成，无需手动设置
+ * 2. 更新记录时，渠道字段不会被修改，保持数据归属的稳定性
+ * 3. 子类不建议使用 @Builder 模式，可能导致字段丢失
+ *
+ * 适用场景：
+ * - SaaS 多租户系统的数据隔离
+ * - 多客户端应用的数据来源标识
+ * - 需要同时管理时间和渠道信息的实体
+ *
+ * @param <T> 主键类型，必须实现 Serializable 接口
+ * @param <M> 模型类型，继承自 Model
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.22 22:49
  * @since 1.0.0
@@ -33,10 +54,13 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
     private String clientId;
 
     /**
-     * Gets tenant id *
+     * 获取租户 ID
      *
-     * @return the tenant id
-     * @since 1.8.0
+     * 该方法实现了 Channel 接口的 getTenantId 方法，
+     * 用于获取数据记录所属的租户标识。
+     *
+     * @return Long 租户 ID
+     * @since 1.0.0
      */
     @Override
     public Long getTenantId() {
@@ -44,10 +68,13 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
     }
 
     /**
-     * Gets client id *
+     * 获取客户端 ID
      *
-     * @return the client id
-     * @since 1.8.0
+     * 该方法实现了 Channel 接口的 getClientId 方法，
+     * 用于获取数据记录的客户端标识。
+     *
+     * @return String 客户端 ID
+     * @since 1.0.0
      */
     @Override
     public String getClientId() {
@@ -55,11 +82,14 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
     }
 
     /**
-     * Sets tenant id *
+     * 设置租户 ID
      *
-     * @param tenantId tenant id
-     * @return the tenant id
-     * @since 1.8.0
+     * 该方法用于设置数据记录的租户 ID，支持链式调用。
+     * 通常情况下不需要手动调用，会由相应的元数据处理器自动填充。
+     *
+     * @param tenantId 要设置的租户 ID
+     * @return M 当前实例，支持链式调用
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     public M setTenantId(Long tenantId) {
@@ -68,11 +98,14 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
     }
 
     /**
-     * Sets client id *
+     * 设置客户端 ID
      *
-     * @param clientId client id
-     * @return the client id
-     * @since 1.8.0
+     * 该方法用于设置数据记录的客户端 ID，支持链式调用。
+     * 通常情况下不需要手动调用，会由相应的元数据处理器自动填充。
+     *
+     * @param clientId 要设置的客户端 ID
+     * @return M 当前实例，支持链式调用
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     public M setClientId(String clientId) {

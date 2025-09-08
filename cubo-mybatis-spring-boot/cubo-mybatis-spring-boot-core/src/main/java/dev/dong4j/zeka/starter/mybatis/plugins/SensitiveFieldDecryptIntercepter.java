@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.05.13 11:24
- * @since 1.5.0
+ * @since 1.0.0
  */
 @Intercepts(@Signature(
     type = ResultSetHandler.class,
@@ -42,7 +42,7 @@ public class SensitiveFieldDecryptIntercepter implements Interceptor {
      * Sensitive field encrypt intercepter
      *
      * @param sensitiveKey sensitive key
-     * @since 1.5.0
+     * @since 1.0.0
      */
     @Contract(pure = true)
     public SensitiveFieldDecryptIntercepter(String sensitiveKey) {
@@ -77,7 +77,7 @@ public class SensitiveFieldDecryptIntercepter implements Interceptor {
      * 加密处理, 目前递归
      *
      * @param o o
-     * @since 1.6.0
+     * @since 1.0.0
      */
     private void process(Object o) {
         ReflectionUtils.doWithFields(o.getClass(), field -> {

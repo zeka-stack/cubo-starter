@@ -41,10 +41,38 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * <p>Description: 用于输出每条 SQL 语句及其执行时间 </p>
+ * SQL 性能监控拦截器
+ *
+ * 该拦截器用于监控 SQL 执行性能，记录每条 SQL 语句的执行时间，
+ * 并在超过阈值时发出警告或记录到日志文件中。
+ *
+ * 主要功能：
+ * 1. 记录 SQL 执行时间，精确到毫秒
+ * 2. 格式化输出 SQL 语句，便于调试
+ * 3. 设置 SQL 执行超时阈值，超时时发出警告
+ * 4. 限制 SQL 输出长度，避免日志过长
+ * 5. 发布 SQL 执行超时事件，支持异步处理
+ * 6. 支持多种数据库连接池的 SQL 提取
+ *
+ * 拦截方法：
+ * - StatementHandler.query：查询操作
+ * - StatementHandler.update：更新操作
+ * - StatementHandler.batch：批量操作
+ *
+ * 配置参数：
+ * - format：是否格式化 SQL 输出
+ * - maxTime：SQL 执行超时阈值（毫秒）
+ * - maxLength：SQL 输出最大长度
+ *
+ * 使用场景：
+ * - 开发和测试环境的 SQL 性能监控
+ * - 慢查询识别和优化
+ * - SQL 执行情况的统计分析
+ *
+ * 注意：建议仅在非生产环境使用，避免影响性能
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.26 20:40
  * @since 1.0.0

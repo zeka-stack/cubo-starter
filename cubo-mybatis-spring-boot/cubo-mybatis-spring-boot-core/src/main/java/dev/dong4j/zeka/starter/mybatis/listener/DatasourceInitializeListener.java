@@ -12,11 +12,28 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * <p>Description: 配置加载完成后检查是否存在 datasource 配置, 如果不不存在, 则排除 datasource 自动配置, 避免启动失败 </p>
- * todo-dong4j : (2020.05.22 17:31) [暂时不使用]
+ * 数据源初始化监听器
+ *
+ * 该监听器在应用上下文初始化完成后检查数据源配置的完整性。
+ * 如果检测到缺少必要的数据源配置，会自动排除相关的自动配置类，
+ * 避免因配置不完整导致的应用启动失败。
+ *
+ * 主要功能：
+ * 1. 检查 spring.datasource.url 配置是否存在
+ * 2. 如果配置缺失，自动排除数据源相关的自动配置类
+ * 3. 记录警告日志，提醒开发者处理配置问题
+ * 4. 确保应用能够正常启动，即使数据源配置不完整
+ *
+ * 排除的自动配置类：
+ * - DataSourceAutoConfiguration：Spring Boot 数据源自动配置
+ * - MybatisPlusAutoConfiguration：MyBatis Plus 自动配置
+ * - DruidDataSourceAutoConfigure：Druid 数据源自动配置
+ * - MybatisAutoConfiguration：自定义 MyBatis 自动配置
+ *
+ * 注意：该监听器目前标记为暂时不使用，可根据需要启用
  *
  * @author dong4j
- * @version 1.4.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.05.19 18:46
  * @since 1.0.0
@@ -36,9 +53,12 @@ public class DatasourceInitializeListener implements ZekaApplicationListener {
     private static boolean inited = false;
 
     /**
-     * Gets order *
+     * 获取执行顺序
      *
-     * @return the order
+     * 该方法返回监听器的执行顺序，设置为最低优先级（LOWEST_PRECEDENCE），
+     * 确保在所有其他配置处理完成后再执行数据源配置检查。
+     *
+     * @return int 执行顺序值，数值越大优先级越低
      * @since 1.0.0
      */
     @Override
@@ -47,10 +67,19 @@ public class DatasourceInitializeListener implements ZekaApplicationListener {
     }
 
     /**
-     * On application context initialized event
+     * 处理应用上下文初始化事件
      *
-     * @param event event
-     * @since 1.4.0
+     * 该方法在应用上下文初始化完成后被调用，执行数据源配置检查逻辑。
+     *
+     * 处理流程：
+     * 1. 检查是否已经初始化过，避免重复执行
+     * 2. 从环境配置中获取数据源 URL 配置
+     * 3. 如果配置缺失，记录错误日志并排除相关自动配置类
+     * 4. 通过系统属性设置排除的自动配置类列表
+     * 5. 标记为已初始化，防止重复处理
+     *
+     * @param event 应用上下文初始化事件
+     * @since 1.0.0
      */
     @Override
     public void onApplicationContextInitializedEvent(@NotNull ApplicationContextInitializedEvent event) {

@@ -2,20 +2,19 @@ package dev.dong4j.zeka.starter.logsystem.helpers;
 
 import dev.dong4j.zeka.starter.logsystem.LoggerFactoryFriend;
 import dev.dong4j.zeka.starter.logsystem.SimpleLogger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.slf4j.helpers.MultithreadedInitializationTest;
-
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.slf4j.helpers.MultithreadedInitializationTest;
 
 /**
  * <p>Description: </p>
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 12:56
  * @since 1.0.0
@@ -87,7 +86,7 @@ public class SimpleLoggerMultithreadedInitializationTest extends MultithreadedIn
      * <p>Description: </p>
      *
      * @author dong4j
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.03.08 12:56
      * @since 1.0.0

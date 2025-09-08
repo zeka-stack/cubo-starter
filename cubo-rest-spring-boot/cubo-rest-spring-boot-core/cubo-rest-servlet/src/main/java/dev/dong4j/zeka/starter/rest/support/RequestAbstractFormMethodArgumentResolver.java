@@ -43,7 +43,7 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
      * Supports annotation
      *
      * @return the class
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @Override
     protected Class<RequestAbstractForm> supportsAnnotation() {
@@ -58,7 +58,7 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
      * @param inputMessage input message
      * @param annotation   request single param
      * @return the object
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @Override
     @SuppressWarnings("unchecked")

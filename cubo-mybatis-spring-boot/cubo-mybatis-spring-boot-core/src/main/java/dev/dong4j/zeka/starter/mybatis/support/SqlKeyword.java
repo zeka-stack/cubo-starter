@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * 定义常用的 sql关键字
  *
  * @author Chill
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.01 00:24
  * @since 1.0.0

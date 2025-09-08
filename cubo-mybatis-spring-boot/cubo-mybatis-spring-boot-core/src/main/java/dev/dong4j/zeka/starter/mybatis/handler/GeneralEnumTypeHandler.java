@@ -1,10 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.IEnum;
 import com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
 import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
@@ -31,17 +28,36 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * <p>Description: 为了解决 mybatis-plus 通用枚举的局限性, 减少 SDK 模块的依赖,
- * 由于 {@link MybatisEnumTypeHandler} 未考虑到扩展性, 这里拷贝 {@link MybatisEnumTypeHandler} 代码,
- * 使用系统自定义枚举 {@link SerializeEnum} 代替 {@link IEnum} 和 {@link EnumValue},
- * 修改后 web 层不需要 mybatis-plus 依赖也可对枚举进行序列化/反序列化, 且 web 层和 service 层可共用相同的枚举.
- * 注意: 不要使用 typeEnumsPackage 来扫描通用枚举, 扫描后将使用 MybatisEnumTypeHandler 处理,
- * 可查看 ({@link MybatisSqlSessionFactoryBean#buildSqlSessionFactory()})
- * </p>
+ * 通用枚举类型处理器
  *
- * @param <E> parameter
+ * 该处理器用于解决 MyBatis Plus 通用枚举的局限性，减少 SDK 模块的依赖。
+ * 通过自定义实现替代 MyBatis Plus 的 MybatisEnumTypeHandler，提供更好的扩展性。
+ *
+ * 主要功能：
+ * 1. 支持自定义枚举 SerializeEnum 接口
+ * 2. 替代 MyBatis Plus 的 IEnum 和 @EnumValue 注解
+ * 3. 支持 Web 层和 Service 层共用相同的枚举
+ * 4. 减少对 MyBatis Plus 的依赖
+ *
+ * 设计优势：
+ * - Web 层无需 MyBatis Plus 依赖即可进行枚举序列化/反序列化
+ * - 统一的枚举处理机制，避免重复定义
+ * - 更好的扩展性和可维护性
+ * - 支持复杂的枚举值映射逻辑
+ *
+ * 使用注意事项：
+ * - 不要使用 typeEnumsPackage 来扫描通用枚举
+ * - 扫描后会使用 MybatisEnumTypeHandler 处理，可能导致冲突
+ * - 建议使用 SerializeEnum 接口定义枚举
+ *
+ * 相关类：
+ * - SerializeEnum：自定义枚举接口
+ * - EntityEnumSerializer：枚举序列化器
+ * - EntityEnumDeserializer：枚举反序列化器
+ *
+ * @param <E> 枚举类型参数
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.23 18:35
  * @see MybatisEnumTypeHandler
@@ -81,8 +97,9 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
         // 不是 SerializeEnum 枚举时
         if (!SerializeEnum.class.isAssignableFrom(type)) {
             name = findEnumValueFieldName(this.type)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Could not find @SerializeValue in Class: %s.",
-                    this.type.getName())));
+                .orElseThrow(() -> new IllegalArgumentException(
+                    String.format("Could not find @SerializeValue in Class: %s.",
+                        this.type.getName())));
         }
         // 是 SerializeEnum 子类, 则使用 SerializeEnum.getValue
         this.invoker = metaClass.getGetInvoker(name);
@@ -171,7 +188,8 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
     @Deprecated
     public static Optional<Field> dealEnumType(@NotNull Class<?> clazz) {
         return clazz.isEnum()
-            ? Arrays.stream(clazz.getDeclaredFields()).filter(field -> field.isAnnotationPresent(SerializeValue.class)).findFirst()
+            ? Arrays.stream(clazz.getDeclaredFields())
+            .filter(field -> field.isAnnotationPresent(SerializeValue.class)).findFirst()
             : Optional.empty();
     }
 
@@ -180,7 +198,7 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
      *
      * @param clazz class
      * @return EnumValue字段 optional
-     * @since 3.3.1
+     * @since 1.0.0
      */
     private static Optional<String> findEnumValueFieldName(Class<?> clazz) {
         if (clazz != null && clazz.isEnum()) {
@@ -200,7 +218,7 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
      *
      * @param clazz class
      * @return 是否为MP枚举处理 boolean
-     * @since 3.3.1
+     * @since 1.0.0
      */
     @Contract("null -> false")
     public static boolean isMpEnums(Class<?> clazz) {
@@ -239,11 +257,12 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
      * @param sourceValue 数据库字段值
      * @param targetValue 当前枚举属性值
      * @return 是否匹配 boolean
-     * @since 3.3.0
+     * @since 1.0.0
      */
     private boolean equalsValue(Object sourceValue, Object targetValue) {
         if (sourceValue instanceof Number && targetValue instanceof Number
-            && new BigDecimal(String.valueOf(sourceValue)).compareTo(new BigDecimal(String.valueOf(targetValue))) == 0) {
+            && new BigDecimal(String.valueOf(sourceValue))
+            .compareTo(new BigDecimal(String.valueOf(targetValue))) == 0) {
             return true;
         }
         return Objects.equals(sourceValue, targetValue);

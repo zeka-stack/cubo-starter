@@ -16,13 +16,25 @@ import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * <p>Description: 扩展 {@link RandomValuePropertySource}
- * 以支持 range.random.int(min, max) 和 range.random.key(字符串长度), 可用于随机端口(一个范围内, 如果端口被占用, 可自动使用下一个端口, 直到可用),
- * 原来的 ${random.uuid} 只支持 32 位的小写字母和数字的字符串, 这里扩展为有大写字母且长度可自定义, 可用于自动生成密钥的业务
- * </p>
+ * 扩展的随机值属性源，提供更灵活的随机值生成功能
+ *
+ * 该类扩展了 Spring Boot 的 RandomValuePropertySource，增加了以下功能：
+ * 1. 支持范围随机整数：${range.random.int(min,max)}
+ * 2. 支持自定义长度随机字符串：${range.random.key(length)}
+ * 3. 自动处理端口冲突，在指定范围内查找可用端口
+ *
+ * 主要应用场景：
+ * 1. 随机端口分配，自动处理端口冲突
+ * 2. 生成随机密钥或令牌
+ * 3. 需要随机值的配置项
+ *
+ * 与原生 ${random.*} 的区别：
+ * 1. 支持范围限制的随机整数
+ * 2. 支持自定义长度的随机字符串（包含大小写字母和数字）
+ * 3. 自动处理端口冲突
  *
  * @author dongj4
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.23 14:21
  * @see RandomValuePropertySource
@@ -43,10 +55,13 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     private static final Integer DEFAULT_END = 18080;
 
     /**
-     * <p>Description: </p>
+     * 范围类型枚举，定义支持的随机值类型
+     *
+     * 1. INT - 整数范围随机值
+     * 2. KEY - 随机字符串
      *
      * @author dong4j
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.03.31 17:00
      * @since 1.0.0
@@ -68,10 +83,14 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * Gets property *
+     * 获取属性值
      *
-     * @param name name
-     * @return the property
+     * @param name 属性名称，支持以下格式：
+     *             1. range.random.int - 默认范围随机端口
+     *             2. range.random.int(min,max) - 指定范围随机整数
+     *             3. range.random.key - 默认长度随机字符串
+     *             4. range.random.key(length) - 指定长度随机字符串
+     * @return 生成的随机值，如果名称不匹配则返回 null
      * @since 1.0.0
      */
     @Override
@@ -84,10 +103,13 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * Gets range random value *
+     * 获取范围随机值
      *
-     * @param type type
-     * @return the range random value
+     * @param type 随机值类型，支持：
+     *             1. int - 整数随机值
+     *             2. key - 字符串随机值
+     * @return 生成的随机值
+     * @throws PropertiesException 如果类型不支持或参数格式错误
      * @since 1.0.0
      */
     private Object getRangeRandomValue(@NotNull String type) {
@@ -107,11 +129,11 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * Gets range *
+     * 从类型字符串中提取范围参数
      *
-     * @param type   type
-     * @param prefix prefix
-     * @return the range
+     * @param type   完整的类型字符串
+     * @param prefix 类型前缀（int 或 key）
+     * @return 范围参数字符串，如果没有指定范围则返回 null
      * @since 1.0.0
      */
     @Nullable
@@ -126,10 +148,11 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * 处理 ${range.random.int} 和 ${range.random.int(61000,61100)} 类型的配置
+     * 处理整数范围随机值
      *
-     * @param range range
-     * @return the next int in range
+     * @param range 范围字符串，格式为 "min,max" 或 null（使用默认范围）
+     * @return 范围内的随机整数
+     * @throws PropertiesException 如果范围格式无效
      * @since 1.0.0
      */
     @Nullable
@@ -149,10 +172,11 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * Gets string in size *
+     * 生成指定长度的随机字符串
      *
-     * @param range range
-     * @return the string in size
+     * @param range 长度字符串或 null（使用默认长度）
+     * @return 随机生成的字符串
+     * @throws PropertiesException 如果长度参数无效
      * @since 1.0.0
      */
     @NotNull
@@ -172,8 +196,8 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     /**
      * 生成随机字符串
      *
-     * @param length length
-     * @return the string
+     * @param length 字符串长度
+     * @return 随机生成的字符串
      * @since 1.0.0
      */
     @NotNull
@@ -187,10 +211,11 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * Check pattern boolean
+     * 检查范围格式是否有效
      *
-     * @param range range range, 符合格式 61000,61100, 可处理空白符
-     * @return the string
+     * @param range 范围字符串，应为 "min,max" 格式
+     * @return true 如果格式有效
+     * @throws PropertiesException 如果格式无效
      * @since 1.0.0
      */
     private boolean checkPattern(String range) {
@@ -202,9 +227,9 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * 将配置源添加到最后, 优先级最低
+     * 将随机值属性源添加到环境变量中
      *
-     * @param environment environment
+     * @param environment 可配置的环境对象
      * @since 1.0.0
      */
     public static void addToEnvironment(@NotNull ConfigurableEnvironment environment) {
@@ -212,10 +237,15 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     }
 
     /**
-     * <p>Description: </p>
+     * 随机端口内部类，处理端口范围内的随机端口获取
+     *
+     * 该类实现了以下功能：
+     * 1. 在指定范围内生成随机端口
+     * 2. 检查端口是否可用
+     * 3. 如果端口被占用，自动查找下一个可用端口
      *
      * @author dongj4
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.03.23 14:21
      * @since 1.0.0

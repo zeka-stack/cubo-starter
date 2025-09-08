@@ -1,5 +1,7 @@
 package dev.dong4j.zeka.starter.logsystem;
 
+import java.io.PrintStream;
+import java.util.Date;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.event.LoggingEvent;
@@ -8,11 +10,35 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
-import java.io.PrintStream;
-import java.util.Date;
-
 /**
- * <p>Description:  </p>
+ * 简单日志实现类
+ *
+ * 该类是SLF4J的简单日志实现，提供轻量级的日志记录功能。
+ * 主要用于在Log4j2不可用或需要简单日志记录的场景下使用。
+ *
+ * 主要功能包括：
+ * 1. 实现SLF4J的Logger接口
+ * 2. 支持多种日志级别（TRACE、DEBUG、INFO、WARN、ERROR）
+ * 3. 支持多种输出目标（控制台、文件、系统流）
+ * 4. 提供灵活的日志格式配置
+ * 5. 支持日志级别动态调整
+ *
+ * 特性包括：
+ * - 轻量级实现，无外部依赖
+ * - 支持多种输出格式和配置
+ * - 支持日志级别分组管理
+ * - 支持异步日志处理
+ * - 提供完整的SLF4J兼容性
+ *
+ * 使用场景：
+ * - 作为Log4j2的备选方案
+ * - 简单应用的日志记录
+ * - 测试环境的日志输出
+ * - 轻量级日志需求
+ *
+ * 设计意图：
+ * 提供简单、轻量级的日志实现，确保在Log4j2不可用时
+ * 系统仍能正常记录日志，保证日志功能的可用性。
  *
  * @author dong4j
  * @version 1.0.0

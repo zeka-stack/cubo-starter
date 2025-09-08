@@ -7,10 +7,12 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
 
 /**
- * <p>Description:  </p>
+ * <p>
+ * Description:
+ * </p>
  *
  * @author dong4j
- * @version 1.2.4
+ * @version 1.0.0
  * @email "mailto:dongshijie@gmail.com"
  * @date 2020.02.17 18:09
  * @since 1.0.0
@@ -28,7 +30,7 @@ public class SqlUtils {
      * Set sensitive key
      *
      * @param sensitiveKey sensitive key
-     * @since 1.6.0
+     * @since 1.0.0
      */
     public void setSensitiveKey(String sensitiveKey) {
         SqlUtils.sensitiveKey = sensitiveKey;
@@ -40,7 +42,7 @@ public class SqlUtils {
      *
      * @param value value
      * @return the string
-     * @since 1.6.0
+     * @since 1.0.0
      * @deprecated 请使用 {@link SqlUtils#encryptFiled(String)}
      */
     @Deprecated
@@ -53,7 +55,7 @@ public class SqlUtils {
      *
      * @param value value
      * @return the string
-     * @since 1.7.1
+     * @since 1.0.0
      */
     public String encryptFiled(String value) {
         if (StringUtils.isBlank(value) || StringUtils.isBlank(SqlUtils.sensitiveKey)) {

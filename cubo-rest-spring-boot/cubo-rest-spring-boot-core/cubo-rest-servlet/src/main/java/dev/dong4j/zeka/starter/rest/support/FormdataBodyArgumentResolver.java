@@ -44,7 +44,7 @@ public class FormdataBodyArgumentResolver extends AbstractMethodArgumentResolver
      * Supports annotation
      *
      * @return the class
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @Override
     protected Class<FormDataBody> supportsAnnotation() {
@@ -59,7 +59,7 @@ public class FormdataBodyArgumentResolver extends AbstractMethodArgumentResolver
      * @param inputMessage input message
      * @param annotation   request single param
      * @return the object
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @Override
     protected Object bundleArgument(@NotNull MethodParameter parameter,

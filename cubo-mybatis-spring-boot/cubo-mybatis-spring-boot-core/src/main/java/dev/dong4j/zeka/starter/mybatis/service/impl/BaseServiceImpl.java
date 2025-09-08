@@ -20,12 +20,36 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <p>Description: BaseService 实现类 </p>
+ * 基础服务实现类
  *
- * @param <DAO> parameter
- * @param <PO>  parameter
+ * 该类提供了 BaseService 接口的默认实现，继承自 MyBatis Plus 的 ServiceImpl。
+ * 主要功能包括：
+ *
+ * 1. 扩展插入操作：
+ *    - saveIgnore：插入时忽略重复数据
+ *    - saveReplace：替换插入操作
+ *    - 支持批量操作，提高性能
+ *
+ * 2. 通用查询操作：
+ *    - 支持分页查询（带/不带总数统计）
+ *    - 支持列表查询
+ *    - 支持流式查询，防止大数据量 OOM
+ *    - 支持计数查询
+ *
+ * 3. 批量操作优化：
+ *    - 使用批量 SQL 会话提高性能
+ *    - 支持自定义批次大小
+ *    - 自动事务管理
+ *
+ * 4. 查询条件处理：
+ *    - 自动处理时间范围查询
+ *    - 支持动态分页参数
+ *    - 参数校验和异常处理
+ *
+ * @param <DAO> 数据访问对象类型，继承自 BaseDao
+ * @param <PO> 持久化对象类型
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.10 17:48
  * @since 1.0.0
@@ -133,7 +157,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      * @param page  分页参数
      * @param query 业务查询参数
      * @return the {@link IPage} 的子类 {@link Page}
-     * @since 1.6.0
+     * @since 1.0.0
      * @deprecated 使用 {@link BaseServiceImpl#page(BaseQuery)}
      */
     @Override
@@ -151,7 +175,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      * @param <Q>   {@link BaseQuery} 子类
      * @param query 业务查询参数
      * @return the {@link IPage} 的子类 {@link Page}
-     * @since 1.6.0
+     * @since 1.0.0
      */
     @Override
     public <DTO extends BaseDTO<? extends Serializable>, Q extends BaseQuery<? extends Serializable>> IPage<DTO> page(@NotNull Q query) {
@@ -166,7 +190,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      * @param <Q>   {@link BaseQuery} 子类
      * @param query 业务查询参数
      * @return the list
-     * @since 1.6.0
+     * @since 1.0.0
      */
     @Override
     public <DTO extends BaseDTO<? extends Serializable>, Q extends BaseQuery<? extends Serializable>> List<DTO> list(@NotNull Q query) {
@@ -180,7 +204,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      *
      * @param query query
      * @return the int
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public <Q extends BaseQuery<? extends Serializable>> int count(@NotNull Q query) {
@@ -196,7 +220,7 @@ public class BaseServiceImpl<DAO extends BaseDao<PO>, PO> extends ServiceImpl<DA
      * @param <Q>   parameter
      * @param query query
      * @return the cursor
-     * @since 1.7.0
+     * @since 1.0.0
      */
     @Override
     public <DTO extends BaseDTO<? extends Serializable>,

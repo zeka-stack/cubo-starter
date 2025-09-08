@@ -9,7 +9,26 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
- * 组件自动装配类
+ * OpenAPI自动配置类
+ *
+ * 该类负责OpenAPI相关功能的自动配置，作为OpenAPI模块的主入口配置类。
+ * 通过Spring Boot自动配置机制，在启用OpenAPI功能时自动配置相关组件。
+ *
+ * 主要功能包括：
+ * 1. 作为OpenAPI模块的自动配置入口
+ * 2. 启用OpenAPI配置属性绑定
+ * 3. 配置Knife4j自动配置的执行顺序
+ * 4. 提供OpenAPI功能的统一管理
+ *
+ * 使用场景：
+ * - OpenAPI功能的自动启用
+ * - API文档的自动配置
+ * - 开发环境的文档工具配置
+ * - 生产环境的API文档管理
+ *
+ * 设计意图：
+ * 通过自动配置类提供OpenAPI功能的开箱即用体验，
+ * 简化开发人员的配置工作，提供标准化的API文档解决方案。
  *
  * @author dong4j
  * @version 1.0.0
@@ -26,6 +45,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(OpenAPIProperties.class)
 public class OpenAPIAutoConfiguration implements ZekaAutoConfiguration {
 
+    /**
+     * 构造OpenAPI自动配置对象
+     * <p>
+     * 初始化OpenAPI自动配置，记录启动日志。
+     * 当OpenAPI功能被启用时，该配置类会被Spring Boot自动加载。
+     *
+     * @since 1.0.0
+     */
     public OpenAPIAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }

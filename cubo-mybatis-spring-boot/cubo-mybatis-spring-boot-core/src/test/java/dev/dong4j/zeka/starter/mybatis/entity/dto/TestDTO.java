@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.03.15 19:32
- * @since 1.8.0
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder

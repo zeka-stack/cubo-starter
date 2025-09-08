@@ -26,11 +26,20 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 /**
- * 配置文件自动刷新
- * 1. 自动配置类 RefreshScopeAutoConfiguration（自动注入各组件）
- * 2. 条件注解判断是否存在 Spring Cloud 的原生 @RefreshScope
- * 3. 自动运行监听器线程启动 ConfigFileWatcherRunner
- * 4. Starter 自动注册文件路径说明（支持 Spring Boot 3.x 的 AutoConfiguration.imports）
+ * 配置自动刷新自动配置类，实现不依赖 Spring Cloud 的配置热更新功能
+ *
+ * 该类实现了以下核心功能：
+ * 1. 自动配置所有必要的组件（注册表、加载器、刷新器等）
+ * 2. 检测并避免与 Spring Cloud 的原生刷新机制冲突
+ * 3. 启动配置文件监听线程，监控配置变更
+ * 4. 支持 Spring Boot 3.x 的 AutoConfiguration.imports 机制
+ *
+ * 工作流程：
+ * 1. 通过 ConfigFileWatcherRunner 监控配置文件变更
+ * 2. 使用 DynamicConfigLoader 加载最新配置
+ * 3. 通过 RefreshScopeRefresher 精准刷新受影响的 Bean
+ *
+ * 注意：当 Spring Cloud 的 ContextRefresher 存在时，此自动配置不会生效。
  *
  * @author dong4j
  * @version 1.0.0
@@ -46,15 +55,24 @@ import org.springframework.core.env.Environment;
 @ConditionalOnProperty(name = LauncherProperties.PREFIX + "refresh", havingValue = "true", matchIfMissing = true)
 public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
 
+    /**
+     * 构造方法，初始化配置自动刷新功能
+     * <p>
+     * 在配置类被加载时，会打印日志信息表明该自动配置已启用。
+     * 这有助于调试和确认配置加载顺序。
+     */
     public RefreshScopeAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }
 
     /**
-     * 刷新范围注册表
+     * 创建刷新范围注册表 Bean
      *
-     * @param context 语境
-     * @return 2:构建核心配置类注册与管理中心
+     * 该注册表用于管理所有需要刷新的 Bean 定义，
+     * 当配置变更时，可以精准定位需要刷新的 Bean。
+     *
+     * @param context Spring 应用上下文
+     * @return 刷新范围注册表实例
      */
     @Bean
     @ConditionalOnMissingBean
@@ -63,10 +81,13 @@ public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 动态配置加载程序
+     * 创建动态配置加载器 Bean
      *
-     * @param environment 环境
-     * @return 3:配置加载器
+     * 该加载器负责从配置文件中读取最新配置，
+     * 并支持多种配置格式（如 YAML、Properties 等）。
+     *
+     * @param environment Spring 环境对象
+     * @return 动态配置加载器实例
      */
     @Bean
     @ConditionalOnMissingBean
@@ -75,11 +96,15 @@ public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 刷新范围更新
+     * 创建刷新范围更新器 Bean
      *
-     * @param environment 环境
-     * @param registry    注册表
-     * @return 6:根据配置变更项（扁平化key集合）精准刷新受影响的
+     * 该更新器负责根据配置变更项（扁平化 key 集合）
+     * 精准刷新受影响的 Bean，避免不必要的全量刷新。
+     *
+     * @param environment Spring 环境对象
+     * @param registry 刷新范围注册表
+     * @param loader 动态配置加载器
+     * @return 刷新范围更新器实例
      */
     @Bean
     @ConditionalOnMissingBean
@@ -98,10 +123,14 @@ public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 配置文件观察器跑步者
+     * 创建配置文件监听器运行器 Bean
      *
-     * @param loader 加载程序
-     * @return 配置变更监听执行器
+     * 该运行器负责启动后台线程，监控配置文件的变更，
+     * 并在文件变更时触发相应的处理逻辑。
+     *
+     * @param loader 动态配置加载器
+     * @param handlerProvider 配置变更处理器提供者
+     * @return 配置文件监听器运行器实例
      */
     @Bean
     @ConditionalOnMissingBean
@@ -112,12 +141,14 @@ public class RefreshScopeAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 添加 springboot 应用配置文件监控
-     * 1. application.yml
-     * 2. application-{env}.yml
+     * 创建 Spring Boot 应用配置文件监听器定制器
      *
-     * @param environment 环境
-     * @return 自定义需要监听的文件
+     * 该定制器负责注册需要监控的配置文件，包括：
+     * 1. application.yml
+     * 2. application-{env}.yml（根据当前激活的环境）
+     *
+     * @param environment Spring 环境对象
+     * @return 配置文件监听器定制器实例
      */
     @Bean
     public ConfigFileWatcherCustomizer applicationConfigFileWatcher(Environment environment) {

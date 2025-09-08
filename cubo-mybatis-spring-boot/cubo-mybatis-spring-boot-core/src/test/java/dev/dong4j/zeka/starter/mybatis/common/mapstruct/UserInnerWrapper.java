@@ -80,7 +80,7 @@ public interface UserInnerWrapper extends Converter<User, UserDTO> {
         /**
          * Gender enum converter
          *
-         * @since 1.9.0
+         * @since 1.0.0
          */
         public GenderEnumConverter() {
             super(GenderEnum.class);

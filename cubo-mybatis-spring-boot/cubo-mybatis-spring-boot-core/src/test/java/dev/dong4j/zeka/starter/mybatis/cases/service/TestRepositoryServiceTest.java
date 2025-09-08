@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.03.16 18:06
- * @since 1.8.0
+ * @since 1.0.0
  */
 @ZekaTest
 public class TestRepositoryServiceTest {
@@ -25,7 +25,7 @@ public class TestRepositoryServiceTest {
     /**
      * Test 1
      *
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @SneakyThrows
     @Test

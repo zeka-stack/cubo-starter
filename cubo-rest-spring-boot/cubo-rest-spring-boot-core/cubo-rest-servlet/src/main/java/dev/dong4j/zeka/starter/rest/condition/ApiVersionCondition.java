@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.condition.RequestCondition;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.09.26 10:53
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class ApiVersionCondition implements RequestCondition<ApiVersionCondition> {
 
@@ -30,7 +30,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
      * Api version condition
      *
      * @param apiVersion api version
-     * @since 2.0.0
+     * @since 1.0.0
      */
     public ApiVersionCondition(int apiVersion) {
         this.apiVersion = apiVersion;
@@ -41,7 +41,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
      *
      * @param other other
      * @return the api version condition
-     * @since 2.0.0
+     * @since 1.0.0
      */
     public @NotNull ApiVersionCondition combine(ApiVersionCondition other) {
         // 采用最后定义优先原则，则方法上的定义覆盖类上面的定义
@@ -53,7 +53,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
      *
      * @param request request
      * @return the matching condition
-     * @since 2.0.0
+     * @since 1.0.0
      */
     public ApiVersionCondition getMatchingCondition(HttpServletRequest request) {
         Matcher m = this.versionPrefixPattern.matcher(Optional.ofNullable(request.getPathInfo()).orElse(request.getRequestURI()));
@@ -73,7 +73,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
      * @param other   other
      * @param request request
      * @return the int
-     * @since 2.0.0
+     * @since 1.0.0
      */
     public int compareTo(ApiVersionCondition other, @NotNull HttpServletRequest request) {
         // 优先匹配最新的版本号

@@ -1,9 +1,5 @@
 package dev.dong4j.zeka.starter.launcher.util;
 
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -15,12 +11,25 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * <p>Description: 类扫描器, 扫描给定包及其子包中的所有类 </p>
+ * 类扫描器工具类，用于扫描指定包及其子包中的所有类
+ *
+ * 该类提供了以下功能：
+ * 1. 支持从文件系统和 JAR 包中扫描类
+ * 2. 递归扫描子包
+ * 3. 自动处理类加载和异常情况
+ *
+ * 使用场景：
+ * 1. 自动发现和注册组件
+ * 2. 动态加载类
+ * 3. 插件系统实现
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.18 11:07
  * @since 1.0.0
@@ -30,10 +39,15 @@ import java.util.jar.JarFile;
 public class ClassScanner {
 
     /**
-     * 从包 package 中获取所有的 Class
+     * 获取指定包及其子包中的所有类
      *
-     * @param basePackage 基本包
-     * @return classes classes
+     * 该方法会扫描指定包路径下的所有类文件，包括：
+     * 1. 文件系统中的类文件
+     * 2. JAR 包中的类文件
+     * 3. 递归处理所有子包
+     *
+     * @param basePackage 要扫描的基础包名
+     * @return 包含所有找到的类的集合
      */
     public static @NotNull Set<Class<?>> getClasses(String basePackage) {
         Set<Class<?>> classes = new LinkedHashSet<>();
@@ -50,7 +64,7 @@ public class ClassScanner {
 
                 if ("file".equals(protocol)) {
                     log.debug("使用 file 协议扫描包：{}", basePackage);
-                    String filePath = URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8.name());
+                    String filePath = URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8);
                     findAndAddClassesInPackageByFile(basePackage, filePath, classes);
                 } else if ("jar".equals(protocol)) {
                     log.debug("使用 jar 协议扫描包：{}", basePackage);
@@ -65,11 +79,14 @@ public class ClassScanner {
     }
 
     /**
-     * 扫描罐包
+     * 扫描 JAR 包中的类
      *
-     * @param basePackage 基本包
-     * @param url         URL
-     * @param classes     课程
+     * 该方法会遍历 JAR 包中的所有条目，找到匹配包路径的类文件，
+     * 并加载这些类。
+     *
+     * @param basePackage 基础包名
+     * @param url         JAR 包的 URL
+     * @param classes     用于存储找到的类的集合
      */
     private static void scanJarPackage(String basePackage, URL url, Set<Class<?>> classes) {
         String packageDirName = basePackage.replace('.', '/');
@@ -99,11 +116,14 @@ public class ClassScanner {
     }
 
     /**
-     * 以文件的形式来获取包下的所有 Class
+     * 从文件系统中获取包下的所有类
      *
-     * @param packageName package name
-     * @param packagePath package path
-     * @param classes     classes
+     * 该方法会递归扫描指定目录下的所有类文件，
+     * 并加载这些类。
+     *
+     * @param packageName 包名
+     * @param packagePath 包对应的文件系统路径
+     * @param classes     用于存储找到的类的集合
      * @since 1.0.0
      */
     private static void findAndAddClassesInPackageByFile(String packageName,

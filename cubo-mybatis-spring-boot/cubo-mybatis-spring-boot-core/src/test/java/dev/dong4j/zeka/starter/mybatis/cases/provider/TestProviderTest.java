@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.03.16 16:58
- * @since 1.8.0
+ * @since 1.0.0
  */
 @ZekaTest
 public class TestProviderTest {
@@ -30,7 +30,7 @@ public class TestProviderTest {
     /**
      * Test 1
      *
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @SneakyThrows
     @Test

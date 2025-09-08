@@ -10,10 +10,30 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * <p>Description: rest 加载默认配置 </p>
+ * OpenAPI启动初始化器
+ *
+ * 该类负责在应用启动时设置OpenAPI相关的默认配置。
+ * 通过LauncherInitiation机制，在系统启动时自动配置OpenAPI和Knife4j的相关参数。
+ *
+ * 主要功能包括：
+ * 1. 设置OpenAPI功能的启用状态
+ * 2. 配置Swagger UI的访问路径和排序规则
+ * 3. 配置API文档的访问路径和分组
+ * 4. 设置Knife4j的各种增强功能配置
+ * 5. 配置UI个性化设置和调试功能
+ *
+ * 使用场景：
+ * - 应用启动时的默认配置设置
+ * - OpenAPI文档的自动配置
+ * - Knife4j功能的初始化
+ * - 开发环境的API文档配置
+ *
+ * 设计意图：
+ * 通过启动初始化器提供OpenAPI和Knife4j的开箱即用配置，
+ * 简化开发人员的配置工作，提供标准化的API文档功能。
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.27 11:17
  * @since 1.0.0
@@ -21,6 +41,27 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @AutoService(LauncherInitiation.class)
 public class OpenAPILauncherInitiation implements LauncherInitiation {
 
+    /**
+     * 设置默认属性配置
+     * <p>
+     * 在应用启动时设置OpenAPI和Knife4j的默认配置属性。
+     * 包括Swagger UI配置、API文档配置、Knife4j增强功能配置等。
+     * <p>
+     * 配置内容包括：
+     * 1. OpenAPI功能启用配置
+     * 2. Swagger UI访问路径和排序规则
+     * 3. API文档访问路径和分组配置
+     * 4. Knife4j基础开关和安全配置
+     * 5. Basic认证配置
+     * 6. 自定义文档配置
+     * 7. UI个性化设置和调试功能
+     *
+     * @param env           可配置的环境对象
+     * @param appName       应用名称
+     * @param isLocalLaunch 是否为本地启动
+     * @return 配置属性映射
+     * @since 1.0.0
+     */
     @Override
     public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
                                                     String appName,
@@ -86,9 +127,11 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Gets order *
+     * 获取初始化器执行顺序
      *
-     * @return the order
+     * 返回初始化器的执行顺序，使用最高优先级加1000，确保在大部分初始化器之前执行。
+     *
+     * @return 执行顺序值
      * @since 1.0.0
      */
     @Override
@@ -96,6 +139,14 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
         return Ordered.HIGHEST_PRECEDENCE + 1000;
     }
 
+    /**
+     * 获取初始化器名称
+     *
+     * 返回初始化器的名称，用于标识和日志记录。
+     *
+     * @return 初始化器名称
+     * @since 1.0.0
+     */
     @Override
     public String getName() {
         return "cubo-openapi-knife4j-spring-boot-starter";

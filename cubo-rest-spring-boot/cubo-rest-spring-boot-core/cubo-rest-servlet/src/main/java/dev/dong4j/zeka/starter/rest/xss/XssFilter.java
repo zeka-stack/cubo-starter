@@ -17,7 +17,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
  * <p>Description: XSS过滤 </p>
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.11 17:01
  * @since 1.0.0

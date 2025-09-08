@@ -1,13 +1,12 @@
 package dev.dong4j.zeka.starter.logsystem;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
@@ -20,7 +19,7 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
  * remember its name.
  *
  * @author Alexander Dorokhine
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 12:57
  * @since 1.0.0
@@ -160,7 +159,7 @@ class DetectLoggerNameMismatchTest {
  * <p>Description: </p>
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 12:57
  * @since 1.0.0
@@ -174,7 +173,7 @@ class ShapeBase {
  * <p>Description: </p>
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 12:57
  * @since 1.0.0

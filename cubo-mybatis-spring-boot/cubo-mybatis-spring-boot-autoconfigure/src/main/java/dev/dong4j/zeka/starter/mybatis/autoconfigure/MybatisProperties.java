@@ -7,7 +7,18 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 组件配置类
+ * MyBatis 配置属性类
+ *
+ * 该类用于定义 MyBatis 相关的配置属性，支持通过配置文件进行自定义配置。
+ * 配置前缀为 "zeka-stack.mybatis"，包含以下主要配置项：
+ *
+ * 1. SQL 日志配置：控制 SQL 语句的日志输出和格式化
+ * 2. 性能监控配置：设置 SQL 执行时间阈值和输出长度限制
+ * 3. 分页配置：设置默认的分页参数和单页限制
+ * 4. 敏感数据配置：配置敏感字段加密的密钥
+ * 5. 拦截器配置：控制各种 SQL 拦截器的开启状态
+ *
+ * 所有配置项都有合理的默认值，可根据实际需求进行调整。
  *
  * @author dong4j
  * @version 1.0.0

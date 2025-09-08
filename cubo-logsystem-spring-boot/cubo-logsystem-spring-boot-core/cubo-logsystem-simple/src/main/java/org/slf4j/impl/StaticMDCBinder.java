@@ -6,10 +6,29 @@ import org.slf4j.helpers.NOPMDCAdapter;
 import org.slf4j.spi.MDCAdapter;
 
 /**
- * This implementation is bound to {@link NOPMDCAdapter}.
+ * 静态MDC绑定器
+ *
+ * 该类绑定到NOPMDCAdapter实现，提供SLF4J MDC（Mapped Diagnostic Context）功能的实现。
+ * 使用空操作适配器，不提供实际的MDC功能。
+ *
+ * 主要功能包括：
+ * 1. 提供MDC适配器的单例实例
+ * 2. 绑定到NOPMDCAdapter实现
+ * 3. 提供MDC适配器的类名信息
+ * 4. 支持SLF4J MDC功能的静态绑定
+ *
+ * 使用场景：
+ * - SLF4J MDC功能的静态绑定
+ * - MDC适配器的实例管理
+ * - 日志上下文功能的实现
+ * - SLF4J框架的集成
+ *
+ * 设计意图：
+ * 通过静态绑定器提供MDC适配器的统一管理，使用空操作适配器简化实现，
+ * 支持SLF4J MDC功能的集成。
  *
  * @author Ceki G&uuml;lc&uuml;
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 11:49
  * @since 1.0.0
@@ -23,7 +42,9 @@ public final class StaticMDCBinder {
     private static final StaticMDCBinder SINGLETON = new StaticMDCBinder();
 
     /**
-     * Static mdc binder
+     * 构造静态MDC绑定器
+     *
+     * 私有构造函数，确保单例模式。
      *
      * @since 1.0.0
      */
@@ -32,10 +53,12 @@ public final class StaticMDCBinder {
     }
 
     /**
-     * Return the singleton of this class.
+     * 获取单例实例
      *
-     * @return the StaticMDCBinder singleton
-     * @since 1.7.14
+     * 返回StaticMDCBinder的单例实例。
+     *
+     * @return StaticMDCBinder的单例实例
+     * @since 1.0.0
      */
     @Contract(pure = true)
     public static StaticMDCBinder getSingleton() {
@@ -43,10 +66,12 @@ public final class StaticMDCBinder {
     }
 
     /**
-     * Currently this method always returns an instance of
-     * {@link StaticMDCBinder}.
+     * 获取MDC适配器实例
      *
-     * @return the mdca
+     * 当前实现总是返回NOPMDCAdapter的实例。
+     * 提供SLF4J MDC功能的空操作实现。
+     *
+     * @return MDC适配器实例
      * @since 1.0.0
      */
     public MDCAdapter getMDCA() {
@@ -54,9 +79,12 @@ public final class StaticMDCBinder {
     }
 
     /**
-     * Gets mdc adapter class str *
+     * 获取MDC适配器类名
      *
-     * @return the mdc adapter class str
+     * 返回NOPMDCAdapter的类名。
+     * 用于标识MDC适配器的具体实现类。
+     *
+     * @return MDC适配器的类名字符串
      * @since 1.0.0
      */
     public String getMDCAdapterClassStr() {

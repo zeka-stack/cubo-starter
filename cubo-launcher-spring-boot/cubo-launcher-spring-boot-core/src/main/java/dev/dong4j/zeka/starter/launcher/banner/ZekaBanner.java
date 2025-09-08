@@ -5,23 +5,28 @@ import dev.dong4j.zeka.kernel.common.util.DateUtils;
 import dev.dong4j.zeka.kernel.common.util.StartUtils;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.boot.SpringBootVersion;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
-
 /**
- * <p>Description: Banner 实现, 输出自定义 banner</p>
+ * Zeka 框架的 Banner 实现类，负责格式化和输出自定义 Banner
+ *
+ * 该类实现了 Banner 接口，提供了具体的 Banner 打印逻辑：
+ * 1. 读取并格式化 Banner 文件内容
+ * 2. 添加应用信息（名称、版本、环境）
+ * 3. 使用日志系统输出美观的 Banner
+ * 4. 支持不同启动模式下的信息展示
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.27 00:29
  * @since 1.0.0
@@ -30,12 +35,15 @@ import java.util.Date;
 public class ZekaBanner implements Banner {
 
     /**
-     * Print banner *
+     * 打印 Banner 信息
      *
-     * @param inputStream input stream
-     * @param profile     profile
-     * @param version     version
-     * @param appName     app name
+     * 读取输入流中的 Banner 内容，并添加版本、环境和应用名称等信息，
+     * 通过格式化处理后输出美观的启动 Banner。
+     *
+     * @param inputStream Banner 文件的输入流
+     * @param profile     当前激活的环境配置
+     * @param version     应用版本信息
+     * @param appName     应用名称
      * @since 1.0.0
      */
     @Override
@@ -60,13 +68,19 @@ public class ZekaBanner implements Banner {
     }
 
     /**
-     * Print line.
+     * 打印 Banner 的具体行内容
      *
-     * @param appName     the app name
-     * @param br          the br                banner 内容
-     * @param versionInfo the version info
-     * @param str         the str               下划线长度
-     * @throws IOException the io exception
+     * 该方法负责：
+     * 1. 格式化并居中显示 Banner 内容
+     * 2. 添加应用信息和启动时间
+     * 3. 添加环境和版本信息
+     * 4. 使用特定的日志标记输出，便于日志系统特殊处理
+     *
+     * @param appName     应用名称
+     * @param br          Banner 内容的缓冲读取器
+     * @param versionInfo 版本信息字符串
+     * @param str         用于生成下划线的 StringBuilder
+     * @throws IOException 读取 Banner 内容时可能抛出的异常
      * @since 1.0.0
      */
     private void printLine(String appName,

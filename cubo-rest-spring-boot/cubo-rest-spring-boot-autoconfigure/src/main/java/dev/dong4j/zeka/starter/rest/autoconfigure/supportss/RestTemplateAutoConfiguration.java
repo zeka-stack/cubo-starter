@@ -39,7 +39,7 @@ import org.springframework.web.client.RestTemplate;
  * <p>Description: </p>
  *
  * @author dong4j
- * @version 1.2.4
+ * @version 1.0.0
  * @email "mailto:dongshijie@gmail.com"
  * @date 2020.02.08 11:49
  * @since 1.0.0
@@ -106,7 +106,7 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
      *
      * @param listObjectProvider list object provider
      * @return the rest template customizer
-     * @since 1.5.0
+     * @since 1.0.0
      */
     @Bean
     public RestTemplateCustomizer restConsumerRestTemplateCustomizer(
@@ -128,7 +128,7 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
      * @param restConsumerRestTemplateCustomizer rest consumer rest template customizer
      * @param restTemplate                       rest template
      * @return the smart initializing singleton
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Bean
     public SmartInitializingSingleton restTemplateSmartInitializingSingleton(RestTemplateCustomizer restConsumerRestTemplateCustomizer,

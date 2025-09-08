@@ -15,7 +15,21 @@ import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 
 /**
- * 消费者自动装配
+ * 消息容器自动配置类
+ *
+ * 该类负责配置消息监听容器相关的组件，包括：
+ * 1. 消息类型检测器
+ * 2. Kafka 监听器端点注册表
+ * 3. RocketMQ 容器注册器
+ * 4. 消息注册处理器
+ * 5. 消息监听器注册表
+ *
+ * 使用场景：
+ * 1. 自动配置消息监听容器
+ * 2. 集成多种消息中间件(Kafka, RocketMQ)
+ * 3. 提供统一的注册管理机制
+ *
+ * 配置属性前缀：zeka.messaging
  *
  * @author dong4j
  * @version 1.0.0
@@ -29,10 +43,10 @@ import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 public class MessagingContainerConfiguration {
 
     /**
-     * 类型检测器
+     * 创建消息类型检测器 Bean
      *
-     * @param environment 环境
-     * @return {@link MessagingTypeDetector }
+     * @param environment Spring 环境对象
+     * @return 消息类型检测器实例
      */
     @Bean
     public MessagingTypeDetector messagingTypeDetector(Environment environment) {
@@ -40,9 +54,11 @@ public class MessagingContainerConfiguration {
     }
 
     /**
-     * 提供 KafkaListenerEndpointRegistry Bean（通常由 Spring Kafka 自动配置）
+     * 创建 Kafka 监听器端点注册表 Bean
      *
-     * @return {@link KafkaListenerEndpointRegistry }
+     * 注意：如果 Spring Kafka 已经自动配置了该 Bean，则不会重复创建
+     *
+     * @return Kafka 监听器端点注册表实例
      */
     @Bean
     @ConditionalOnMissingBean
@@ -51,9 +67,9 @@ public class MessagingContainerConfiguration {
     }
 
     /**
-     * 提供 RocketMQ 容器注册器
+     * 创建 RocketMQ 容器注册器 Bean
      *
-     * @return {@link RocketMQContainerFactoryProxy.RocketMQContainerRegistry }
+     * @return RocketMQ 容器注册器实例
      */
     @Bean
     public RocketMQContainerFactoryProxy.RocketMQContainerRegistry rocketMQContainerRegistry() {
@@ -61,11 +77,11 @@ public class MessagingContainerConfiguration {
     }
 
     /**
-     * 创建 MQRegistrationHandler Bean
+     * 创建消息注册处理器 Bean
      *
-     * @param kafkaRegistry    卡夫卡注册表
-     * @param rocketmqRegistry RocketMQ注册表
-     * @return {@link MessagingRegistrationHandler }
+     * @param kafkaRegistry    Kafka 监听器端点注册表
+     * @param rocketmqRegistry RocketMQ 容器注册器
+     * @return 消息注册处理器实例
      */
     @Bean
     public MessagingRegistrationHandler messagingRegistrationHandler(KafkaListenerEndpointRegistry kafkaRegistry,
@@ -75,11 +91,11 @@ public class MessagingContainerConfiguration {
     }
 
     /**
-     * 消息传递听众注册表
+     * 创建消息监听器注册表 Bean
      *
-     * @param registrationHandler 注册处理程序
-     * @param typeDetector        类型检测器
-     * @return {@link MessagingListenerRegistry }
+     * @param registrationHandler 消息注册处理器
+     * @param typeDetector        消息类型检测器
+     * @return 消息监听器注册表实例
      */
     @Bean
     public MessagingListenerRegistry messagingListenerRegistry(MessagingRegistrationHandler registrationHandler, MessagingTypeDetector typeDetector) {

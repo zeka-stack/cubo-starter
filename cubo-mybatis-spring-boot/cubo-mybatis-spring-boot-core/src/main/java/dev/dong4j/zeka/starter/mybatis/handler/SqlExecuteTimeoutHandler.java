@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.Async;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2025.05.30 14:22
- * @since 1.9.5
+ * @since 1.0.0
  */
 public class SqlExecuteTimeoutHandler extends BaseEventHandler<SqlExecuteTimeoutEvent> {
     /** 日志输出到指定的文件 */

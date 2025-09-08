@@ -32,7 +32,24 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 /**
- * 动态属性日志配置
+ * 动态日志级别刷新自动配置类
+ *
+ * 该类提供日志级别的动态刷新功能，支持在运行时修改日志级别而无需重启应用。
+ * 主要功能包括：
+ * 1. 支持Spring Boot环境下的日志级别动态刷新
+ * 2. 支持Spring Cloud环境下的配置中心动态刷新
+ * 3. 提供配置文件监听和自动重载功能
+ * 4. 支持手动和自动两种日志级别修改方式
+ *
+ * 使用场景：
+ * - 生产环境动态调整日志级别进行问题排查
+ * - 开发环境快速切换日志输出级别
+ * - 配置中心统一管理日志级别配置
+ * - 微服务架构下的日志级别集中控制
+ *
+ * 设计意图：
+ * 通过提供灵活的日志级别动态调整机制，提升运维效率和问题排查能力，
+ * 同时支持多种环境下的不同刷新策略。
  *
  * @author dong4j
  * @version 1.0.0
@@ -45,7 +62,19 @@ import org.springframework.core.env.Environment;
 public class RefreshLogLevelAutoConfiguration {
 
     /**
-     * springboot 环境下日志动态刷新
+     * Spring Boot环境下的日志动态刷新配置
+     *
+     * 该类专门处理Spring Boot环境下的日志级别动态刷新功能。
+     * 主要功能包括：
+     * 1. 配置文件监听和自动重载
+     * 2. 刷新范围注册和管理
+     * 3. 配置变更处理器注册
+     * 4. 日志配置文件监控
+     *
+     * 使用场景：
+     * - 本地开发环境的日志级别动态调整
+     * - 配置文件修改后的自动重载
+     * - 无需重启应用即可调整日志输出
      *
      * @author dong4j
      * @version 1.0.0
@@ -64,10 +93,14 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 刷新范围注册表
+         * 创建刷新范围注册表Bean
          *
-         * @param context 语境
-         * @return 2:构建核心配置类注册与管理中心
+         * 用于管理需要动态刷新的Bean范围，支持配置变更时的精准刷新。
+         * 该注册表会跟踪所有标记为@RefreshScope的Bean，并在配置变更时
+         * 只刷新受影响的Bean，避免全量刷新带来的性能问题。
+         *
+         * @param context Spring应用上下文，用于获取Bean定义和实例
+         * @return 刷新范围注册表实例
          */
         @Bean
         @ConditionalOnMissingBean
@@ -76,11 +109,16 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 配置刷新主逻辑
+         * 创建配置刷新器Bean
          *
-         * @param environment 环境
-         * @param registry    注册表
-         * @return 6:根据配置变更项（扁平化key集合）精准刷新受影响的
+         * 负责执行配置变更时的刷新逻辑，根据变更的配置项精准刷新受影响的Bean。
+         * 该刷新器会分析配置变更的扁平化key集合，只刷新真正受影响的Bean，
+         * 避免不必要的全量刷新，提升刷新性能和稳定性。
+         *
+         * @param environment 环境配置，用于获取当前配置信息
+         * @param registry 刷新范围注册表，用于管理需要刷新的Bean
+         * @param loader 动态配置加载器，用于加载和解析配置变更
+         * @return 配置刷新器实例
          */
         @Bean
         @ConditionalOnMissingBean
@@ -150,7 +188,20 @@ public class RefreshLogLevelAutoConfiguration {
     }
 
     /**
-     * springcloud 环境下日志动态刷新(修改 yml 中的日志配置时刷新)
+     * Spring Cloud环境下的日志动态刷新配置
+     *
+     * 该类专门处理Spring Cloud环境下的日志级别动态刷新功能。
+     * 主要功能包括：
+     * 1. 监听配置中心的环境变更事件
+     * 2. 自动检测日志配置变更并应用
+     * 3. 支持手动触发日志级别修改
+     * 4. 提供事件驱动的日志级别更新机制
+     *
+     * 使用场景：
+     * - 微服务架构下的配置中心统一管理
+     * - 生产环境的日志级别集中控制
+     * - 配置变更的实时生效
+     * - 运维人员的手动日志级别调整
      *
      * @author dong4j
      * @version 1.0.0
@@ -171,7 +222,7 @@ public class RefreshLogLevelAutoConfiguration {
          * 当环境配置改变时 自动检查是否需要修改日志等级
          *
          * @return the logging level rebinder
-         * @since 1.6.0
+         * @since 1.0.0
          */
         @Contract(value = " -> new", pure = true)
         @Bean
@@ -184,7 +235,7 @@ public class RefreshLogLevelAutoConfiguration {
          * 监听 ChangeLogLevelEvent 以动态修改日志等级 (手动修改事件)
          *
          * @return the logging level refresh event handler
-         * @since 1.6.0
+         * @since 1.0.0
          */
         @Bean
         @ConditionalOnMissingBean(ManualChangeLogLevelEventHandler.class)

@@ -7,16 +7,27 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 
 /**
- * spring 自动注入对象通常会用到 @Autowired (spring 自定义注解), @Resource (JSR-250 规范定义的注解) 两个注解,
- * Autowired 支持 required = false 的设置可以允许注入对象为 null, 而 Resource 不支持该特性, 这里手动扩展 spring 使其支持 null 对象注入.
- * 直接继承 CommonAnnotationBeanPostProcessor, 作为 BeanPostProcessor 组件加载
+ * @Resource 注解扩展实现，全局允许依赖注入为 null
+ *
+ * 该类扩展了 CommonAnnotationBeanPostProcessor，修改了默认行为：
+ * 1. 当 @Resource 注解的依赖注入失败时，不再抛出异常
+ * 2. 允许 @Resource 注解的字段/方法参数为 null
+ * 3. 记录警告日志，便于调试
+ *
+ * 与 @Autowired 不同，@Resource 注解原生不支持 required=false 属性，
+ * 此扩展为 @Resource 注解提供了类似的功能。
+ *
+ * 使用场景：
+ * 1. 在开发环境中简化依赖管理
+ * 2. 在可选依赖场景下避免强制注入
+ *
+ * 注意：生产环境应谨慎使用，可能导致 NPE 风险。
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.28 01:11
- * @see CommonAnnotationBeanPostProcessor#autowireResource CommonAnnotationBeanPostProcessor
- * #autowireResourceCommonAnnotationBeanPostProcessor#autowireResource
+ * @see CommonAnnotationBeanPostProcessor#autowireResource
  * @since 1.0.0
  */
 @Slf4j
@@ -26,16 +37,21 @@ public class ResourceAnnotationExtend extends CommonAnnotationBeanPostProcessor 
     private static final long serialVersionUID = 3463920095157475670L;
 
     /**
-     * 通过重写 CommonAnnotationBeanPostProcessor 在对象注入前, 重写该类中 autowireResource 方法,
-     * 在 BeanFactory 中找不到该对象是默认返回 null 对象给到引用方, 从而不影响这个 spring 容器的加载.
-     * 多数情况下用于单元测试阶段 (因为不想因为不相干的 bean 对象找不到从而影响整个 spring 容器的加载).
-     * 有一个缺点就是不能像 @Autowired 那样细粒度控制到具体某个对象允许为 null, 这里相当于给 @Resource 加了个全局开关.
+     * 重写资源自动装配逻辑，允许注入为 null
      *
-     * @param factory            factory
-     * @param element            element
-     * @param requestingBeanName requesting bean name
-     * @return the object
-     * @throws BeansException beans exception
+     * 该方法重写了父类的资源注入逻辑：
+     * 1. 捕获所有注入异常
+     * 2. 记录警告日志
+     * 3. 返回 null 而不是抛出异常
+     *
+     * 注意：这是一个全局开关，无法像 @Autowired 那样细粒度控制。
+     * 主要用于开发环境和单元测试场景。
+     *
+     * @param factory 当前 Bean 工厂
+     * @param element 查找元素
+     * @param requestingBeanName 请求注入的 Bean 名称
+     * @return 注入的对象，如果注入失败则返回 null
+     * @throws BeansException 如果处理过程中发生不可恢复的错误
      * @since 1.0.0
      */
     @Override

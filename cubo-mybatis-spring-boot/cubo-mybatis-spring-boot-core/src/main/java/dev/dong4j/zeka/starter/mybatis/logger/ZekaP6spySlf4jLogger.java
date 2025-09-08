@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
  * <p>Description:  </p>
  *
  * @author dong4j
- * @version 1.7.1
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.01.26 15:45
- * @since 1.7.1
+ * @since 1.0.0
  */
 @SuppressWarnings("all")
 public class ZekaP6spySlf4jLogger extends FormattedLogger {
@@ -23,7 +23,7 @@ public class ZekaP6spySlf4jLogger extends FormattedLogger {
     /**
      * p6spy slf4j logger
      *
-     * @since 1.7.1
+     * @since 1.0.0
      */
     public ZekaP6spySlf4jLogger() {
         log = LoggerFactory.getLogger("p6spy");
@@ -33,7 +33,7 @@ public class ZekaP6spySlf4jLogger extends FormattedLogger {
      * Log exception
      *
      * @param e e
-     * @since 1.7.1
+     * @since 1.0.0
      */
     @Override
     public void logException(Exception e) {
@@ -44,7 +44,7 @@ public class ZekaP6spySlf4jLogger extends FormattedLogger {
      * Log text
      *
      * @param text text
-     * @since 1.7.1
+     * @since 1.0.0
      */
     @Override
     public void logText(String text) {
@@ -61,7 +61,7 @@ public class ZekaP6spySlf4jLogger extends FormattedLogger {
      * @param prepared     prepared
      * @param sql          sql
      * @param url          url
-     * @since 1.7.1
+     * @since 1.0.0
      */
     @Override
     public void logSQL(int connectionId, String now, long elapsed,
@@ -85,7 +85,7 @@ public class ZekaP6spySlf4jLogger extends FormattedLogger {
      *
      * @param category category
      * @return the boolean
-     * @since 1.7.1
+     * @since 1.0.0
      */
     @Override
     public boolean isCategoryEnabled(Category category) {

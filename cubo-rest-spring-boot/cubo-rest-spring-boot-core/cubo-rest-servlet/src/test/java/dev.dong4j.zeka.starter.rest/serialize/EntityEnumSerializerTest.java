@@ -31,7 +31,7 @@ import org.junit.jupiter.api.TestMethodOrder;
  * <p>Description:  </p>
  *
  * @author dong4j
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.10 15:16
  * @since 1.0.0
@@ -314,7 +314,7 @@ class EntityEnumSerializerTest {
      * <p>Description: </p>
      *
      * @author dong4j
-     * @version 1.3.0
+     * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
      * @date 2020.04.04 21:25
      * @since 1.0.0

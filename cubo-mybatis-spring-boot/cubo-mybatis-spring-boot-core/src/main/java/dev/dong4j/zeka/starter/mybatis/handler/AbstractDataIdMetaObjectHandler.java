@@ -12,7 +12,7 @@ import org.apache.ibatis.reflection.MetaObject;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.05.13 18:10
- * @since 1.8.0
+ * @since 1.0.0
  */
 @Slf4j
 public abstract class AbstractDataIdMetaObjectHandler implements MetaObjectChain {
@@ -22,7 +22,7 @@ public abstract class AbstractDataIdMetaObjectHandler implements MetaObjectChain
      *
      * @param metaObject meta object
      * @param chain      chain
-     * @since 1.8.0
+     * @since 1.0.0
      */
     @Override
     public void insertFill(MetaObject metaObject, MetaObjectChain chain) {
@@ -40,7 +40,7 @@ public abstract class AbstractDataIdMetaObjectHandler implements MetaObjectChain
      *
      * @param metaObject meta object
      * @param expandIds  expand ids
-     * @since 1.8.0
+     * @since 1.0.0
      */
     protected abstract void setFieldValue(MetaObject metaObject, ExpandIds expandIds);
 }

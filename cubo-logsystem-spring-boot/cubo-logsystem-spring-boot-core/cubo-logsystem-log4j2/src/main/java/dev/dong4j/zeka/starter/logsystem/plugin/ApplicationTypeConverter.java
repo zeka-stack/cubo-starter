@@ -12,13 +12,31 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * <p>Description: dev.dong4j.zeka.starter.log4j2 自定义插件 应用类型输出, TMS/驾驶员APP/千迅智运APP/xxxx </p>
- * {@link LogEventPatternConverter} 接口用于扩展 pattern, 类似的有 %d (时间), %C (classname) 等
- * 在 dev.dong4j.zeka.starter.log4j2 配置 '%appType', 将会输出 AT:xxxx
- * dev.dong4j.zeka.starter.log4j2 插件相关 {@link Plugin}
+ * 应用类型转换器插件
+ *
+ * 该类是Log4j2的自定义插件，用于在日志输出中添加应用类型标识。
+ * 主要功能包括：
+ * 1. 扩展Log4j2的pattern转换器，支持自定义格式输出
+ * 2. 在日志中输出应用类型标识（如TMS/驾驶员APP/千迅智运APP等）
+ * 3. 提供全局唯一的日志ID生成功能
+ * 4. 支持链路追踪ID的自动注入
+ *
+ * 使用方式：
+ * - 在Log4j2配置中使用 '%appType' 模式
+ * - 输出格式为 "AT:xxxx"，其中xxxx为应用类型或追踪ID
+ * - 类似其他Log4j2模式：%d (时间), %C (类名) 等
+ *
+ * 技术实现：
+ * - 实现 {@link LogEventPatternConverter} 接口用于扩展pattern
+ * - 使用 {@link Plugin} 注解注册为Log4j2插件
+ * - 通过 {@link ConverterKeys} 指定转换器关键字
+ *
+ * 设计意图：
+ * 通过自定义Log4j2插件，在日志输出中自动添加应用类型和追踪信息，
+ * 便于日志的识别、分类和问题排查。
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.26 21:41
  * @since 1.0.0
@@ -28,10 +46,12 @@ import org.jetbrains.annotations.NotNull;
 public class ApplicationTypeConverter extends LogEventPatternConverter {
 
     /**
-     * Instantiates a new Application type converter.
+     * 构造函数
      *
-     * @param name  the name
-     * @param style the style
+     * 创建应用类型转换器实例，初始化转换器的名称和样式。
+     *
+     * @param name 转换器名称
+     * @param style 转换器样式
      * @since 1.0.0
      */
     protected ApplicationTypeConverter(String name, String style) {
@@ -39,10 +59,13 @@ public class ApplicationTypeConverter extends LogEventPatternConverter {
     }
 
     /**
-     * 必须实现 new Instance 方法, 被 dev.dong4j.zeka.starter.log4j2 调用
+     * 创建转换器实例
      *
-     * @param options the options
-     * @return the application type converter
+     * 该方法必须实现，供Log4j2框架调用。当在配置文件中使用%appType模式时，
+     * Log4j2会调用此方法创建转换器实例。
+     *
+     * @param options 转换器选项参数（未使用）
+     * @return 应用类型转换器实例
      * @since 1.0.0
      */
     @NotNull
@@ -52,10 +75,13 @@ public class ApplicationTypeConverter extends LogEventPatternConverter {
     }
 
     /**
-     * Formats.
+     * 格式化日志事件
      *
-     * @param event      the event          系统已经存在的一些可选数据
-     * @param toAppendTo the to append to   最终的输出字符流
+     * 将日志事件格式化为应用类型标识，输出到指定的字符串构建器中。
+     * 该方法会检查日志事件是否有消息，如果有则生成并追加应用类型ID。
+     *
+     * @param event 日志事件对象，包含系统已存在的可选数据
+     * @param toAppendTo 最终的输出字符流，用于追加格式化后的内容
      * @since 1.0.0
      */
     @Override
@@ -67,9 +93,16 @@ public class ApplicationTypeConverter extends LogEventPatternConverter {
     }
 
     /**
-     * 业务日志全局UUID
+     * 生成业务日志全局UUID
      *
-     * @return string string
+     * 生成用于业务日志的全局唯一标识符。优先使用链路追踪ID，
+     * 如果链路追踪ID不存在，则生成新的UUID。
+     *
+     * 生成策略：
+     * 1. 优先使用当前线程的链路追踪ID
+     * 2. 如果链路追踪ID为空，则生成新的UUID
+     *
+     * @return 全局唯一的日志标识符
      * @since 1.0.0
      */
     @NotNull

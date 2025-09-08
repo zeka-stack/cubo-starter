@@ -62,7 +62,7 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      * @return the v
      * @return the user vo
      * @since 1.0.0*
-     * @since 1.9.0
+     * @since 1.0.0
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumValueToDesc"})
@@ -80,7 +80,7 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      * @return the user
      * @return the user
      * @since 1.0.0*
-     * @since 1.9.0
+     * @since 1.0.0
      */
     @Override
     @Mapping(target = "updateTime", ignore = true)
@@ -100,7 +100,7 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      * @return the user dto
      * @return the user dto
      * @since 1.0.0*
-     * @since 1.9.0
+     * @since 1.0.0
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
@@ -117,7 +117,7 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
      * @return the user vo
      * @return the user vo
      * @since 1.0.0*
-     * @since 1.9.0
+     * @since 1.0.0
      */
     @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter"})
@@ -155,7 +155,7 @@ public interface UserAllWrapper extends BaseWrapper<UserVO, UserDTO, User> {
         /**
          * Gender enum converter
          *
-         * @since 1.9.0
+         * @since 1.0.0
          */
         public GenderEnumConverter() {
             super(GenderEnum.class);

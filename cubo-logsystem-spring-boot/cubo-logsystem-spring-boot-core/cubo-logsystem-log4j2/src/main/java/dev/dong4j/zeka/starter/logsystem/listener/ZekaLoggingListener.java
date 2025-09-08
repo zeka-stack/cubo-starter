@@ -52,10 +52,35 @@ import org.springframework.util.ResourceUtils;
 import static org.springframework.boot.context.logging.LoggingApplicationListener.CONFIG_PROPERTY;
 
 /**
- * <p>Description: 在日志系统加载之前, 将自定义配置注入到日志配置文件中, 完成日志自定义配置 </p>
+ * Zeka日志系统监听器
+ *
+ * 该类是日志系统的核心监听器，负责在日志系统加载之前将自定义配置注入到日志配置文件中，
+ * 完成日志系统的自定义配置。通过监听Spring Boot应用的生命周期事件，实现日志系统的
+ * 分阶段初始化和配置。
+ *
+ * 主要功能包括：
+ * 1. 监听应用环境准备事件，进行第一次日志系统初始化
+ * 2. 监听应用上下文初始化事件，进行第二次日志系统初始化
+ * 3. 处理日志文件配置、格式配置、级别配置等
+ * 4. 支持多环境下的日志配置切换
+ * 5. 提供日志配置信息的调试输出
+ *
+ * 初始化阶段：
+ * - 第一次初始化：在环境准备阶段，只能读取本地配置
+ * - 第二次初始化：在上下文初始化阶段，可以读取Nacos等配置中心的配置
+ *
+ * 使用场景：
+ * - Spring Boot应用启动时的日志系统初始化
+ * - 多环境下的日志配置管理
+ * - 配置中心变更时的日志系统重新配置
+ * - 开发和生产环境的差异化日志配置
+ *
+ * 设计意图：
+ * 通过分阶段初始化，确保日志系统能够在不同阶段获取到正确的配置，
+ * 支持配置中心的动态配置和本地配置的优先级管理。
  *
  * @author dong4j
- * @version 1.2.4
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.02.25 20:59
  * @since 1.0.0
@@ -141,7 +166,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      * 第一次初始化日志系统, 只能读取本地配置, 用于本地开发时设置日志文件保存路径等需求.
      *
      * @param event event
-     * @since 1.5.0
+     * @since 1.0.0
      */
     @Override
     public void onApplicationEnvironmentPreparedEvent(@NotNull ApplicationEnvironmentPreparedEvent event) {
@@ -177,7 +202,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      *
      * @param environment environment
      * @param classLoader class loader
-     * @since 1.5.0
+     * @since 1.0.0
      */
     private void initLogSystem(ConfigurableEnvironment environment, ClassLoader classLoader) {
         if (this.loggingSystem == null) {
@@ -210,7 +235,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      * Init logging file properties
      *
      * @param environment environment
-     * @since 1.4.0
+     * @since 1.0.0
      */
     private void initLoggingFileConfig(ConfigurableEnvironment environment) {
         this.logFileProcessor = new LogFileProcessor(environment);
@@ -220,7 +245,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      * Init patter properties
      *
      * @param environment environment
-     * @since 1.4.0
+     * @since 1.0.0
      */
     private void initLogsystemConfig(ConfigurableEnvironment environment) {
         this.logFileProcessor.apply();
@@ -232,7 +257,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      * Init primary properties
      *
      * @param environment environment
-     * @since 1.4.0
+     * @since 1.0.0
      */
     private void initLogsystem(ConfigurableEnvironment environment) {
         loggerGroups = new LoggerGroups(DEFAULT_GROUP_LOGGERS);

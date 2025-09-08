@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2021.03.15 19:31
- * @since 1.8.0
+ * @since 1.0.0
  */
 @Service
 public class TestRepositoryServiceImpl extends ExchangeServiceImpl<TestDao, Test, TestDTO, TestServiceConverter>

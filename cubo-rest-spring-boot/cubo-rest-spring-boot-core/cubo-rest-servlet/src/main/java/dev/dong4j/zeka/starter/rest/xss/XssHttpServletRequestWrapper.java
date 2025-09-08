@@ -20,7 +20,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
  * <p>Description: xss 过滤处理, 在 cache request 的基础上对 xss 进行处理 </p>
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.11 17:00
  * @since 1.0.0

@@ -75,14 +75,26 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.util.UrlPathHelper;
 
 /**
- * <p>Description: WEB 初始化相关配置</p>
- * 1. 使用 MappingJackson2HttpMessageConverter 转换器
- * 2. 跨域请求设置
- * 3. 字符过滤器
- * 4. 接口日志
+ * Servlet Web 环境自动配置类
+ *
+ * 该自动配置类是 Servlet Web 环境下的核心配置组件，负责配置和注册
+ * 所有与 Web 请求处理相关的组件。它提供了完整的 Web 层基础设施配置，
+ * 包括消息转换器、过滤器、拦截器、参数解析器等。
+ *
+ * 主要功能：
+ * 1. HTTP 消息转换器配置：使用 Jackson 作为 JSON 转换器，支持枚举序列化
+ * 2. 跨域请求支持：非生产环境自动开启 CORS 支持
+ * 3. 字符编码过滤器：统一设置 UTF-8 编码
+ * 4. 全局缓存过滤器：缓存 Request 和 Response 以支持重复读取
+ * 5. 异常处理过滤器：在 Filter 层提供异常捕获和处理
+ * 6. XSS 防护过滤器：防止跨站脚本攻击
+ * 7. 参数注入过滤器：支持全局参数注入机制
+ * 8. 自定义参数解析器：支持多种自定义注解的参数解析
+ * 9. 拦截器注册：用户认证、链路追踪等拦截器
+ * 10. API 版本控制：支持基于 URL 的 API 版本管理
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.11.21 21:47
  * @since 1.0.0
@@ -112,15 +124,22 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     /** MAX_AGE */
     private static final Long MAX_AGE = 18000L;
 
+    /**
+     * 构造函数，初始化 Servlet Web 自动配置
+     *
+     * @since 1.0.0
+     */
     public ServletWebAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }
 
     /**
-     * Filter registration bean filter registration bean.
-     * 设置字符过滤器
+     * 注册字符编码过滤器
      *
-     * @return the filter registration bean
+     * 设置字符过滤器，强制设置请求和响应的字符编码为 UTF-8。
+     * 这确保了整个应用在处理中文等多字节字符时的一致性和正确性。
+     *
+     * @return 配置好的字符编码过滤器注册Bean
      * @since 1.0.0
      */
     @Bean
@@ -135,10 +154,13 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * request 和 response 缓存
+     * 注册全局缓存过滤器
      *
-     * @param properties properties
-     * @return the filter registration bean
+     * request 和 response 缓存过滤器，用于缓存 HTTP 请求和响应的内容，
+     * 允许在请求处理过程中多次读取请求体和响应体。
+     *
+     * @param properties Web 配置属性，包含缓存忽略的 URL 模式等配置
+     * @return 配置好的全局缓存过滤器注册Bean
      * @since 1.0.0
      */
     @Bean
@@ -157,10 +179,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * Add cors mapping.
-     * 跨域 CORS 配置, 不是 prod 环境才允许跨域
+     * 注册跨域请求过滤器
      *
-     * @return the cors filter
+     * 跨域 CORS 配置，不是 prod 环境才允许跨域。
+     * 在非生产环境下注册 CORS 过滤器，允许前端应用从不同域名访问后端 API。
+     *
+     * @return 配置好的CORS过滤器注册Bean
      * @since 1.0.0
      */
     @Bean
@@ -177,13 +201,16 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * Filter 异常处理
+     * 注册过滤器异常处理器
      *
-     * @param serverProperties server properties
-     * @return the filter registration bean
-     * @see ExceptionFilter
-     * @see ServletErrorController
-     * @see RestProperties#isEnableExceptionFilter
+     * Filter 异常处理器，用于捕获和处理过滤器层异常。
+     * 当在过滤器链中发生异常时，该过滤器会统一处理这些异常。
+     *
+     * @param serverProperties 服务器配置属性，包含错误页面路径等配置
+     * @return 配置好的异常过滤器注册Bean
+     * @see ExceptionFilter 过滤器异常处理器实现
+     * @see ServletErrorController 错误控制器
+     * @see RestProperties#isEnableExceptionFilter 异常过滤器开关配置
      * @since 1.0.0
      */
     @Bean
@@ -201,10 +228,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 参数注入拦截器
+     * 注册全局参数注入过滤器
      *
-     * @return the filter registration bean
-     * @see RestProperties#isEnableGlobalParameterFilter RestProperties#isEnableGlobalParameterFilter
+     * 参数注入过滤器，用于在请求处理过程中自动注入一些全局性的参数。
+     *
+     * @return 配置好的全局参数注入过滤器注册Bean
+     * @see RestProperties#isEnableGlobalParameterFilter 全局参数注入过滤器开关配置
      * @since 1.0.0
      */
     @Bean
@@ -222,11 +251,14 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 防 XSS 注入 Filter
+     * 注册 XSS 防护过滤器
      *
-     * @param xssProperties xss properties
-     * @return FilterRegistrationBean filter registration bean
-     * @see XssProperties#isEnableXssFilter XssProperties#isEnableXssFilterXssProperties#isEnableXssFilter
+     * 防 XSS 注入 Filter，用于防止跨站脚本攻击。
+     * 该过滤器会对请求参数进行安全过滤，移除或转义潜在的恶意脚本代码。
+     *
+     * @param xssProperties XSS 防护配置属性，包含排除模式等配置
+     * @return 配置好的XSS防护过滤器注册Bean
+     * @see XssProperties#isEnableXssFilter XSS过滤器开关配置
      * @since 1.0.0
      */
     @Bean
@@ -244,10 +276,12 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 前端传入的时间字符串, 自动转换为 Date 类型, 只针对普通的字段,
-     * 如果是 @RequestBody 中的字段, 将使用 {@link MappingApiJackson2HttpMessageConverter} 使用 jackson 进行转换
+     * 注册自定义格式化器和转换器
      *
-     * @param registry the registry
+     * 前端传入的时间字符串，自动转换为 Date 类型，只针对普通的字段。
+     * 如果是 @RequestBody 中的字段，将使用 {@link MappingApiJackson2HttpMessageConverter} 使用 jackson 进行转换。
+     *
+     * @param registry Spring MVC 的格式化注册表
      * @since 1.0.0
      */
     @Override
@@ -259,9 +293,11 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * Add argument resolvers *
+     * 注册自定义参数解析器
      *
-     * @param argumentResolvers argument resolvers
+     * 向 Spring MVC 添加自定义的方法参数解析器，用于处理 Controller 方法中的特殊注解参数。
+     *
+     * @param argumentResolvers Spring MVC 的参数解析器列表
      * @since 1.0.0
      */
     @Override
@@ -274,9 +310,11 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 使用 JACKSON 作为JSON MessageConverter
+     * 配置 HTTP 消息转换器
      *
-     * @param converters converters
+     * 使用 JACKSON 作为 JSON MessageConverter，配置 Spring MVC 的 HTTP 消息转换器。
+     *
+     * @param converters Spring MVC 的消息转换器列表
      * @since 1.0.0
      */
     @Override
@@ -296,7 +334,9 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 自定义枚举序列化与反序列化方式
+     * 配置自定义枚举序列化与反序列化
+     *
+     * 为 ObjectMapper 注册自定义的枚举序列化器和反序列化器。
      *
      * @since 1.0.0
      */
@@ -310,9 +350,11 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 添加拦截器
+     * 注册拦截器
      *
-     * @param registry registry
+     * 添加拦截器，包括当前用户拦截器和认证拦截器。
+     *
+     * @param registry 拦截器注册表
      * @since 1.0.0
      */
     @Override
@@ -331,9 +373,11 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * 开启矩阵变量 {@code @MatrixVariable}支持
+     * 配置路径匹配
      *
-     * @param configurer configurer
+     * 开启矩阵变量 {@code @MatrixVariable} 支持。
+     *
+     * @param configurer 路径匹配配置器
      * @since 1.0.0
      */
     @Override
@@ -344,22 +388,25 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     }
 
     /**
-     * Registrations
+     * 注册 Web MVC 配置
      *
-     * @return the web mvc registrations
-     * @since 2.0.0
+     * 注册 RequestMappingHandlerMapping，不使用继承 WebMvcConfigurationSupport。
+     * 替换后，会将其提供的一系列默认组件全部移除。
+     *
+     * @return Web MVC 注册配置
+     * @since 1.0.0
      */
     @Bean
     @ConditionalOnMissingBean(WebMvcRegistrations.class)
     public WebMvcRegistrations registrations() {
         return new WebMvcRegistrations() {
             /**
-             * 注册 RequestMappingHandlerMapping,
-             * 不使用 继承 WebMvcConfigurationSupport, 替换后，会将其提供的一系列默认组件全部移除。
-             * 如我们注册拦截器使用的（RequestMappingHandlerAdapter）、全局异常拦截（ExceptionHandlerExceptionResolver）等
+             * 注册请求映射处理器
              *
-             * @return the request mapping handler mapping
-             * @since 2.0.0
+             * 注册 RequestMappingHandlerMapping。
+             *
+             * @return 请求映射处理器
+             * @since 1.0.0
              */
             @Override
             public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
@@ -370,9 +417,11 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
 
     /**
-     * Build config cors configuration
+     * 构建 CORS 配置
      *
-     * @return the cors configuration
+     * 构建跨域资源共享配置。
+     *
+     * @return CORS 配置
      * @since 1.0.0
      */
     private @NotNull CorsConfiguration buildConfig() {

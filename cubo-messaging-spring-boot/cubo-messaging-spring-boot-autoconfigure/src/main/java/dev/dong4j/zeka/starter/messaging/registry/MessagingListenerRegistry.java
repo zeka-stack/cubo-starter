@@ -1,4 +1,3 @@
-// UnifiedListenerRegistry.java
 package dev.dong4j.zeka.starter.messaging.registry;
 
 import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
@@ -15,6 +14,29 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
 
+/**
+ * 消息监听器注册表
+ * <p>
+ * 该类实现了 Spring 的 BeanPostProcessor 接口，用于：
+ * 1. 扫描带有 @MessagingListener 注解的方法
+ * 2. 根据消息类型创建对应的监听适配器
+ * 3. 注册监听适配器到相应的消息中间件
+ * <p>
+ * 核心功能：
+ * 1. 自动注册消息监听方法
+ * 2. 支持多种消息中间件(Kafka/RocketMQ)
+ * 3. 提供统一的异常处理机制
+ * <p>
+ * 使用场景：
+ * 1. Spring Bean 初始化完成后自动处理
+ * 2. 消息监听器的统一注册管理
+ *
+ * @author dong4j
+ * @version 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.06.27
+ * @since 1.0.0
+ */
 public class MessagingListenerRegistry implements BeanPostProcessor {
 
     private final MessagingRegistrationHandler registrationHandler;
@@ -27,12 +49,12 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
     }
 
     /**
-     * 在 Bean 初始化完成后执行
+     * Bean 初始化后处理方法
      *
-     * @param bean     豆
-     * @param beanName 豆名称
-     * @return {@link Object }
-     * @throws BeansException 豆例外
+     * @param bean     当前处理的 Bean 实例
+     * @param beanName Bean 名称
+     * @return 处理后的 Bean 实例
+     * @throws BeansException 如果处理过程中发生错误
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
@@ -58,6 +80,13 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         return bean;
     }
 
+    /**
+     * 注册消息监听方法
+     *
+     * @param bean 包含监听方法的 Bean 实例
+     * @param method 带有 @MessagingListener 注解的方法
+     * @param annotation MessagingListener 注解实例
+     */
     public void registerMethod(Object bean, Method method, MessagingListener annotation) {
         MessagingContext context = new MessagingContext();
         context.setMessagingType(typeDetector.resolveType(annotation.type()));
@@ -79,6 +108,11 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         registrationHandler.registerAdapter(adapter, annotation);
     }
 
+    /**
+     * 创建自定义消息解析器
+     *
+     * @return 自定义消息解析器实例
+     */
     private MessagingHandlerMethod.UnifiedMessageResolver createCustomResolver() {
         return new MessagingHandlerMethod.UnifiedMessageResolver() {
             @Override
@@ -95,6 +129,13 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
         };
     }
 
+    /**
+     * 创建消息处理器
+     *
+     * @param bean 包含处理方法的 Bean 实例
+     * @param method 处理方法
+     * @return 消息处理器实例
+     */
     private MessagingMessageHandler createMessageHandler(Object bean, Method method) {
         return (message, ctx) -> {
             try {
@@ -106,12 +147,13 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
     }
 
     /**
-     * 创建侦听器适配器, 当监听到消息时调用 {@link MessagingHandlerMethod#invoke(MessagingContext)} 处理
+     * 创建监听器适配器
      *
-     * @param handlerMethod 处理程序方法
-     * @param context       语境
-     * @param method        方法
-     * @return {@link AbstractMessagingListenerAdapter }
+     * @param handlerMethod 消息处理方法
+     * @param context 消息上下文
+     * @param method 监听方法
+     * @return 消息监听适配器实例
+     * @throws IllegalArgumentException 如果消息类型不支持
      */
     private AbstractMessagingListenerAdapter createListenerAdapter(MessagingHandlerMethod handlerMethod,
                                                                    MessagingContext context,

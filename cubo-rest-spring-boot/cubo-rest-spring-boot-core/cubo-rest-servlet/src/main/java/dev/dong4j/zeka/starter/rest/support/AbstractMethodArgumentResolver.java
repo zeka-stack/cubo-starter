@@ -32,27 +32,57 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
- * <p>Description: rest 接口参数自定义处理与绑定 </p>
+ * REST 接口参数自定义处理与绑定的抽象基类
  *
- * @param <A> parameter
+ * 该抽象类提供了一个通用的框架，用于实现自定义的方法参数解析器。
+ * 它封装了从 HTTP 请求中解析和绑定参数的通用逻辑，
+ * 包括 JSON 反序列化、类型转换、异常处理等功能。
+ *
+ * 主要功能：
+ * 1. 支持基于注解的参数解析（泛型 A 为注解类型）
+ * 2. JSON 请求体的解析和反序列化
+ * 3. 枚举类型的特殊处理和转换
+ * 4. 请求类型和数据格式的验证
+ * 5. 完善的异常处理和错误信息
+ *
+ * 技术特点：
+ * - 使用 Jackson ObjectMapper 进行 JSON 处理
+ * - 集成了全局枚举转换器工厂
+ * - 支持 Jackson 的视图功能和高级特性
+ * - 保证了请求的可重复读取
+ *
+ * 安全限制：
+ * - 仅支持 POST 和 PUT 请求方法
+ * - 要求使用 CacheRequestEnhanceWrapper 包装请求
+ * - 验证请求体的有效性和可读性
+ *
+ * 继承方式：
+ * 子类需要实现两个抽象方法：
+ * - supportsAnnotation(): 返回支持的注解类型
+ * - bundleArgument(): 实现具体的参数绑定逻辑
+ *
+ * @param <A> 支持的注解类型，必须继承自 Annotation
  * @author dong4j
- * @version 1.4.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.05.23 21:13
- * @since 1.4.0
+ * @since 1.0.0
  */
 public abstract class AbstractMethodArgumentResolver<A extends Annotation> implements HandlerMethodArgumentResolver {
 
-    /** Object mapper */
+    /** Jackson 对象映射器，用于 JSON 序列化和反序列化 */
     protected final ObjectMapper objectMapper;
-    /** Global enum converter factory */
+    /** 全局枚举转换器工厂，用于处理枚举类型的参数转换 */
     protected final ConverterFactory<String, SerializeEnum<?>> globalEnumConverterFactory;
 
     /**
-     * Request single param handler method argument resolver
+     * 构造方法，初始化参数解析器的核心组件
      *
-     * @param objectMapper               object mapper
-     * @param globalEnumConverterFactory global enum converter factory
+     * 通过构造参数注入必要的依赖组件，包括 JSON 处理器和枚举转换器。
+     * 这些组件在参数解析过程中将被用于各种数据类型的转换和处理。
+     *
+     * @param objectMapper JSON 对象映射器，用于处理 JSON 数据的序列化和反序列化
+     * @param globalEnumConverterFactory 全局枚举转换器工厂，用于处理枚举类型的参数转换
      * @since 1.0.0
      */
     @Contract(pure = true)
@@ -116,7 +146,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
      *
      * @param annotation request single param
      * @param request    request
-     * @since 1.4.0
+     * @since 1.0.0
      */
     private void check(A annotation, HttpServletRequest request) {
         BaseCodes.PARAM_VERIFY_ERROR.notNull(request, "Request is null");
@@ -200,7 +230,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
      * Supports annotation
      *
      * @return the class
-     * @since 1.4.0
+     * @since 1.0.0
      */
     protected abstract Class<A> supportsAnnotation();
 
@@ -212,7 +242,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
      * @param inputMessage input message
      * @param annotation   request single param
      * @return the object
-     * @since 1.4.0
+     * @since 1.0.0
      */
     protected abstract Object bundleArgument(MethodParameter parameter,
                                              JavaType javaType,
@@ -226,7 +256,7 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
      * @param clazz        clazz
      * @param targetObject target object
      * @return the t
-     * @since 1.4.0
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     protected <T> T convert(@NotNull Class<? extends SerializeEnum<?>> clazz, Object targetObject) {

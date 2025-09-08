@@ -6,7 +6,6 @@ import com.alibaba.druid.util.Utils;
 import com.alibaba.druid.wall.WallConfig;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import jakarta.servlet.Filter;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
@@ -19,10 +18,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 
 /**
- * <p>Description:  </p>
+ * Druid 数据源自动配置类
+ *
+ * 该配置类主要用于自动配置 Druid 数据源相关功能，包括：
+ * 1. 配置 SQL 防火墙规则，允许执行多条语句
+ * 2. 移除 Druid 监控页面底部的广告信息
+ * 3. 提供 Druid 相关的 Bean 配置
+ *
+ * 注意：该配置类只有在类路径中存在 DruidDataSourceAutoConfigure 等相关类时才会生效
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.12.06 22:27
  * @since 1.0.0
@@ -38,9 +44,14 @@ public class DruidAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Wall config wall config
+     * 配置 Druid SQL 防火墙规则
      *
-     * @return the wall config
+     * 该方法创建并配置 WallConfig 对象，用于设置 SQL 防火墙的安全规则。
+     * 主要配置包括：
+     * - 允许一次执行多条 SQL 语句
+     * - 允许执行非基础语句（如存储过程调用等）
+     *
+     * @return WallConfig 防火墙配置对象
      * @since 1.0.0
      */
     @Bean
@@ -54,10 +65,20 @@ public class DruidAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 除去页面底部的广告
+     * 创建移除 Druid 监控页面广告的过滤器
      *
-     * @param properties 特性
-     * @return {@link FilterRegistrationBean }<{@link Filter }>
+     * 该方法创建一个过滤器，用于移除 Druid 监控页面底部的广告信息。
+     * 过滤器会拦截对 common.js 文件的请求，并移除其中的广告相关内容。
+     *
+     * 主要功能：
+     * - 拦截 /druid/js/common.js 请求
+     * - 读取原始 common.js 内容并移除广告代码
+     * - 禁用 gzip 压缩以防止内容损坏
+     * - 设置正确的响应头和内容类型
+     *
+     * @param properties Druid 统计属性配置
+     * @return FilterRegistrationBean<Filter> 过滤器注册 Bean
+     * @since 1.0.0
      */
     @Bean
     public FilterRegistrationBean<Filter> removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {
@@ -71,7 +92,6 @@ public class DruidAutoConfiguration implements ZekaAutoConfiguration {
 
         // 定义过滤器逻辑
         Filter filter = (request, response, chain) -> {
-            HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse resp = (HttpServletResponse) response;
 
             // 正常执行过滤器链，common.js 内容会先输出

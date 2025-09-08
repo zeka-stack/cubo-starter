@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.logsystem;
 
+import java.io.PrintStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +10,13 @@ import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Test whether invoking the SLF4J API causes problems or not.
  *
  * @author Ceki Gulcu
- * @version 1.3.0
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.03.08 12:56
  * @since 1.0.0

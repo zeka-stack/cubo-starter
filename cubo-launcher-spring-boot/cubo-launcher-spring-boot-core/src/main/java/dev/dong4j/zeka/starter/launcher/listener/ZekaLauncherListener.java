@@ -24,10 +24,19 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 
 /**
- * <p>Description: </p>
+ * Zeka 框架核心启动监听器，负责应用启动全生命周期的处理
+ *
+ * 该监听器处理应用启动的各个阶段，包括：
+ * 1. 应用启动前的检查和准备
+ * 2. 环境配置加载和 Banner 显示
+ * 3. Web 服务器初始化后的端口配置
+ * 4. 应用启动完成后的资源初始化
+ * 5. 应用关闭时的清理工作
+ *
+ * 通过 @AutoListener 注解自动注册到 Spring 容器中。
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.11.20 19:06
  * @since 1.0.0
@@ -37,9 +46,12 @@ import org.springframework.core.env.Environment;
 public class ZekaLauncherListener implements ZekaApplicationListener {
 
     /**
-     * Gets order *
+     * 获取监听器执行优先级
      *
-     * @return the order
+     * 设置为较高优先级（仅次于最高优先级21个位置），确保在核心配置加载后、
+     * 但在大多数应用组件初始化前执行，以便正确设置环境和显示 Banner。
+     *
+     * @return 监听器的执行优先级
      * @since 1.0.0
      */
     @Override
@@ -48,9 +60,14 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
     }
 
     /**
-     * 启动类检查
+     * 处理应用启动事件
      *
-     * @param event the event
+     * 在应用启动最早阶段执行，主要完成：
+     * 1. 关闭 Spring Boot 默认的 Banner 显示
+     * 2. 检查应用是否通过 ZekaApplication 启动
+     * 3. 如果不是，输出警告信息和正确的使用示例
+     *
+     * @param event 应用启动事件
      * @since 1.0.0
      */
     @Override
@@ -79,9 +96,15 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
     }
 
     /**
-     * On application environment prepared event *
+     * 处理应用环境准备事件
      *
-     * @param event event
+     * 当 Spring 环境准备完成后执行，主要完成：
+     * 1. 设置应用类型到系统属性
+     * 2. 初始化配置工具类
+     * 3. 根据配置决定是否显示自定义 Banner
+     * 4. 输出应用启动信息
+     *
+     * @param event Spring 环境准备完成事件
      * @since 1.0.0
      */
     @Override
@@ -100,9 +123,16 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
     }
 
     /**
-     * 应用 web 相关初始化完成后, 获取 web 应用的端口, 设置到环境变量中, 用于在启动完成后输出端口信息
+     * 处理 Web 服务器初始化事件
      *
-     * @param event event
+     * 当 Web 服务器初始化完成后执行，主要完成：
+     * 1. 获取 Web 应用的实际端口号
+     * 2. 将端口号设置到系统环境变量中，便于其他组件获取
+     * 3. 记录应用名称、端口、上下文路径和环境信息
+     *
+     * 特别适用于随机端口场景，确保能获取到实际分配的端口号。
+     *
+     * @param event Web 服务器初始化事件
      * @see dev.dong4j.zeka.kernel.common.util.StartUtils
      * @since 1.0.0
      */
@@ -122,9 +152,12 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
     }
 
     /**
-     * On context closed event *
+     * 处理应用上下文关闭事件
      *
-     * @param event event
+     * 当应用关闭时执行，记录应用关闭的日志信息，
+     * 使用 executeAtLast 确保该操作在所有关闭处理的最后执行。
+     *
+     * @param event 上下文关闭事件
      * @since 1.0.0
      */
     @Override
@@ -135,9 +168,15 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
     }
 
     /**
-     * On context started event *
+     * 处理应用启动完成事件
      *
-     * @param event event
+     * 当应用完全启动后执行，主要完成：
+     * 1. 记录应用上下文的详细信息（用于调试）
+     * 2. 设置线程执行器，用于后续的异步任务处理
+     *
+     * 使用 executeAtLast 确保该操作在所有启动处理的最后执行。
+     *
+     * @param event 应用启动完成事件
      * @since 1.0.0
      */
     @Override

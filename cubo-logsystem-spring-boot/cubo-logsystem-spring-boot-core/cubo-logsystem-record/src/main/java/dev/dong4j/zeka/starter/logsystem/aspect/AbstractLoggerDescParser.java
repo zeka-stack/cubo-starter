@@ -14,7 +14,26 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
- * <p>Description: 日志描述解析(支持SpEL表达式)</p>
+ * 抽象日志描述解析器
+ *
+ * 该类提供日志描述解析的基础功能，支持SpEL表达式动态生成日志描述。
+ * 通过解析方法参数和SpEL表达式，生成包含实际参数值的日志描述。
+ *
+ * 主要功能包括：
+ * 1. 支持SpEL表达式解析日志描述
+ * 2. 自动获取方法参数名称和值
+ * 3. 提供日期格式化函数支持
+ * 4. 支持模板化日志描述生成
+ *
+ * 使用场景：
+ * - 操作日志的动态描述生成
+ * - 接口日志的参数化描述
+ * - 业务日志的模板化输出
+ * - 日志描述的国际化支持
+ *
+ * 设计意图：
+ * 通过SpEL表达式提供灵活的日志描述生成能力，支持动态参数解析和格式化，
+ * 简化日志描述的编写和维护。
  *
  * @author dong4j
  * @version 1.0.0
@@ -48,7 +67,7 @@ public abstract class AbstractLoggerDescParser {
      * @param args   args
      * @param spel   spel
      * @return the string
-     * @since 1.5.0
+     * @since 1.0.0
      */
     protected String parseDescription(Method method, Object[] args, String spel) {
         // 从方法中获取参数名, 并把参数和值添加到计算上下文中
@@ -68,7 +87,7 @@ public abstract class AbstractLoggerDescParser {
      *
      * @param date date
      * @return string string
-     * @since 1.5.0
+     * @since 1.0.0
      */
     @Contract("null -> null")
     private static String dateFormat(Date date) {

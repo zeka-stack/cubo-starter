@@ -26,10 +26,17 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * <p>Description:  </p>
+ * 子启动器初始化类，实现 LauncherInitiation 接口
+ *
+ * 该类负责在应用启动前执行以下操作：
+ * 1. 检查所有枚举类的 value 值是否重复
+ * 2. 设置默认的 Spring 配置属性
+ * 3. 处理本地开发环境的特殊配置
+ *
+ * 该类具有最高优先级 +1 的执行顺序，确保在其他初始化之前执行。
  *
  * @author dong4j
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dongshijie@gmail.com"
  * @date 2020.01.27 12:23
  * @since 1.0.0
@@ -41,10 +48,14 @@ public class SubLauncherInitiation implements LauncherInitiation {
     private static final String SPRING_PROFILE_ACTIVE_FILE = "spring.profiles.active";
 
     /**
-     * 检查枚举的 value 是否重复
+     * 检查所有枚举类的 value 值是否重复
      *
-     * @param appName app name
-     * @since 2022.1.1
+     * 该方法会扫描所有实现了 SerializeEnum 接口的枚举类，
+     * 并检查每个枚举类的 value 值是否唯一。
+     * 如果发现重复的 value 值，会抛出 IllegalArgumentException。
+     *
+     * @param appName 应用名称
+     * @since 1.0.0
      */
     @SneakyThrows
     @Override
@@ -94,12 +105,20 @@ public class SubLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Launcher map
+     * 设置默认的 Spring 配置属性
      *
-     * @param env           env
-     * @param appName       app name
-     * @param isLocalLaunch is local launch
-     * @return the map
+     * 该方法会设置以下默认配置：
+     * 1. 允许 Bean 定义覆盖
+     * 2. 生成 PID 文件
+     * 3. 配置加密密钥
+     * 4. 设置 WIKI 链接
+     *
+     * 如果是本地开发环境，还会处理 spring.profiles.active 文件。
+     *
+     * @param env           Spring 环境对象
+     * @param appName       应用名称
+     * @param isLocalLaunch 是否是本地开发环境
+     * @return 包含默认配置的 Map
      * @since 1.0.0
      */
     @Override
@@ -137,9 +156,12 @@ public class SubLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * 本地开发时获取 target 目录
+     * 获取本地开发时的 target 目录路径
      *
-     * @return the string
+     * 该方法用于定位本地开发环境中的 target 目录，
+     * 主要用于读取 spring.profiles.active 文件。
+     *
+     * @return target 目录的绝对路径
      * @since 1.0.0
      */
     private static @NotNull String getTargetDir() {
@@ -148,9 +170,9 @@ public class SubLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Gets name *
+     * 获取启动器名称
      *
-     * @return the name
+     * @return 启动器模块名称
      * @since 1.0.0
      */
     @Override
@@ -159,9 +181,12 @@ public class SubLauncherInitiation implements LauncherInitiation {
     }
 
     /**
-     * Gets order *
+     * 获取执行顺序
      *
-     * @return the order
+     * 该方法返回 HIGHEST_PRECEDENCE + 1，
+     * 确保在其他初始化之前执行。
+     *
+     * @return 执行顺序值
      * @since 1.0.0
      */
     @Override

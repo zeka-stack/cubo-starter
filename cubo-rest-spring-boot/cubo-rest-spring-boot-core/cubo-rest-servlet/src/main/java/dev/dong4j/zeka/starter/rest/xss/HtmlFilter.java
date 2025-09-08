@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
  * source, and our contact details, can be found at http://xss-html-filter.sf.net
  *
  * @author Joseph O'Connell
- * @version 1.2.3
+ * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
  * @date 2020.01.11 17:11
  * @since 1.0.0
