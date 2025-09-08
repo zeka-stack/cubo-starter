@@ -7,6 +7,7 @@ import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.kernel.common.convert.StringToMapConverter;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
@@ -76,11 +77,11 @@ import org.springframework.web.util.UrlPathHelper;
 
 /**
  * Servlet Web 环境自动配置类
- *
+ * <p>
  * 该自动配置类是 Servlet Web 环境下的核心配置组件，负责配置和注册
  * 所有与 Web 请求处理相关的组件。它提供了完整的 Web 层基础设施配置，
  * 包括消息转换器、过滤器、拦截器、参数解析器等。
- *
+ * <p>
  * 主要功能：
  * 1. HTTP 消息转换器配置：使用 Jackson 作为 JSON 转换器，支持枚举序列化
  * 2. 跨域请求支持：非生产环境自动开启 CORS 支持
@@ -135,7 +136,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册字符编码过滤器
-     *
+     * <p>
      * 设置字符过滤器，强制设置请求和响应的字符编码为 UTF-8。
      * 这确保了整个应用在处理中文等多字节字符时的一致性和正确性。
      *
@@ -155,7 +156,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册全局缓存过滤器
-     *
+     * <p>
      * request 和 response 缓存过滤器，用于缓存 HTTP 请求和响应的内容，
      * 允许在请求处理过程中多次读取请求体和响应体。
      *
@@ -180,7 +181,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册跨域请求过滤器
-     *
+     * <p>
      * 跨域 CORS 配置，不是 prod 环境才允许跨域。
      * 在非生产环境下注册 CORS 过滤器，允许前端应用从不同域名访问后端 API。
      *
@@ -202,7 +203,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册过滤器异常处理器
-     *
+     * <p>
      * Filter 异常处理器，用于捕获和处理过滤器层异常。
      * 当在过滤器链中发生异常时，该过滤器会统一处理这些异常。
      *
@@ -229,7 +230,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册全局参数注入过滤器
-     *
+     * <p>
      * 参数注入过滤器，用于在请求处理过程中自动注入一些全局性的参数。
      *
      * @return 配置好的全局参数注入过滤器注册Bean
@@ -252,7 +253,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册 XSS 防护过滤器
-     *
+     * <p>
      * 防 XSS 注入 Filter，用于防止跨站脚本攻击。
      * 该过滤器会对请求参数进行安全过滤，移除或转义潜在的恶意脚本代码。
      *
@@ -277,7 +278,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册自定义格式化器和转换器
-     *
+     * <p>
      * 前端传入的时间字符串，自动转换为 Date 类型，只针对普通的字段。
      * 如果是 @RequestBody 中的字段，将使用 {@link MappingApiJackson2HttpMessageConverter} 使用 jackson 进行转换。
      *
@@ -290,11 +291,13 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
         registry.addConverter(new StringToDateConverter());
         log.debug("注册通用枚举转换器: [{}]", GlobalEnumConverterFactory.class);
         registry.addConverterFactory(GLOBAL_ENUM_CONVERTER_FACTORY);
+        log.debug("注册 String -> Map 转换器 :[{}]", StringToMapConverter.class);
+        registry.addConverter(new StringToMapConverter());
     }
 
     /**
      * 注册自定义参数解析器
-     *
+     * <p>
      * 向 Spring MVC 添加自定义的方法参数解析器，用于处理 Controller 方法中的特殊注解参数。
      *
      * @param argumentResolvers Spring MVC 的参数解析器列表
@@ -311,7 +314,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 配置 HTTP 消息转换器
-     *
+     * <p>
      * 使用 JACKSON 作为 JSON MessageConverter，配置 Spring MVC 的 HTTP 消息转换器。
      *
      * @param converters Spring MVC 的消息转换器列表
@@ -335,7 +338,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 配置自定义枚举序列化与反序列化
-     *
+     * <p>
      * 为 ObjectMapper 注册自定义的枚举序列化器和反序列化器。
      *
      * @since 1.0.0
@@ -351,7 +354,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册拦截器
-     *
+     * <p>
      * 添加拦截器，包括当前用户拦截器和认证拦截器。
      *
      * @param registry 拦截器注册表
@@ -374,7 +377,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 配置路径匹配
-     *
+     * <p>
      * 开启矩阵变量 {@code @MatrixVariable} 支持。
      *
      * @param configurer 路径匹配配置器
@@ -389,7 +392,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 注册 Web MVC 配置
-     *
+     * <p>
      * 注册 RequestMappingHandlerMapping，不使用继承 WebMvcConfigurationSupport。
      * 替换后，会将其提供的一系列默认组件全部移除。
      *
@@ -418,7 +421,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
 
     /**
      * 构建 CORS 配置
-     *
+     * <p>
      * 构建跨域资源共享配置。
      *
      * @return CORS 配置
