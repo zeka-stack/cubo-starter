@@ -39,8 +39,8 @@ class KafkaMessagingMessagingTemplateAdapterTest {
 
         // 验证结果
         assertNotNull(result);
-        assertEquals("test-topic", result.getTopic());
-        assertEquals(0, result.getPartition());
+        assertEquals("test-topic", result.topic());
+        assertEquals(0, result.partition());
     }
 
     @Test
@@ -53,7 +53,7 @@ class KafkaMessagingMessagingTemplateAdapterTest {
 
         // 验证结果
         SendResult result = asyncResult.join();
-        assertEquals("async-topic", result.getTopic());
-        assertEquals(1, result.getPartition());
+        assertEquals("async-topic", result.topic());
+        assertEquals(1, result.partition());
     }
 }
