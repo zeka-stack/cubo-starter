@@ -34,14 +34,14 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 /**
  * Reactive 环境下的启动信息自动配置类
- *
+ * <p>
  * 该类为 Spring WebFlux Reactive Web 环境提供启动信息和 Git 信息相关的配置。
  * 主要包括：
- *
+ * <p>
  * 1. 配置処理启动信息的路由函数，支持重定向到 Git 信息端点
  * 2. 提供读取 Git 属性信息的方法
  * 3. 配置 Reactive 环境下的初始化服务
- *
+ * <p>
  * 仅在 Reactive Web 环境下生效，使用条件注解确保兼容性。
  *
  * @author dong4j
@@ -68,10 +68,10 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
 
     /**
      * 配置启动信息路由函数
-     *
+     * <p>
      * 如果在 classpath 下存在 git.properties 文件，则将访问 /start 的请求
      * 重定向到 /git 端点，用于显示 Git 相关信息。
-     *
+     * <p>
      * 使用 Reactive 方式处理请求和响应，支持非阻塞式操作。
      *
      * @return 路由函数定义
@@ -95,7 +95,7 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
 
     /**
      * 获取 Git 相关信息
-     *
+     * <p>
      * 读取 classpath 下的 git.properties 文件并返回其内容。
      * 如果文件不存在或读取失败，则返回简单的 "up" 字符串。
      * 该方法使用 @ReadOperation 注解，可以通过 Actuator 端点访问。
@@ -125,7 +125,7 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
 
     /**
      * 创建 Reactive 初始化服务
-     *
+     * <p>
      * 在 Reactive 环境下创建初始化服务实现，用于应用预热。
      * 使用 WebClient.Builder 来构建 HTTP 客户端进行异步请求。
      * 仅在没有其他 InitializationService 实现时才会创建。

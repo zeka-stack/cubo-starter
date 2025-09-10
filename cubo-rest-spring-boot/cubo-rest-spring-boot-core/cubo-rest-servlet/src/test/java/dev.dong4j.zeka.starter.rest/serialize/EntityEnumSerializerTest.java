@@ -13,6 +13,7 @@ import dev.dong4j.zeka.kernel.common.util.Tools;
 import dev.dong4j.zeka.starter.rest.entity.GenderEnum;
 import dev.dong4j.zeka.starter.rest.entity.UserForm;
 import dev.dong4j.zeka.starter.rest.entity.UserType;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -71,7 +72,8 @@ class EntityEnumSerializerTest {
         UserForm orderDto = UserForm.builder().date(new Date())
             .gender(GenderEnum.MAN)
             .type(UserType.ADMIN)
-            .genderList(new ArrayList<GenderEnum>() {
+            .genderList(new ArrayList<>() {
+                @Serial
                 private static final long serialVersionUID = -8994472517933682403L;
 
                 {
@@ -103,8 +105,8 @@ class EntityEnumSerializerTest {
 
         // 使用 objectMapper 来序列化枚举
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.MAN);
-        Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
+        Assertions.assertEquals(GenderEnum.MAN, userForm.getGender());
+        Assertions.assertEquals(UserType.ADMIN, userForm.getType());
     }
 
     @Test
@@ -118,8 +120,8 @@ class EntityEnumSerializerTest {
 
         // 使用 objectMapper 来序列化枚举
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.MAN);
-        Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
+        Assertions.assertEquals(GenderEnum.MAN, userForm.getGender());
+        Assertions.assertEquals(UserType.ADMIN, userForm.getType());
     }
 
     /**
@@ -131,26 +133,27 @@ class EntityEnumSerializerTest {
     @Test
     @Order(3)
     void jsonToObject2() throws Exception {
-        String json = "{\n" +
-            "  \"date\": \"2019-10-31 18:36:13\",\n" +
-            "  \"gender\": {\n" +
-            "    \"value\": 0,\n" +
-            "    \"desc\": \"女\"\n" +
-            "  },\n" +
-            "  \"type\": \"\",\n" +
-            "  \"genderList\": [\n" +
-            "    1,\n" +
-            "    2,\n" +
-            "    0\n" +
-            "  ]\n" +
-            "}";
+        String json = """
+            {
+              "date": "2019-10-31 18:36:13",
+              "gender": {
+                "value": 0,
+                "desc": "女"
+              },
+              "type": "",
+              "genderList": [
+                1,
+                2,
+                0
+              ]
+            }""";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         log.info("{}", Jsons.toJson(userForm, true));
 
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
+        Assertions.assertEquals(GenderEnum.WOMEN, userForm.getGender());
         Assertions.assertNull(userForm.getType());
     }
 
@@ -163,27 +166,28 @@ class EntityEnumSerializerTest {
     @Test
     @Order(4)
     void jsonToObject3() throws Exception {
-        String json = "{\n" +
-            "  \"date\": \"2019-10-31 18:36:13\",\n" +
-            "  \"gender\": {\n" +
-            "    \"value\": 0,\n" +
-            "    \"desc\": \"女\"\n" +
-            "  },\n" +
-            "  \"type\": \"ADMIN\",\n" +
-            "  \"genderList\": [\n" +
-            "    1,\n" +
-            "    2,\n" +
-            "    0\n" +
-            "  ]\n" +
-            "}";
+        String json = """
+            {
+              "date": "2019-10-31 18:36:13",
+              "gender": {
+                "value": 0,
+                "desc": "女"
+              },
+              "type": "ADMIN",
+              "genderList": [
+                1,
+                2,
+                0
+              ]
+            }""";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         log.info("{}", Jsons.toJson(userForm, true));
 
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
-        Assertions.assertEquals(userForm.getType(), UserType.ADMIN);
+        Assertions.assertEquals(GenderEnum.WOMEN, userForm.getGender());
+        Assertions.assertEquals(UserType.ADMIN, userForm.getType());
     }
 
     /**
@@ -195,27 +199,28 @@ class EntityEnumSerializerTest {
     @Test
     @Order(5)
     void jsonToObject4() throws Exception {
-        String json = "{\n" +
-            "  \"date\": \"2019-10-31 18:36:13\",\n" +
-            "  \"gender\": {\n" +
-            "    \"value\": 0,\n" +
-            "    \"desc\": \"女\"\n" +
-            "  },\n" +
-            "  \"type\": 0,\n" +
-            "  \"genderList\": [\n" +
-            "    1,\n" +
-            "    2,\n" +
-            "    0\n" +
-            "  ]\n" +
-            "}";
+        String json = """
+            {
+              "date": "2019-10-31 18:36:13",
+              "gender": {
+                "value": 0,
+                "desc": "女"
+              },
+              "type": 0,
+              "genderList": [
+                1,
+                2,
+                0
+              ]
+            }""";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         log.info("{}", Jsons.toJson(userForm, true));
 
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
-        Assertions.assertEquals(userForm.getType(), UserType.SA);
+        Assertions.assertEquals(GenderEnum.WOMEN, userForm.getGender());
+        Assertions.assertEquals(UserType.SA, userForm.getType());
     }
 
     /**
@@ -227,19 +232,20 @@ class EntityEnumSerializerTest {
     @Test
     @Order(6)
     void jsonToObject5() throws Exception {
-        String json = "{\n" +
-            "  \"date\": \"2019-10-31 18:36:13\",\n" +
-            "  \"gender\": {\n" +
-            "    \"value\": 0,\n" +
-            "    \"desc\": \"女\"\n" +
-            "  },\n" +
-            "  \"type\": 0,\n" +
-            "  \"genderList\": [\n" +
-            "    1,\n" +
-            "    0,\n" +
-            "    2\n" +
-            "  ]\n" +
-            "}";
+        String json = """
+            {
+              "date": "2019-10-31 18:36:13",
+              "gender": {
+                "value": 0,
+                "desc": "女"
+              },
+              "type": 0,
+              "genderList": [
+                1,
+                0,
+                2
+              ]
+            }""";
         UserForm userForm = this.objectMapper.readValue(json, UserForm.class);
 
         log.info("{}", Jsons.toJson(userForm, true));
@@ -247,8 +253,8 @@ class EntityEnumSerializerTest {
 
         log.info("{}", Jsons.toJson(this.objectMapper, userForm, true));
 
-        Assertions.assertEquals(userForm.getGender(), GenderEnum.WOMEN);
-        Assertions.assertEquals(userForm.getType(), UserType.SA);
+        Assertions.assertEquals(GenderEnum.WOMEN, userForm.getGender());
+        Assertions.assertEquals(UserType.SA, userForm.getType());
         Assertions.assertArrayEquals(userForm.getGenderList().toArray(), Arrays.asList(GenderEnum.MAN, GenderEnum.WOMEN, GenderEnum.UNKNOWN).toArray());
     }
 
@@ -301,10 +307,11 @@ class EntityEnumSerializerTest {
         log.info("{}", Tools.convert(UserStatusEnum.CHECK_FAILED, String.class));
 
 
-        String json = "{\n" +
-            "    \"value\": 1,\n" +
-            "    \"desc\": \"xxxx\"\n" +
-            "}";
+        String json = """
+            {
+                "value": 1,
+                "desc": "xxxx"
+            }""";
         log.info("{}", Jsons.parse(json, UserStatusEnum.class));
         log.info("{}", Tools.convert(json, UserStatusEnum.class));
         log.info("{}", Jsons.toJson(UserStatusEnum.CHECK_FAILED));

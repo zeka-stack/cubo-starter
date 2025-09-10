@@ -1,6 +1,6 @@
 package dev.dong4j.zeka.starter.messaging.template.model;
 
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 消息发送结果类
@@ -31,7 +31,6 @@ import lombok.Setter;
  * @date 2023.05.15
  * @since 1.0.0
  */
-@Setter
 public record SendResult(String topic, int partition, long offset, String messageId) {
     /**
      * 构造方法
@@ -50,7 +49,7 @@ public record SendResult(String topic, int partition, long offset, String messag
      * @return 发送结果的字符串表示
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "SendResult{" +
             "topic='" + topic + '\'' +
             ", partition=" + partition +

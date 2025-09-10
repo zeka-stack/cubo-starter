@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * @date 2020.05.13 11:24
  * @since 1.0.0
  */
+@SuppressWarnings("D")
 @Intercepts(
     @Signature(
         type = Executor.class,
@@ -68,7 +69,7 @@ public class SensitiveFieldEncryptIntercepter implements Interceptor {
         if (SqlCommandType.UPDATE.equals(sqlCommandType)) {
             Object arg = invocation.getArgs()[1];
             // 如果期望实现敏感字段更新自动脱敏, 请使用UpdateWrapper方式操作更新
-            if (arg instanceof ParamMap<?> paramMap) {
+            if (arg instanceof MapperMethod.ParamMap<?> paramMap) {
                 // et 实体对象 (set 条件值,可以为 null)
                 if (paramMap.containsKey(Constants.ENTITY)) {
                     Object parameter1 = paramMap.get("et");

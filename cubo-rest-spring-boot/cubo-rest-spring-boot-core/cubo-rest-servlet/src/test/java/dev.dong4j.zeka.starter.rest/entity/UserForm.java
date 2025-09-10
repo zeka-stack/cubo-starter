@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.rest.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserForm implements Serializable {
     /** serialVersionUID */
+    @Serial
     private static final long serialVersionUID = 3457453077473375609L;
 
     /** Date */
