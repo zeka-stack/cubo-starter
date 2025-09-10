@@ -38,6 +38,23 @@
                 <scope>import</scope>
             </dependency>
             <!--mark-->
+            <!--region dict-->
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-dict-spring-boot-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-dict-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.dong4j</groupId>
+                <artifactId>cubo-dict-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--endregion-->
 
             <!--region openapi-->
             <dependency>
