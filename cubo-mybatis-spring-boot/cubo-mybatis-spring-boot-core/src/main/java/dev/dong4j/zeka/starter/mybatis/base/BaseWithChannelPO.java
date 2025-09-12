@@ -3,30 +3,31 @@ package dev.dong4j.zeka.starter.mybatis.base;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * 带渠道信息的基础持久化对象抽象类
- *
+ * <p>
  * 该抽象类继承自 BaseWithTimePO，并实现了 Channel 接口，为数据库实体提供
  * 多租户和多客户端场景下的渠道信息自动管理功能。
- *
+ * <p>
  * 主要功能：
  * 1. 自动管理租户 ID 字段（tenant_id）
  * 2. 自动管理客户端 ID 字段（client_id）
  * 3. 继承时间字段的自动填充功能
  * 4. 支持链式调用的 setter 方法
- *
+ * <p>
  * 字段填充策略：
  * - 租户 ID：仅在插入时填充（FieldFill.INSERT）
  * - 客户端 ID：仅在插入时填充（FieldFill.INSERT）
  * - 时间字段：继承自父类的填充策略
- *
+ * <p>
  * 使用说明：
  * 1. 新增记录时，渠道字段会自动生成，无需手动设置
  * 2. 更新记录时，渠道字段不会被修改，保持数据归属的稳定性
  * 3. 子类不建议使用 @Builder 模式，可能导致字段丢失
- *
+ * <p>
  * 适用场景：
  * - SaaS 多租户系统的数据隔离
  * - 多客户端应用的数据来源标识
@@ -43,6 +44,7 @@ import java.io.Serializable;
 public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<M>> extends BaseWithTimePO<T, M> implements Channel {
 
     /** serialVersionUID */
+    @Serial
     private static final long serialVersionUID = 9002400483320996799L;
 
     /** Tenant id */
@@ -55,7 +57,7 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
 
     /**
      * 获取租户 ID
-     *
+     * <p>
      * 该方法实现了 Channel 接口的 getTenantId 方法，
      * 用于获取数据记录所属的租户标识。
      *
@@ -69,7 +71,7 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
 
     /**
      * 获取客户端 ID
-     *
+     * <p>
      * 该方法实现了 Channel 接口的 getClientId 方法，
      * 用于获取数据记录的客户端标识。
      *
@@ -83,7 +85,7 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
 
     /**
      * 设置租户 ID
-     *
+     * <p>
      * 该方法用于设置数据记录的租户 ID，支持链式调用。
      * 通常情况下不需要手动调用，会由相应的元数据处理器自动填充。
      *
@@ -99,7 +101,7 @@ public abstract class BaseWithChannelPO<T extends Serializable, M extends Model<
 
     /**
      * 设置客户端 ID
-     *
+     * <p>
      * 该方法用于设置数据记录的客户端 ID，支持链式调用。
      * 通常情况下不需要手动调用，会由相应的元数据处理器自动填充。
      *

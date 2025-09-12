@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `sys_dictionary_type`
+CREATE TABLE IF NOT EXISTS `sys_dict_type`
 (
     `id`          bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键Id',
     `code`        varchar(50)         NOT NULL COMMENT '字典类型编码',
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `sys_dictionary_type`
   ROW_FORMAT = DYNAMIC COMMENT ='字典类型表';
 
 
-CREATE TABLE IF NOT EXISTS `sys_dictionary_value`
+CREATE TABLE IF NOT EXISTS `sys_dict_value`
 (
     `id`          bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键Id',
     `type_code`   varchar(50)         NOT NULL COMMENT '字典类型编码',
@@ -49,11 +49,11 @@ CREATE TABLE IF NOT EXISTS `sys_dictionary_value`
 
 
 -- 插入字典类型数据
-INSERT INTO `sys_dictionary_type` (`code`, `name`, `description`, `state`, `order`, `deleted`, `tenant_id`, `client_id`)
+INSERT INTO `sys_dict_type` (`code`, `name`, `description`, `state`, `order`, `deleted`, `tenant_id`, `client_id`)
 VALUES ('gender', '性别', '性别字典', 1, 1, 0, '0', 'default');
 
 -- 插入字典值数据
-INSERT INTO `sys_dictionary_value` (`type_code`, `code`, `name`, `description`, `state`, `order`, `deleted`, `tenant_id`, `client_id`)
+INSERT INTO `sys_dict_value` (`type_code`, `code`, `name`, `description`, `state`, `order`, `deleted`, `tenant_id`, `client_id`)
 VALUES ('gender', '0', '未知', '性别未知', 1, 1, 0, '0', 'default'),
        ('gender', '1', '男', '男性', 1, 2, 0, '0', 'default'),
        ('gender', '2', '女', '女性', 1, 3, 0, '0', 'default');

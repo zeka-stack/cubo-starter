@@ -3,25 +3,26 @@ package dev.dong4j.zeka.starter.mybatis.base;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import dev.dong4j.zeka.kernel.common.base.IBaseEntity;
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.Builder;
 
 /**
  * 基础持久化对象抽象类
- *
+ * <p>
  * 该抽象类为所有数据库实体类提供基础功能，继承自 MyBatis Plus 的 Model 类，
  * 支持 Active Record 模式的数据库操作。
- *
+ * <p>
  * 主要功能：
  * 1. 提供统一的主键 ID 字段定义和访问方法
  * 2. 实现 Active Record 模式的基础方法
  * 3. 支持泛型化的主键类型
  * 4. 提供链式调用的 setter 方法
- *
+ * <p>
  * Active Record 模式要求：
  * 1. 必须重写 pkVal() 方法返回主键值
  * 2. 必须存在对应的 Dao 接口
- *
+ * <p>
  * 使用注意事项：
  * - 子类不能使用 @Builder 注解，会导致字段丢失
  * - 建议使用链式调用的 setter 方法
@@ -38,6 +39,7 @@ import lombok.Builder;
 public abstract class BasePO<T extends Serializable, M extends Model<M>> extends Model<M> implements IBaseEntity<T> {
 
     /** serialVersionUID */
+    @Serial
     private static final long serialVersionUID = -3685429878576720045L;
 
     /** Id */
@@ -46,10 +48,10 @@ public abstract class BasePO<T extends Serializable, M extends Model<M>> extends
 
     /**
      * 获取主键值
-     *
+     * <p>
      * 该方法是 Active Record 模式的核心方法之一，用于返回当前实体的主键值。
      * MyBatis Plus 通过该方法获取主键值来执行相关的数据库操作。
-     *
+     * <p>
      * Active Record 模式的使用要求：
      * 1. 必须重写此方法返回正确的主键值
      * 2. 必须存在对应的 Dao 接口（如 UserDao）
@@ -65,7 +67,7 @@ public abstract class BasePO<T extends Serializable, M extends Model<M>> extends
 
     /**
      * 获取主键 ID
-     *
+     * <p>
      * 该方法用于获取实体的主键 ID 值，是对主键字段的标准访问方法。
      * 所有继承该类的实体都可以通过此方法获取主键值。
      *
@@ -79,10 +81,10 @@ public abstract class BasePO<T extends Serializable, M extends Model<M>> extends
 
     /**
      * 设置主键 ID
-     *
+     * <p>
      * 该方法用于设置实体的主键 ID 值，支持链式调用。
      * 使用 @Builder 注解确保在对象转换时主键值不会丢失。
-     *
+     * <p>
      * 注意事项：
      * - 返回当前实例以支持链式调用
      * - 在使用 MapStruct 等转换工具时，该注解确保字段正确映射

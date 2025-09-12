@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @Tag(name = "字典值表接口")
 @AllArgsConstructor
-@RestControllerWrapper("/dictionary-value")
+@RestControllerWrapper("/dicts/value")
 public class DictionaryValueController extends ServletController {
 
     /** DictionaryValue service */

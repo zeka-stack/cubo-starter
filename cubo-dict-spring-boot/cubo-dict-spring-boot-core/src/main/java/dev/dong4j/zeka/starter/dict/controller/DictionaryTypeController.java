@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @Tag(name = "字典类型表接口")
 @AllArgsConstructor
-@RestControllerWrapper("/dictionary-type")
+@RestControllerWrapper("/dicts/type")
 public class DictionaryTypeController extends ServletController {
 
     /** DictionaryType service */

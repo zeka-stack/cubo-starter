@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_dictionary_value")
+@TableName("sys_dict_value")
 public class DictionaryValue extends BaseExtendPO<Long, DictionaryValue> {
 
     /** serialVersionUID */

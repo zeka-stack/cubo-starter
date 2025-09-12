@@ -1,0 +1,24 @@
+# 字典组件配置示例
+zeka-stack:
+  dict:
+    # 是否启用字典功能
+    enabled: true
+    # 是否启用缓存
+    enable-cache: true
+    # 是否启动时预热缓存
+    preload-cache: true
+    # 缓存类型：MEMORY（内存缓存）, NONE（禁用缓存）
+    cache-type: MEMORY
+    # 缓存过期时间（秒）
+    cache-expire-time: 3600
+    # 缓存刷新延迟时间（毫秒）
+    cache-refresh-delay: 100
+
+# 数据库配置示例
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: rootpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
