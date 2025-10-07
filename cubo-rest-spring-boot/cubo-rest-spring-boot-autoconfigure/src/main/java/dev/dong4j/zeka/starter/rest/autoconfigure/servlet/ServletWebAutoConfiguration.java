@@ -405,7 +405,6 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
         return new WebMvcRegistrations() {
             /**
              * 注册请求映射处理器
-             *
              * 注册 RequestMappingHandlerMapping。
              *
              * @return 请求映射处理器
@@ -430,7 +429,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     private @NotNull CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 1. 允许任何域名使用
-        corsConfiguration.addAllowedOrigin(StringPool.ASTERISK);
+        corsConfiguration.addAllowedOriginPattern(StringPool.ASTERISK);
         // 2. 允许任何头
         corsConfiguration.addAllowedHeader(StringPool.ASTERISK);
         // 3. 允许任何方法 (post、get等)
