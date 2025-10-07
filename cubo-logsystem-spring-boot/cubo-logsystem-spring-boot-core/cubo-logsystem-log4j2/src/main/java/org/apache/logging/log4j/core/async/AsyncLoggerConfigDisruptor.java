@@ -1,23 +1,23 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements. See the NOTICE file distributed with
+ * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache license, Version 2.0
+ * The ASF licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the license for the specific language governing permissions and
- * limitations under the license.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.apache.logging.log4j.core.async;
 
 import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorTwoArg;
 import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.RingBuffer;
@@ -39,6 +39,7 @@ import org.apache.logging.log4j.core.impl.ReusableLogEventFactory;
 import org.apache.logging.log4j.core.jmx.RingBufferAdmin;
 import org.apache.logging.log4j.core.util.Log4jThread;
 import org.apache.logging.log4j.core.util.Log4jThreadFactory;
+import org.apache.logging.log4j.core.util.Throwables;
 import org.apache.logging.log4j.message.ReusableMessage;
 
 /**
@@ -93,13 +94,18 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
 
     /**
      * EventHandler performs the work in a separate thread.
+     * <p>
+     *     <strong>Warning:</strong> this implementation only works with Disruptor 4.x.
+     * </p>
      */
-    private static class Log4jEventWrapperHandler implements SequenceReportingEventHandler<Log4jEventWrapper> {
+    private static class Log4jEventWrapperHandler implements EventHandler<Log4jEventWrapper> {
         private static final int NOTIFY_PROGRESS_THRESHOLD = 50;
         private Sequence sequenceCallback;
         private int counter;
 
-        @Override
+        /*
+         * Overrides a method from Disruptor 4.x. Do not remove.
+         */
         public void setSequenceCallback(final Sequence sequenceCallback) {
             this.sequenceCallback = sequenceCallback;
         }
@@ -127,6 +133,18 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
     }
 
     /**
+     * EventHandler performs the work in a separate thread.
+     * <p>
+     * <strong>Warning:</strong> this implementation only works with Disruptor 3.x.
+     * </p>
+     */
+    private static final class Log4jEventWrapperHandler3 extends Log4jEventWrapperHandler
+        implements SequenceReportingEventHandler<Log4jEventWrapper> {
+        public Log4jEventWrapperHandler3() {
+        }
+    }
+
+    /**
      * Factory used to populate the RingBuffer with events. These event objects are then re-used during the life of the
      * RingBuffer.
      */
@@ -136,7 +154,8 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
      * Factory used to populate the RingBuffer with events. These event objects are then re-used during the life of the
      * RingBuffer.
      */
-    private static final EventFactory<Log4jEventWrapper> MUTABLE_FACTORY = () -> new Log4jEventWrapper(new MutableLogEvent());
+    private static final EventFactory<Log4jEventWrapper> MUTABLE_FACTORY =
+        () -> new Log4jEventWrapper(new MutableLogEvent());
 
     /**
      * Object responsible for passing on data to a specific RingBuffer event.
@@ -156,6 +175,20 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
             ringBufferElement.loggerConfig = loggerConfig;
         };
 
+    private Log4jEventWrapperHandler createEventHandler() {
+        if (DisruptorUtil.DISRUPTOR_MAJOR_VERSION == 3) {
+            try {
+                return (Log4jEventWrapperHandler) Class.forName(
+                        "org.apache.logging.log4j.core.async.AsyncLoggerConfigDisruptor$Log4jEventWrapperHandler3")
+                    .getConstructor()
+                    .newInstance();
+            } catch (final ReflectiveOperationException | LinkageError e) {
+                LOGGER.warn("Failed to create event handler for LMAX Disruptor 3.x, trying version 4.x.", e);
+            }
+        }
+        return new Log4jEventWrapperHandler();
+    }
+
     private int ringBufferSize;
     private AsyncQueueFullPolicy asyncQueueFullPolicy;
     private Boolean mutable = Boolean.FALSE;
@@ -165,10 +198,18 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
     private EventFactory<Log4jEventWrapper> factory;
     private EventTranslatorTwoArg<Log4jEventWrapper, LogEvent, AsyncLoggerConfig> translator;
     private volatile boolean alreadyLoggedWarning;
+    private final AsyncWaitStrategyFactory asyncWaitStrategyFactory;
+    private WaitStrategy waitStrategy;
 
     private final Object queueFullEnqueueLock = new Object();
 
-    public AsyncLoggerConfigDisruptor() {
+    public AsyncLoggerConfigDisruptor(final AsyncWaitStrategyFactory asyncWaitStrategyFactory) {
+        this.asyncWaitStrategyFactory = asyncWaitStrategyFactory; // may be null
+    }
+
+    // package-protected for testing
+    WaitStrategy getWaitStrategy() {
+        return waitStrategy;
     }
 
     // called from AsyncLoggerConfig constructor
@@ -194,7 +235,7 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
         }
         LOGGER.trace("AsyncLoggerConfigDisruptor creating new disruptor for this configuration.");
         ringBufferSize = DisruptorUtil.calculateRingBufferSize("AsyncLoggerConfig.RingBufferSize");
-        final WaitStrategy waitStrategy = DisruptorUtil.createWaitStrategy("AsyncLoggerConfig.WaitStrategy", null);
+        waitStrategy = DisruptorUtil.createWaitStrategy("AsyncLoggerConfig.WaitStrategy", asyncWaitStrategyFactory);
 
         final ThreadFactory threadFactory = new Log4jThreadFactory("AsyncLoggerConfig", true, Thread.NORM_PRIORITY) {
             @Override
@@ -213,12 +254,15 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
         final ExceptionHandler<Log4jEventWrapper> errorHandler = DisruptorUtil.getAsyncLoggerConfigExceptionHandler();
         disruptor.setDefaultExceptionHandler(errorHandler);
 
-        final Log4jEventWrapperHandler[] handlers = {new Log4jEventWrapperHandler()};
+        final Log4jEventWrapperHandler[] handlers = {createEventHandler()};
         disruptor.handleEventsWith(handlers);
 
-        LOGGER.debug("Starting AsyncLoggerConfig disruptor for this configuration with ringbufferSize={}, "
-            + "waitStrategy={}, exceptionHandler={}...", disruptor.getRingBuffer().getBufferSize(), waitStrategy
-            .getClass().getSimpleName(), errorHandler);
+        LOGGER.debug(
+            "Starting AsyncLoggerConfig disruptor for this configuration with ringbufferSize={}, "
+                + "waitStrategy={}, exceptionHandler={}...",
+            disruptor.getRingBuffer().getBufferSize(),
+            waitStrategy.getClass().getSimpleName(),
+            errorHandler);
         disruptor.start();
         super.start();
     }
@@ -259,7 +303,9 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
         LOGGER.trace("AsyncLoggerConfigDisruptor: disruptor has been shut down.");
 
         if (DiscardingAsyncQueueFullPolicy.getDiscardCount(asyncQueueFullPolicy) > 0) {
-            LOGGER.trace("AsyncLoggerConfigDisruptor: {} discarded {} events.", asyncQueueFullPolicy,
+            LOGGER.trace(
+                "AsyncLoggerConfigDisruptor: {} discarded {} events.",
+                asyncQueueFullPolicy,
                 DiscardingAsyncQueueFullPolicy.getDiscardCount(asyncQueueFullPolicy));
         }
         setStopped();
@@ -295,8 +341,11 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
      * Returns {@code true} if the specified disruptor is null.
      */
     private boolean hasLog4jBeenShutDown(final Disruptor<Log4jEventWrapper> aDisruptor) {
-        // LOG4J2-639 todo-dong4j : (2022.12.30 23:58) [改动了]
-        return aDisruptor == null;
+        if (aDisruptor == null) { // LOG4J2-639
+            LOGGER.warn("Ignoring log event after log4j was shut down");
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -308,7 +357,12 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
         } catch (final NullPointerException npe) {
             // Note: NPE prevents us from adding a log event to the disruptor after it was shut down,
             // which could cause the publishEvent method to hang and never return.
-            // todo-dong4j : (2022.12.30 23:58) [改动了]
+            LOGGER.warn(
+                "Ignoring log event after log4j was shut down: {} [{}] {}",
+                event.getLevel(),
+                event.getLoggerName(),
+                event.getMessage().getFormattedMessage()
+                    + (event.getThrown() == null ? "" : Throwables.toStringList(event.getThrown())));
         }
     }
 
@@ -319,7 +373,8 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
                 ((Log4jLogEvent) logEvent).makeMessageImmutable();
             } else if (logEvent instanceof MutableLogEvent) {
                 // MutableLogEvents need to be translated into the RingBuffer by the MUTABLE_TRANSLATOR.
-                // That translator calls MutableLogEvent.initFrom to copy the event, which will makeMessageImmutable the message.
+                // That translator calls MutableLogEvent.initFrom to copy the event, which will makeMessageImmutable the
+                // message.
                 if (translator != MUTABLE_TRANSLATOR) { // should not happen...
                     // TRANSLATOR expects an immutable LogEvent
                     logEvent = ((MutableLogEvent) logEvent).createMemento();
@@ -327,7 +382,8 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
             } else { // custom log event, with a ReusableMessage
                 showWarningAboutCustomLogEventWithReusableMessage(logEvent);
             }
-        } else { // message is not a ReusableMessage; makeMessageImmutable it to prevent ConcurrentModificationExceptions
+        } else { // message is not a ReusableMessage; makeMessageImmutable it to prevent
+            // ConcurrentModificationExceptions
             InternalAsyncUtil.makeMessageImmutable(logEvent.getMessage()); // LOG4J2-1988, LOG4J2-1914
         }
         return logEvent;
@@ -335,12 +391,14 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
 
     private void showWarningAboutCustomLogEventWithReusableMessage(final LogEvent logEvent) {
         if (!alreadyLoggedWarning) {
-            LOGGER.warn("Custom log event of type {} contains a mutable message of type {}." +
-                    " AsyncLoggerConfig does not know how to make an immutable copy of this message." +
-                    " This may result in ConcurrentModificationExceptions or incorrect log messages" +
-                    " if the application modifies objects in the message while" +
-                    " the background thread is writing it to the appenders.",
-                logEvent.getClass().getName(), logEvent.getMessage().getClass().getName());
+            LOGGER.warn(
+                "Custom log event of type {} contains a mutable message of type {}."
+                    + " AsyncLoggerConfig does not know how to make an immutable copy of this message."
+                    + " This may result in ConcurrentModificationExceptions or incorrect log messages"
+                    + " if the application modifies objects in the message while"
+                    + " the background thread is writing it to the appenders.",
+                logEvent.getClass().getName(),
+                logEvent.getMessage().getClass().getName());
             alreadyLoggedWarning = true;
         }
     }
