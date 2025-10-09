@@ -2,6 +2,7 @@ package dev.dong4j.zeka.starter.rest.spi;
 
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.processor.annotation.AutoService;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Description: rest 加载默认配置 </p>
@@ -21,6 +22,7 @@ public class ServletLauncherInitiation extends RestLauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @NotNull
     public String getName() {
         return "cubo-rest-servlet-spring-boot-starter";
     }

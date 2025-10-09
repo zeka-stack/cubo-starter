@@ -176,6 +176,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @NotNull
     public String getName() {
         return Launcher.MODULE_NAME;
     }

@@ -2,6 +2,7 @@ package dev.dong4j.zeka.starter.rest.spi;
 
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.processor.annotation.AutoService;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 反应式 REST 模块启动器初始化类
@@ -60,6 +61,7 @@ public class ReactiveLauncherInitiation extends RestLauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @NotNull
     public String getName() {
         return "cubo-rest-reactive-spring-boot-starter";
     }

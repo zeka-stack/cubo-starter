@@ -6,6 +6,7 @@ import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -102,6 +103,7 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @NotNull
     public String getName() {
         return "cubo-mybatis-spring-boot-starter";
     }

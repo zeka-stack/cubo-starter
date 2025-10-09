@@ -4,6 +4,7 @@ import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.endpoint.constant.Endpoint;
 import dev.dong4j.zeka.starter.endpoint.spi.EndpointLauncherInitiation;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Servlet 环境下的 Endpoint 模块启动初始化器
@@ -33,6 +34,7 @@ public class ServletEndpointLauncherInitiation extends EndpointLauncherInitiatio
      * @since 1.0.0
      */
     @Override
+    @NotNull
     public String getName() {
         return Endpoint.SERVLET_MODULE_NAME;
     }
