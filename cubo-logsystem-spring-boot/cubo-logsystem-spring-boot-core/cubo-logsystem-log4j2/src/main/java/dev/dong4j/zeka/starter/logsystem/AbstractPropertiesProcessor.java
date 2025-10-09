@@ -1,7 +1,7 @@
 package dev.dong4j.zeka.starter.logsystem;
 
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import java.util.Arrays;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.core.env.PropertySourcesPropertyResolver;
@@ -119,10 +119,6 @@ public abstract class AbstractPropertiesProcessor {
      * @since 1.0.0
      */
     protected void setSystemProperty(String value, String... names) {
-        Arrays.stream(names).forEach(name -> {
-            if (StringUtils.isBlank(System.getProperty(name)) && StringUtils.isNotBlank(value)) {
-                System.setProperty(name, value);
-            }
-        });
+        ConfigKit.setSystemProperty(value, names);
     }
 }

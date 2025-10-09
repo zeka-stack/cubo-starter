@@ -106,7 +106,6 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
             .put(ConfigKey.UndertowConfigKye.ACCESSLOG_SUFFIX, "log")
 
             // Spring MVC 相关配置
-            .put(ConfigKey.MvcConfigKey.NO_HANDLER_FOUND, ConfigDefaultValue.TRUE)
             .put(ConfigKey.MvcConfigKey.ENCODING_ENABLED, ConfigDefaultValue.TRUE)
             .put(ConfigKey.MvcConfigKey.ENCODING_FORCE, ConfigDefaultValue.TRUE)
             .put(ConfigKey.MvcConfigKey.ENCODING_CHARSET, StringPool.UTF_8)

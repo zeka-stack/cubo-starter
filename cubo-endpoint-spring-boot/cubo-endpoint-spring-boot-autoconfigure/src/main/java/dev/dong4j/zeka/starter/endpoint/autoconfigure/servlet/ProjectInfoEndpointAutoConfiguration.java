@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.util.SecurityUtils;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import java.util.List;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@Tag(name = "应用接口信息")
+@Tag(name = "(built.in)应用接口信息")
 public class ProjectInfoEndpointAutoConfiguration {
     /** Spring Web 应用上下文，用于获取请求处理器映射 */
     @Resource
@@ -68,7 +68,7 @@ public class ProjectInfoEndpointAutoConfiguration {
      * @return 包含所有接口信息的响应结果
      * @since 1.0.0
      */
-    @Operation(summary = "获取应用所有接口")
+    @Schema(description = "获取应用所有接口")
     @GetMapping(value = "/request-urls")
     public Result<List<RequestToMethodItem>> index() {
         // 创建结果列表

@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.endpoint.initialization;
 
-
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +14,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * 应用预热控制器
- *
+ * <p>
  * 该控制器提供一个用于应用预热的 REST 接口，通过接收和处理
  * 预热请求来触发 Spring Boot 应用的各项初始化操作。
- *
+ * <p>
  * 包含 JSON 序列化、参数验证、异常处理等功能的测试，
  * 确保用户第一次真实访问时能够获得更快的响应速度。
  *
@@ -31,11 +32,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
     path = "/warmup",
     consumes = APPLICATION_JSON_VALUE
 )
+@Tag(name = "(built.in)接口预热初始化")
 public class WarmUpController {
 
     /**
      * 处理预热 POST 请求
-     *
+     * <p>
      * 接收并验证预热请求数据，测试 JSON 序列化/反序列化、
      * 参数验证、异常处理等功能的正常工作，确保应用的核心组件
      * 已经被正常初始化和加载。
@@ -45,6 +47,7 @@ public class WarmUpController {
      * @since 1.0.0
      */
     @PostMapping
+    @Schema(description = "预热接口")
     public Result<WarmUpRequestDTO> post(@RequestBody @Valid WarmUpRequestDTO dto) {
         return R.succeed(dto);
     }

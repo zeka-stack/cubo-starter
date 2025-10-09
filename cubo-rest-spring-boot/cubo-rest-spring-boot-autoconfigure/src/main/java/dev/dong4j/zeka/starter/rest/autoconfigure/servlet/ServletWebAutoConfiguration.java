@@ -39,6 +39,7 @@ import dev.dong4j.zeka.starter.rest.xss.XssFilter;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Servlet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -429,7 +430,7 @@ public class ServletWebAutoConfiguration implements WebMvcConfigurer, ZekaAutoCo
     private @NotNull CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 1. 允许任何域名使用
-        corsConfiguration.addAllowedOriginPattern(StringPool.ASTERISK);
+        corsConfiguration.setAllowedOriginPatterns(Collections.singletonList(StringPool.ASTERISK));
         // 2. 允许任何头
         corsConfiguration.addAllowedHeader(StringPool.ASTERISK);
         // 3. 允许任何方法 (post、get等)

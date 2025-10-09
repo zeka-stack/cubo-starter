@@ -1,5 +1,6 @@
 package dev.dong4j.zeka.starter.launcher.banner;
 
+import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.DateUtils;
 import dev.dong4j.zeka.kernel.common.util.StartUtils;
@@ -93,7 +94,7 @@ public class ZekaBanner implements Banner {
         String underline = str.toString();
         String devModel = "Local Development Model";
         if (ConfigKit.notLocalLaunch()) {
-            devModel = "Started By Shell";
+            devModel = "Started By " + System.getProperty(App.START_TYPE);
         }
         String startline = "::: "
             + appName
