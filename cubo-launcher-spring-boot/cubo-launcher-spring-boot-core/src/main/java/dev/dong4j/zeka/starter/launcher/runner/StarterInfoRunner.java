@@ -48,6 +48,7 @@ public class StarterInfoRunner implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) {
+        log.debug("StarterInfoRunner.run normal execution");
         try {
             ConfigKit.showDebugInfo();
             SpringContext.showDebugInfo();

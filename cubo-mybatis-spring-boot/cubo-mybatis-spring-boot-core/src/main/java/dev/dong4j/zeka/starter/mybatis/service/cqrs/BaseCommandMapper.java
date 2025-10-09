@@ -83,7 +83,7 @@ public interface BaseCommandMapper<T> extends Mapper<T> {
      * @return the int
      * @since 1.0.0
      */
-    int deleteBatchIds(@Param(Constants.COLLECTION) Collection<? extends Serializable> idList);
+    int deleteBatchIds(@Param(Constants.COLL) Collection<? extends Serializable> idList);
 
     /**
      * 根据 ID 修改

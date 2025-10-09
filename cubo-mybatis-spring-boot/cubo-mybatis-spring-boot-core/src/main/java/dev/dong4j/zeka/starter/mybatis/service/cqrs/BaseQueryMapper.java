@@ -12,23 +12,23 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * 基础查询 Mapper 接口
- *
+ * <p>
  * 该接口定义了 CQRS（命令查询职责分离）模式中的查询操作规范。
  * 主要用于处理数据的读取操作，与写入操作分离。
- *
+ * <p>
  * 主要功能：
  * 1. 提供单条数据查询方法（按 ID、条件查询）
  * 2. 提供批量数据查询方法（批量 ID、条件查询）
  * 3. 提供分页查询方法
  * 4. 提供计数查询方法
  * 5. 提供多种数据格式的查询结果（实体、Map、Object）
- *
+ * <p>
  * CQRS 模式优势：
  * - 读写分离，提高查询性能
  * - 查询优化，可以使用专门的查询模型
  * - 支持复杂的查询场景和数据格式
  * - 职责清晰，便于维护和扩展
- *
+ * <p>
  * 使用场景：
  * - 需要明确区分读写操作的系统
  * - 高并发查询场景
@@ -60,7 +60,7 @@ public interface BaseQueryMapper<T> extends Mapper<T> {
      * @return the list
      * @since 1.0.0
      */
-    List<T> selectBatchIds(@Param(Constants.COLLECTION) Collection<? extends Serializable> idList);
+    List<T> selectBatchIds(@Param(Constants.COLL) Collection<? extends Serializable> idList);
 
     /**
      * 查询（根据 columnMap 条件）
@@ -69,7 +69,7 @@ public interface BaseQueryMapper<T> extends Mapper<T> {
      * @return the list
      * @since 1.0.0
      */
-    List<T> selectByMap(@Param(Constants.COLUMN_MAP) Map<String, Object> columnMap);
+    List<T> selectByMap(@Param(Constants.COLL) Map<String, Object> columnMap);
 
     /**
      * 根据 entity 条件，查询一条记录
