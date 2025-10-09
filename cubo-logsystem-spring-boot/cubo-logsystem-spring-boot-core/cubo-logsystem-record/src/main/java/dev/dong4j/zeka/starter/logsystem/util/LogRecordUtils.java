@@ -65,7 +65,7 @@ public class LogRecordUtils {
         abstractLog.setHttpMethod(request.getMethod());
         // 设置请求参数
         abstractLog.setParams(WebUtils.getRequestParamString(request));
-        // TODO: 获取操作人信息，目前设置为空字符串
+        // todo-dong4j : (2025.10.9 22:25) [获取操作人信息，目前设置为空字符串]
         abstractLog.setCreateBy(StringPool.NULL_STRING);
     }
 
