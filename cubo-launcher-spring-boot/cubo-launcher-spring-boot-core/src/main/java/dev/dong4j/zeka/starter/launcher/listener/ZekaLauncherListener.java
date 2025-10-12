@@ -77,20 +77,14 @@ public class ZekaLauncherListener implements ZekaApplicationListener {
             event.getSpringApplication().setBannerMode(Banner.Mode.OFF);
             if (StringUtils.isBlank(System.getProperty(App.START_APPLICATION))
                 && !App.START_JUNIT.equals(System.getProperty(App.START_TYPE))) {
-                log.warn("请使用 ZekaApplication 启动或者继承 ZekaStarter, 用于加载组件默认配置\n\n"
-                    + "Sample: \n"
-                    + "@SpringBootApplication\n"
-                    + "public class DemoApplication {\n"
-                    + "    public static void main(String[] args) {\n"
-                    + "        ZekaApplication.run(DemoApplication.class);\n"
-                    + "        // ZekaApplication.run(\"applicationName\",DemoApplication.class);\n"
-                    + "    }\n"
-                    + "}\n"
-                    + "or simple: \n"
-                    + "@SpringBootApplication\n"
-                    + "public class DemoApplication extends ZekaStarter {\n"
-                    + "    \n"
-                    + "}");
+                log.warn("""
+                    启动类错误, 请按照以下方式实现启动类
+
+                    @SpringBootApplication
+                    public class DemoApplication extends ZekaStarter {
+                        // 不要写任何代码
+                    }
+                    """);
             }
         });
     }

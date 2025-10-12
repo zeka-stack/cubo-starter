@@ -11,7 +11,9 @@ import dev.dong4j.zeka.kernel.common.context.SpringContext;
 import dev.dong4j.zeka.kernel.common.context.Trace;
 import dev.dong4j.zeka.kernel.common.event.SqlExecuteTimeoutEvent;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
 import dev.dong4j.zeka.starter.mybatis.util.SqlUtils;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Statement;
@@ -121,7 +123,8 @@ public class PerformanceInterceptor implements Interceptor {
         Statement statement;
         Object firstArg = invocation.getArgs()[0];
         if (Proxy.isProxyClass(firstArg.getClass())) {
-            statement = (Statement) SystemMetaObject.forObject(firstArg).getValue("h.statement");
+            InvocationHandler invocationHandler = Proxy.getInvocationHandler(firstArg);
+            statement = (Statement) ReflectionUtils.getFieldValue(invocationHandler, "statement");
         } else {
             statement = (Statement) firstArg;
         }
