@@ -9,7 +9,6 @@ import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.GsonUtils;
-import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
 import dev.dong4j.zeka.kernel.common.util.StartUtils;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
@@ -342,8 +341,6 @@ public final class ZekaApplication {
                     propertySource = ConfigKit.getPropertySource(ConfigKit.BOOT_CONFIG_FILE_NAME);
                 }
                 name = propertySource.getProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME);
-
-                deprecatedPropertiesCheck(propertySource);
             } catch (Exception ignored) {
                 // nothing to do.
             }
@@ -383,18 +380,4 @@ public final class ZekaApplication {
         return properties;
     }
 
-    /**
-     * 检查配置中是否存在已过时的配置项
-     *
-     * 当检测到过时配置时，会输出警告日志提示用户更新配置
-     *
-     * @param propertySource 配置源对象
-     * @since 1.0.0
-     */
-    private static void deprecatedPropertiesCheck(@NotNull PropertySource<?> propertySource) {
-        Object property = propertySource.getProperty(ConfigKey.SpringConfigKey.PROFILE_ACTIVE);
-        if (ObjectUtils.isNotNull(property)) {
-            log.debug("1.4.0+ 开始不需要在配置文件 (bootstrap.yml/application.yml) 中配置 spring.profiles.active 属性, 请删除此配置以修复错误.");
-        }
-    }
 }

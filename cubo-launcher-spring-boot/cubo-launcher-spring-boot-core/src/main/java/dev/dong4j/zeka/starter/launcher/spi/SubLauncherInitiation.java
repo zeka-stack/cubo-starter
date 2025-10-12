@@ -5,13 +5,10 @@ import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnumCache;
-import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.common.util.FileUtils;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.launcher.constant.Launcher;
 import java.io.File;
@@ -42,8 +39,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Slf4j
 @AutoService(LauncherInitiation.class)
 public class SubLauncherInitiation implements LauncherInitiation {
-    /** SPRING_PROFILE_ACTIVE_FILE */
-    private static final String SPRING_PROFILE_ACTIVE_FILE = "spring.profiles.active";
 
     /**
      * 检查所有枚举类的 value 值是否重复
@@ -110,7 +105,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
      */
     @Override
     public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env, String appName, boolean isLocalLaunch) {
-        ChainMap chainMap = ChainMap.build(8)
+        return ChainMap.build(8)
             // Spring Boot 2.1 需要设定, 存在相同的 bean name 时, 后一个覆盖前一个, 主要用于覆写默认 bean
             .put(ConfigKey.SpringConfigKey.MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING, ConfigDefaultValue.TRUE)
             // 启动后新增一个 app.pid 文本文件, 写入当前应用的 PID
@@ -118,28 +113,6 @@ public class SubLauncherInitiation implements LauncherInitiation {
             // 配置加密密钥
             .put(ConfigKey.JASYPT_ENCRYPTOR_PASSWORD, ConfigDefaultValue.DEFAULT_ENCRYPTOR_PASSWORD)
             .put(ConfigKey.WIKI, ConfigDefaultValue.WIKI);
-
-        // 本地开发时, 读取 arco-maven-plugin/profile/spring.profiles.active
-        if (isLocalLaunch) {
-            String targetPath = getTargetDir();
-            String finalActiveFilePath = FileUtils.appendPath(targetPath, "arco-maven-plugin", "profile", SPRING_PROFILE_ACTIVE_FILE);
-
-            String currentProfileActive = ZekaEnv.LOCAL.getName();
-            try {
-                String active = StringUtils.trimAllWhitespace(FileUtils.readToString(new File(finalActiveFilePath)));
-                if (StringUtils.isBlank(active)) {
-                    active = ZekaEnv.LOCAL.getName();
-                }
-                currentProfileActive = active;
-            } catch (Exception e) {
-                log.trace("未监测到 target/arco-maven-plugin/profile/spring.profiles.active 文件, 将自动设置为 [local].");
-                System.setProperty("profile.active", currentProfileActive);
-            }
-
-            System.setProperty(ConfigKey.SpringConfigKey.PROFILE_ACTIVE, currentProfileActive);
-        }
-
-        return chainMap;
     }
 
     /**
