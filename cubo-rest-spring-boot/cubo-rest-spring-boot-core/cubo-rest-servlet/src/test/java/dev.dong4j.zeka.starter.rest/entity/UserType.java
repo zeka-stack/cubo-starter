@@ -1,6 +1,8 @@
 package dev.dong4j.zeka.starter.rest.entity;
 
+import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.util.StringPool;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,16 +17,22 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserType implements SerializeEnum<String> {
-    /** Sa user type */
-    SA("sa", "普通用户"),
-    /** Admin user type */
-    ADMIN("admin", "管理员");
+public enum UserType implements SerializeEnum<Integer> {
+    /** N a user type */
+    N_A(0, StringPool.NULL_STRING),
+    /** Tenant own user type */
+    TENANT(1, "租户"),
+    /** Platform fleet user type */
+    ADMIN(2, "系统管理员"),
+    /** Platform driver user type */
+    SADMIN(3, "超级管理员");
 
-    /** 数据库存储的值 */
-    private final String value;
-    /** 枚举描述 */
+    /** Value */
+    @SerializeValue
+    private final Integer value;
+    /** Desc */
     private final String desc;
+
 }
 
 

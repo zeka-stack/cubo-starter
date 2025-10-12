@@ -18,22 +18,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * 查询条件工具类
- *
+ * <p>
  * 该工具类提供了查询条件构建和分页处理的通用方法，主要用于简化
  * MyBatis Plus 的查询条件构建和分页参数处理。
- *
+ * <p>
  * 主要功能：
  * 1. 分页参数转换：将 BaseQuery 转换为 MyBatis Plus 的 IPage
  * 2. 查询条件构建：构建 QueryWrapper 查询条件
  * 3. 排序处理：支持多字段升序和降序排序
  * 4. 时间范围校验：验证开始时间和结束时间的合理性
  * 5. SQL 关键字过滤：防止 SQL 注入攻击
- *
+ * <p>
  * 工具方法：
  * - getPage：构建分页对象，支持排序和时间校验
  * - getQueryWrapper：构建查询条件包装器
  * - checkTime：校验时间范围的合理性
- *
+ * <p>
  * 安全特性：
  * - 自动过滤 SQL 关键字，防止注入攻击
  * - 参数校验，确保查询条件的合法性

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import dev.dong4j.zeka.kernel.common.enums.EnabledEnum;
 import dev.dong4j.zeka.starter.mybatis.base.BaseExtendPO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,7 @@ public class User extends BaseExtendPO<Long, User> {
     /** ENABLE */
     public static final String ENABLE = "enable";
     /** serialVersionUID */
+    @Serial
     private static final long serialVersionUID = 1L;
     /** 性别 */
     private GenderEnum gender;

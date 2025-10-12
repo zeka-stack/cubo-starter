@@ -19,23 +19,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 实体转换服务实现类
- *
+ * <p>
  * 该类提供了 PO（持久化对象）和 DTO（数据传输对象）之间的转换服务实现。
  * 为了避免与 MyBatis Plus 的 IService 方法名冲突，使用了相近的单词代替：
- *
+ * <p>
  * 方法名映射：
  * - save -> create（创建）
  * - updateById -> update（更新）
  * - getById -> find（查找）
  * - removeById -> delete（删除）
- *
+ * <p>
  * 主要功能：
  * 1. 提供 DTO 到 PO 的自动转换
  * 2. 支持各种插入操作（普通、忽略、替换）
  * 3. 支持批量操作，提高性能
  * 4. 提供完整的 CRUD 操作
  * 5. 自动处理 ID 回写
- *
+ * <p>
  * 设计特点：
  * - 使用 ServiceConverter 进行对象转换
  * - 支持泛型，类型安全
@@ -43,9 +43,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * - 支持事务管理
  *
  * @param <DAO> 数据访问对象类型，继承自 BaseDao
- * @param <PO> 持久化对象类型，继承自 BasePO
+ * @param <PO>  持久化对象类型，继承自 BasePO
  * @param <DTO> 数据传输对象类型，继承自 AbstractBaseEntity
- * @param <C> 服务转换器类型，继承自 ServiceConverter
+ * @param <C>   服务转换器类型，继承自 ServiceConverter
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
@@ -73,7 +73,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public <I extends Serializable> I create(@NotNull DTO dto) {
         Assertions.notNull(dto);
-        PO po = this.serviceConverter.po(dto);
+        PO po = this.serviceConverter.d2p(dto);
         Assertions.isTrue(super.save(po));
         dto.setId(this.getId(po));
         return this.getId(po);
@@ -90,7 +90,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public <I extends Serializable> I createIgnore(@NotNull DTO dto) {
         Assertions.notNull(dto);
-        PO po = this.serviceConverter.po(dto);
+        PO po = this.serviceConverter.d2p(dto);
         Assertions.isTrue(super.saveIgnore(po));
         dto.setId(this.getId(po));
         return this.getId(po);
@@ -107,7 +107,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public <I extends Serializable> I createReplace(@NotNull DTO dto) {
         Assertions.notNull(dto);
-        PO po = this.serviceConverter.po(dto);
+        PO po = this.serviceConverter.d2p(dto);
         Assertions.isTrue(super.saveReplace(po));
         dto.setId(this.getId(po));
         return this.getId(po);
@@ -124,7 +124,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public <I extends Serializable> I createOrUpdate(@NotNull DTO dto) {
         Assertions.notNull(dto);
-        PO po = this.serviceConverter.po(dto);
+        PO po = this.serviceConverter.d2p(dto);
         Assertions.isTrue(super.saveOrUpdate(po));
         dto.setId(this.getId(po));
         return this.getId(po);
@@ -151,7 +151,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void createBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(super.saveBatch(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.saveBatch(this.serviceConverter.d2p(dtos), batchSize));
     }
 
     /**
@@ -175,7 +175,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void createIgnoreBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(super.saveIgnoreBatch(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.saveIgnoreBatch(this.serviceConverter.d2p(dtos), batchSize));
     }
 
     /**
@@ -199,7 +199,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void createReplaceBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(super.saveReplaceBatch(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.saveReplaceBatch(this.serviceConverter.d2p(dtos), batchSize));
     }
 
     /**
@@ -236,7 +236,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void updateBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(super.updateBatchById(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.updateBatchById(this.serviceConverter.d2p(dtos), batchSize));
     }
 
     /**
@@ -260,7 +260,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public void createOrUpdateBatch(Collection<DTO> dtos, int batchSize) {
         Assertions.notEmpty(dtos);
-        Assertions.isTrue(super.saveOrUpdateBatch(this.serviceConverter.po(dtos), batchSize));
+        Assertions.isTrue(super.saveOrUpdateBatch(this.serviceConverter.d2p(dtos), batchSize));
     }
 
     /**
@@ -336,7 +336,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     @Override
     public <I extends Serializable> DTO find(@NotNull I id) {
         Assertions.notNull(id);
-        return this.serviceConverter.dto(super.getById(id));
+        return this.serviceConverter.p2d(super.getById(id));
     }
 
     /**
@@ -351,7 +351,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
     public <I extends Serializable> List<DTO> find(Collection<I> ids) {
         Assertions.notEmpty(ids);
         List<PO> pos = super.listByIds(ids);
-        return this.serviceConverter.dto(pos);
+        return this.serviceConverter.p2d(pos);
     }
 
     /**
@@ -362,7 +362,7 @@ public class ExchangeServiceImpl<DAO extends BaseDao<PO>, PO extends BasePO<?, P
      */
     @Override
     public List<DTO> find() {
-        return this.serviceConverter.dto(super.list());
+        return this.serviceConverter.p2d(super.list());
     }
 
     /**

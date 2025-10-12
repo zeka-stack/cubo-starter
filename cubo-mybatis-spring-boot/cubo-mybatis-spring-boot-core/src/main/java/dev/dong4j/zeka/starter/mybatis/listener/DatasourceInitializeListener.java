@@ -2,9 +2,11 @@ package dev.dong4j.zeka.starter.mybatis.listener;
 
 import dev.dong4j.zeka.kernel.common.ZekaApplicationListener;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.processor.annotation.AutoListener;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
@@ -86,9 +88,9 @@ public class DatasourceInitializeListener implements ZekaApplicationListener {
         if (!inited) {
             ZekaApplicationListener.Runner.executeAtLast(this.key(event, this.getClass()), () -> {
                 ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
-                String datasourceUrl = environment.getProperty("spring.datasource.url");
-
-                if (StringUtils.isBlank(datasourceUrl)) {
+                String datasourceUrl = environment.getProperty(ConfigKey.SpringConfigKey.DATASOURCE_URL);
+                Map<Object, Object> matching = ConfigKit.getPropertiesByExpression("spring.datasource.dynamic.datasource.**");
+                if (StringUtils.isBlank(datasourceUrl) && matching.isEmpty()) {
                     log.error("未检测到 JDBC 配置, 但是引入了 JDBC 相关依赖包, 将会禁用自动配置. 请根据业务处理此错误!");
                     String property = System.getProperty(ConfigKey.SpringConfigKey.AUTOCONFIGURE_EXCLUDE);
 
@@ -113,5 +115,16 @@ public class DatasourceInitializeListener implements ZekaApplicationListener {
                 inited = true;
             });
         }
+    }
+
+    /**
+     * Post processing
+     *
+     * @param environment environment
+     * @since 2024.2.0
+     */
+    @Override
+    public void postProcessing(ConfigurableEnvironment environment) {
+        log.info("执行环境后置处理器");
     }
 }

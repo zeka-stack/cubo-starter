@@ -4,9 +4,11 @@ import com.google.common.collect.Maps;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.enums.SerializeEnumCache;
 import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
+import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.FileUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
@@ -15,24 +17,20 @@ import dev.dong4j.zeka.starter.launcher.constant.Launcher;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ConfigurationBuilder;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * 子启动器初始化类，实现 LauncherInitiation 接口
- *
+ * <p>
  * 该类负责在应用启动前执行以下操作：
  * 1. 检查所有枚举类的 value 值是否重复
  * 2. 设置默认的 Spring 配置属性
  * 3. 处理本地开发环境的特殊配置
- *
+ * <p>
  * 该类具有最高优先级 +1 的执行顺序，确保在其他初始化之前执行。
  *
  * @author dong4j
@@ -49,7 +47,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
 
     /**
      * 检查所有枚举类的 value 值是否重复
-     *
+     * <p>
      * 该方法会扫描所有实现了 SerializeEnum 接口的枚举类，
      * 并检查每个枚举类的 value 值是否唯一。
      * 如果发现重复的 value 值，会抛出 IllegalArgumentException。
@@ -59,60 +57,49 @@ public class SubLauncherInitiation implements LauncherInitiation {
      */
     @SneakyThrows
     @Override
-    @SuppressWarnings(value = {"rawtypes"})
+    @SuppressWarnings({"rawtypes", "D"})
     public void before(String appName) {
-        // 构建 Reflections 扫描器，仅扫描指定包下的子类
-        Reflections reflections = new Reflections(
-            new ConfigurationBuilder()
-                .forPackages(ConfigDefaultValue.BASE_PACKAGES)
-                .setScanners(new SubTypesScanner(false))
-                .setExpandSuperTypes(false)
-        );
-
-        Set<Class<? extends SerializeEnum>> enumClasses = reflections.getSubTypesOf(SerializeEnum.class);
-        if (enumClasses == null || enumClasses.isEmpty()) {
-            return;
-        }
-
-        for (Class<? extends SerializeEnum> enumClass : enumClasses) {
-            if (!enumClass.isEnum()) {
-                continue;
-            }
-
-            try {
-                Method getValueMethod = enumClass.getMethod(SerializeEnum.VALUE_METHOD_NAME);
-                Object[] enumConstants = enumClass.getEnumConstants();
-
-                if (enumConstants == null || enumConstants.length <= 1) {
+        if (CollectionUtils.isNotEmpty(SerializeEnumCache.SUB_ENUMS)) {
+            for (Class<? extends SerializeEnum> enumClass : SerializeEnumCache.SUB_ENUMS) {
+                if (!enumClass.isEnum()) {
                     continue;
                 }
 
-                Map<Object, Object> valueMap = Maps.newHashMapWithExpectedSize(64);
-                for (Object constant : enumConstants) {
-                    Object value = getValueMethod.invoke(constant);
-                    Object existing = valueMap.putIfAbsent(value, constant);
-                    if (existing != null) {
-                        throw new IllegalArgumentException(String.format(
-                            "存在相同的枚举 value: [%s: %s.value = %s.value]",
-                            enumClass.getName(), constant, existing
-                        ));
+                try {
+                    Method getValueMethod = enumClass.getMethod(SerializeEnum.VALUE_METHOD_NAME);
+                    Object[] enumConstants = enumClass.getEnumConstants();
+
+                    if (enumConstants == null || enumConstants.length <= 1) {
+                        continue;
                     }
+
+                    Map<Object, Object> valueMap = Maps.newHashMapWithExpectedSize(64);
+                    for (Object constant : enumConstants) {
+                        Object value = getValueMethod.invoke(constant);
+                        Object existing = valueMap.putIfAbsent(value, constant);
+                        if (existing != null) {
+                            throw new IllegalArgumentException(String.format(
+                                "存在相同的枚举 value: [%s: %s.value = %s.value]",
+                                enumClass.getName(), constant, existing
+                            ));
+                        }
+                    }
+                } catch (ReflectiveOperationException e) {
+                    throw new RuntimeException("处理枚举类失败: " + enumClass.getName(), e);
                 }
-            } catch (ReflectiveOperationException e) {
-                throw new RuntimeException("处理枚举类失败: " + enumClass.getName(), e);
             }
         }
     }
 
     /**
      * 设置默认的 Spring 配置属性
-     *
+     * <p>
      * 该方法会设置以下默认配置：
      * 1. 允许 Bean 定义覆盖
      * 2. 生成 PID 文件
      * 3. 配置加密密钥
      * 4. 设置 WIKI 链接
-     *
+     * <p>
      * 如果是本地开发环境，还会处理 spring.profiles.active 文件。
      *
      * @param env           Spring 环境对象
@@ -157,7 +144,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取本地开发时的 target 目录路径
-     *
+     * <p>
      * 该方法用于定位本地开发环境中的 target 目录，
      * 主要用于读取 spring.profiles.active 文件。
      *
@@ -183,7 +170,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取执行顺序
-     *
+     * <p>
      * 该方法返回 HIGHEST_PRECEDENCE + 1，
      * 确保在其他初始化之前执行。
      *

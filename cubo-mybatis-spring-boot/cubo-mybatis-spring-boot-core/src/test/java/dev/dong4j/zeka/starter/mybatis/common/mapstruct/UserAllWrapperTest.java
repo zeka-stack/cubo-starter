@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
  * @date 2020.01.26 20:16
  * @since 1.0.0
  */
+@SuppressWarnings("LoggingSimilarMessage")
 @Slf4j
 class UserAllWrapperTest {
 

@@ -1,6 +1,5 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
-import dev.dong4j.zeka.kernel.common.mapstruct.Converter;
 import dev.dong4j.zeka.kernel.common.mapstruct.DeletedEnumConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.EnabledEnumConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.EntityEnumConverter;
@@ -27,7 +26,7 @@ import org.mapstruct.factory.Mappers;
     DeletedEnumConverter.class,
     EnabledEnumConverter.class}
 )
-public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
+public interface UserOuterWrapper {
 
     /**
      * vo -> dto: UserOuterWrapper.INSTANCE.to(vo);
@@ -43,7 +42,6 @@ public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
      * @return the t
      * @since 1.0.0
      */
-    @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumDescToValue"})
     @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumDescToValue"})
     @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumDescToValue"})
@@ -57,7 +55,6 @@ public interface UserOuterWrapper extends Converter<UserVO, UserDTO> {
      * @return the s
      * @since 1.0.0
      */
-    @Override
     @Mapping(target = "gender", qualifiedByName = {"GenderEnumConverter", "EnumValueToDesc"})
     @Mapping(target = "enable", qualifiedByName = {"EnabledEnumConverter", "EnumValueToDesc"})
     @Mapping(target = "deleted", qualifiedByName = {"DeletedEnumConverter", "EnumValueToDesc"})

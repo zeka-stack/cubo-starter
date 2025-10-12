@@ -192,17 +192,7 @@ public final class ZekaApplication {
         MutablePropertySources propertySources = environment.getPropertySources();
         propertySources.addFirst(new SimpleCommandLinePropertySource(args));
 
-        // 加载自定义 SPI 组件, 用于在容器启动前注入自定义逻辑, 比如设置组件的默认配置以减少业务上的配置
-        ServiceLoader<LauncherInitiation> loader = ServiceLoader.load(LauncherInitiation.class);
-        launcherInitiations = CollectionUtils.toList(loader)
-            .stream()
-            .sorted(Comparator.comparingInt(LauncherInitiation::getOrder))
-            .collect(Collectors.toList());
-
-        launcherInitiations.forEach(launcherService -> launcherService.launcherWrapper(environment,
-            defaultProperties,
-            appName,
-            ConfigKit.isLocalLaunch()));
+        launcherSPI(appName, environment, defaultProperties);
 
         log.debug("应用类型: ApplicationType = {}", applicationType.name());
         ConfigKit.setSystemProperties(App.APPLICATION_TYPE, applicationType.name());
@@ -226,6 +216,29 @@ public final class ZekaApplication {
             Tools.getMapFromProperties(defaultProperties)));
 
         return builder;
+    }
+
+    /**
+     * 执行 starter 组件启动 spi
+     *
+     * @param appName           app name
+     * @param environment       environment
+     * @param defaultProperties default properties
+     * @since 2024.2.0
+     */
+    private static void launcherSPI(String appName, ConfigurableEnvironment environment, Properties defaultProperties) {
+        // 加载自定义 SPI 组件, 用于在容器启动前注入自定义逻辑, 比如设置组件的默认配置以减少业务上的配置
+        ServiceLoader<LauncherInitiation> loader = ServiceLoader.load(LauncherInitiation.class);
+        launcherInitiations = CollectionUtils.toList(loader)
+            .stream()
+            .sorted(Comparator.comparingInt(LauncherInitiation::getOrder))
+            .collect(Collectors.toList());
+
+        launcherInitiations.forEach(launcherService -> launcherService.launcherWrapper(environment,
+            defaultProperties,
+            appName,
+            ConfigKit.isLocalLaunch()));
+
     }
 
     /**
