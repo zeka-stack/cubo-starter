@@ -5,6 +5,7 @@ import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.web.exception.ServletGlobalExceptionHandler;
 import dev.dong4j.zeka.kernel.web.handler.ServletErrorController;
+import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
 import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
 import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
 import jakarta.servlet.Servlet;
@@ -15,6 +16,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -175,6 +177,18 @@ public class ServletGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
                                                      ObjectProvider<ServletGlobalExceptionHandler> handlerProvider) {
         ServletGlobalExceptionHandler servletHandler = handlerProvider.getIfAvailable();
         return new ServletErrorController(errorAttributes, serverProperties.getError(), servletHandler);
+    }
+
+    /**
+     * Rest global exception handler
+     *
+     * @return the servlet global exception handler
+     * @since 2022.1.1
+     */
+    @Bean
+    @ConditionalOnMissingBean(value = ErrorController.class, search = SearchStrategy.CURRENT)
+    public ServletGlobalExceptionHandler servletGlobalExceptionHandler() {
+        return new RestGlobalExceptionHandler();
     }
 
 }

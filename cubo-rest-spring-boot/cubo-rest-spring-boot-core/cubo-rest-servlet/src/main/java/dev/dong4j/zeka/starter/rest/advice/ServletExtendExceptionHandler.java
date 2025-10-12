@@ -1,7 +1,5 @@
 package dev.dong4j.zeka.starter.rest.advice;
 
-import dev.dong4j.zeka.kernel.common.api.BaseCodes;
-import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
@@ -12,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,27 +34,17 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 @Slf4j
 @RestControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE + 2000)
+@Order(Ordered.HIGHEST_PRECEDENCE + 500)
 @ConditionalOnClass(value = {Servlet.class, DispatcherServlet.class, Transactional.class})
 public class ServletExtendExceptionHandler implements ZekaAutoConfiguration {
 
     /**
-     * 处理数据库唯一键约束异常
+     * Servlet extend exception handler
      *
-     * <p>当尝试插入或更新数据时违反了数据库唯一索引约束时，
-     * Spring 会抛出 {@link org.springframework.dao.DuplicateKeyException} 异常，
-     * 该方法会捕获此异常并返回友好的错误信息给客户端。</p>
-     *
-     * @param e DuplicateKeyException 异常实例
-     * @return 包含错误信息的统一响应结果
-     * @since 1.0.0
+     * @since 2024.2.0
      */
-    @ExceptionHandler(value = {
-        org.springframework.dao.DuplicateKeyException.class
-    })
-    public Result<Void> handleDuplicateKeyException(@NotNull org.springframework.dao.DuplicateKeyException e) {
-        log.warn("已存在被定义为唯一索引的相同数据: [{}]", e.getMessage());
-        return R.failed(BaseCodes.FAILURE, "已存在相同的数据");
+    public ServletExtendExceptionHandler() {
+        log.info("加载 ServletExtendExceptionHandler");
     }
 
     /**
@@ -76,5 +65,19 @@ public class ServletExtendExceptionHandler implements ZekaAutoConfiguration {
     public Result<?> handleDuplicateKeyException(@NotNull Exception e, HttpServletRequest req) {
         log.error("已存在被定义为唯一索引的相同数据", e);
         return GlobalExceptionHandler.result(e, req, "已存在相同的数据");
+    }
+
+    /**
+     * 死锁异常 不能确认锁异常：可能产生原因：A是大事务，然后指定了B业务，B业务也有个事务，A等B提交事务，B一直无法提交事务，这个事务 上述有执行一遍 就会造成死锁异常
+     *
+     * @param req 请求：可以记录一些传参的内容。你可以自定义日志与向响应的信息，只是当前没用到。
+     * @param e   异常对象。
+     * @return 响应实体
+     */
+    @SuppressWarnings("all")
+    @ExceptionHandler(value = CannotAcquireLockException.class)
+    public Result<?> cannotAcquireLockException(HttpServletRequest req, NumberFormatException e) {
+        log.error("死锁异常：{}，为了避免锁表，请使用'select * from information_schema.INNODB_TRX' 如果锁表了，快速kill 某个trx_mysql_thread_id，以解除锁表", e.getMessage());
+        return GlobalExceptionHandler.result(e, req, "锁表异常！请检查管理员处理！");
     }
 }
