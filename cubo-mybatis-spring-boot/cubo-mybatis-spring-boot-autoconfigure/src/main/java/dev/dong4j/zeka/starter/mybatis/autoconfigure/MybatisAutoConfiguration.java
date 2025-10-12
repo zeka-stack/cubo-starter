@@ -17,6 +17,9 @@ import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.enums.LibraryEnum;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import dev.dong4j.zeka.kernel.common.start.ZekaComponentBean;
+import dev.dong4j.zeka.starter.mybatis.dict.DataBindInterceptor;
+import dev.dong4j.zeka.starter.mybatis.dict.DefaultDataBind;
+import dev.dong4j.zeka.starter.mybatis.dict.IDataBind;
 import dev.dong4j.zeka.starter.mybatis.handler.ClientIdMetIdaObjectHandler;
 import dev.dong4j.zeka.starter.mybatis.handler.GeneralEnumTypeHandler;
 import dev.dong4j.zeka.starter.mybatis.handler.MetaHandlerChain;
@@ -308,6 +311,30 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     public SensitiveFieldEncryptIntercepter sensitiveFieldEncryptIntercepter(@NotNull MybatisProperties mybatisProperties) {
         SqlUtils.setSensitiveKey(mybatisProperties.getSensitiveKey());
         return new SensitiveFieldEncryptIntercepter(mybatisProperties.getSensitiveKey());
+    }
+
+    /**
+     * Data bind
+     *
+     * @return the data bind
+     * @since 2024.2.0
+     */
+    @Bean
+    @ConditionalOnMissingBean(IDataBind.class)
+    public IDataBind dataBind() {
+        return new DefaultDataBind();
+    }
+
+    /**
+     * Data bind interceptor
+     *
+     * @return the data bind interceptor
+     * @since 2024.2.0
+     */
+    @Bean
+    @ConditionalOnMissingBean(DataBindInterceptor.class)
+    public DataBindInterceptor dataBindInterceptor(IDataBind dataBind) {
+        return new DataBindInterceptor(dataBind);
     }
 
     /**

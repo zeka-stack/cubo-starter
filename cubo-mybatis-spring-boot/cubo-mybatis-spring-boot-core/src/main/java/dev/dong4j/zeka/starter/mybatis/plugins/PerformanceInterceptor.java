@@ -235,7 +235,10 @@ public class PerformanceInterceptor implements Interceptor {
                 map.put("tenantId", -1L);
             }
             map.put("createTime", new Date());
-            SpringContext.publishEvent(new SqlExecuteTimeoutEvent(map));
+            try {
+                SpringContext.publishEvent(new SqlExecuteTimeoutEvent(map));
+            } catch (Exception ignored) {
+            }
         } else {
             log.debug("{}", formatSql);
         }
