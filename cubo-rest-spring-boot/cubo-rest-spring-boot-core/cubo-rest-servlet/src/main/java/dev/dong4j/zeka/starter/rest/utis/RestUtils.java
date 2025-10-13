@@ -127,7 +127,7 @@ public class RestUtils {
      * @return true 表示是框架指定包路径下的类，false 表示不是
      * @since 1.0.0
      */
-    public boolean atomClass(@NotNull MethodParameter returnType) {
+    public boolean zekaClass(@NotNull MethodParameter returnType) {
         return StringUtils.containsIgnoreCase(returnType.getDeclaringClass().getPackage().getName(), App.BASE_PACKAGES)
             || StringUtils.containsIgnoreCase(returnType.getDeclaringClass().getPackage().getName(), ZekaStack.class.getPackageName());
     }
