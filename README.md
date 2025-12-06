@@ -303,19 +303,19 @@ public class UserController {
 
 每个模块都有详细的配置选项，请参考各模块的 README 文档：
 
-- [启动器配置](cubo-launcher-spring-boot/README.md#配置属性)
-- [日志系统配置](cubo-logsystem-spring-boot/README.md#配置属性)
-- [消息处理配置](cubo-messaging-spring-boot/README.md#配置属性)
-- [数据访问配置](cubo-mybatis-spring-boot/README.md#配置属性)
-- [API 文档配置](cubo-openapi-spring-boot/README.md#配置属性)
-- [REST API 配置](cubo-rest-spring-boot/README.md#配置属性)
-- [端点管理配置](cubo-endpoint-spring-boot/README.md#配置属性)
+- [[cubo-starter/cubo-launcher-spring-boot/index#配置属性|启动器配置]]
+- [[cubo-starter/cubo-logsystem-spring-boot/index#配置属性|日志系统配置]]
+- [[cubo-starter/cubo-messaging-spring-boot/index#配置属性|消息处理配置]]
+- [[cubo-starter/cubo-mybatis-spring-boot/index#配置属性|数据访问配置]]
+- [[cubo-starter/cubo-openapi-spring-boot/index#配置属性|API 文档配置]]
+- [[cubo-starter/cubo-rest-spring-boot/index#配置属性|REST API 配置]]
+- [[cubo-starter/cubo-endpoint-spring-boot/index#配置属性|端点管理配置]]
 
 ## 示例项目
 
 我们提供了完整的示例项目，展示如何使用各个模块：
 
-- [cubo-starter-examples](../cubo-starter-examples/): 包含所有模块的使用示例
+- [cubo-starter-examples](https://github.com/zeka-stack/cubo-starter-examples): 包含所有模块的使用示例
 
 ## 最佳实践
 
@@ -373,7 +373,7 @@ public class UserController {
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+本项目采用 MIT 许可证 - 查看 [LICENSE](https://github.com/zeka-stack/zeka-stack/blob/main/LICENSE) 文件了解详情。
 
 ## 联系方式
 
