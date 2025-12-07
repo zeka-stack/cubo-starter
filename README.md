@@ -1,4 +1,8 @@
-# Cubo Starter
+---
+published: 2022.03.07
+---
+
+# Starter 组件
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)

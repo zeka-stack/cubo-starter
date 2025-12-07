@@ -1,4 +1,8 @@
-# Cubo Dict Spring Boot
+---
+published: 2022.05.09
+---
+
+# 字典组件
 
 ## 概述
 
@@ -230,6 +234,6 @@ public class CustomDictionaryEventListener {
 
 ## 相关链接
 
-- [Zeka Stack 框架文档](../../README.md)
+- [[cubo-starter/index|Starter 组件]]
 - [Spring Boot 自动配置](https://docs.spring.io/spring-boot/docs/current/reference/html/auto-configuration-classes.html)
 - [MyBatis Plus 文档](https://baomidou.com/)

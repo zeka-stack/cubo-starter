@@ -1,3 +1,7 @@
+---
+published: 2022.03.21
+---
+
 # 🌟 Spring Boot 配置热更新框架（非 Spring Cloud 环境）
 
 ## **📌 项目目标**

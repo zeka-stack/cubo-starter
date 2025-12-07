@@ -1,4 +1,8 @@
-# Cubo Launcher Spring Boot
+---
+published: 2022.03.21
+---
+
+# 应用启动器
 
 ## 概述
 

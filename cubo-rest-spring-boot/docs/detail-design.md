@@ -1,4 +1,8 @@
-# Cubo REST Spring Boot 组件设计文档
+---
+published: 2022.04.04
+---
+
+# 组件
 
 ## 概述
 

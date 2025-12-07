@@ -1,4 +1,8 @@
-# Cubo LogSystem Spring Boot 组件设计文档
+---
+published: 2022.03.28
+---
+
+# 日志系统
 
 ## 概述
 

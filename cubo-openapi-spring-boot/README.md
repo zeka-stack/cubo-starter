@@ -1,4 +1,8 @@
-# Cubo OpenAPI Spring Boot
+---
+published: 2022.04.25
+---
+
+# API 文档
 
 ## 概述
 

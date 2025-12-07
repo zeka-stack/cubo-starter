@@ -1,3 +1,7 @@
+---
+published: 2022.03.07
+---
+
 # Cubo Starter 总体设计文档
 
 ## 概述

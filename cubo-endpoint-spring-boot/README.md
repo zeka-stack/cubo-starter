@@ -1,4 +1,8 @@
-# Cubo Endpoint Spring Boot
+---
+published: 2022.05.02
+---
+
+# 端点管理
 
 ## 概述
 

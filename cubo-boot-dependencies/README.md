@@ -1,4 +1,8 @@
-# Cubo Boot Dependencies
+---
+published: 2022.03.14
+---
+
+# 依赖管理
 
 ## 概述
 
