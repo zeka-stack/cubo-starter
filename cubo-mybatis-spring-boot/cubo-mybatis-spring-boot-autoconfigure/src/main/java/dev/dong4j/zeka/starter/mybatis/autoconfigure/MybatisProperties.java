@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.autoconfigure;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * MyBatis 配置属性类
@@ -55,4 +56,25 @@ public class MybatisProperties extends ZekaProperties {
     private boolean enableIllegalSqlInterceptor = Boolean.FALSE;
     /** SQL执行分析插件, 拦截一些整表操作 */
     private boolean enableSqlExplainInterceptor = Boolean.FALSE;
+
+    /** 用于执行 JDBC 检查的实例 */
+    private JdbcCheck jdbcCheck = new JdbcCheck();
+
+    /**
+     * JDBC 检查配置类
+     * <p>
+     * 用于控制是否启用 JDBC 相关的检查逻辑, 通过设置 enabled 属性来决定是否执行相关检查操作
+     *
+     * @author dong4j
+     * @version 1.0.0
+     * @email "mailto:dong4j@gmail.com"
+     * @date 2025.12.14
+     * @since 2.0.0
+     */
+    @Getter
+    @Setter
+    private static class JdbcCheck {
+        /** 是否开启 */
+        private boolean enabled = true;
+    }
 }

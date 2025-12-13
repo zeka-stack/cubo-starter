@@ -1,5 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.spi;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
@@ -7,10 +13,6 @@ import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.NetUtils;
 import dev.dong4j.zeka.processor.annotation.AutoService;
-import java.util.Map;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * Druid 数据源启动初始化器
@@ -67,9 +69,9 @@ public class DruidLauncherInitiation implements LauncherInitiation {
             return ChainMap.build(0);
         }
         return ChainMap.build(36)
-            .put(ConfigKey.DruidConfigKey.DRIVER_CLASS, "com.mysql.cj.jdbc.Driver")
+            // .put(ConfigKey.DruidConfigKey.DRIVER_CLASS, "com.mysql.cj.jdbc.Driver")
             .put(ConfigKey.DruidConfigKey.TYPE, "com.alibaba.druid.pool.DruidDataSource")
-            .put(ConfigKey.DruidConfigKey.DB_TYPE, "mysql")
+            // .put(ConfigKey.DruidConfigKey.DB_TYPE, "mysql")
             .put(ConfigKey.DruidConfigKey.INITIALSIZE, 5)
             .put(ConfigKey.DruidConfigKey.MINIDLE, 5)
             .put(ConfigKey.DruidConfigKey.MAXACTIVE, 20)

@@ -10,6 +10,22 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+
+import java.io.Serializable;
+import java.util.List;
+
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
@@ -33,19 +49,7 @@ import dev.dong4j.zeka.starter.mybatis.plugins.PerformanceInterceptor;
 import dev.dong4j.zeka.starter.mybatis.plugins.SensitiveFieldDecryptIntercepter;
 import dev.dong4j.zeka.starter.mybatis.plugins.SensitiveFieldEncryptIntercepter;
 import dev.dong4j.zeka.starter.mybatis.util.SqlUtils;
-import java.io.Serializable;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 /**
  * MyBatis Plus 自动配置类
@@ -73,9 +77,14 @@ import org.springframework.context.annotation.Profile;
 @AutoConfiguration
 @ConditionalOnEnabled(value = MybatisProperties.PREFIX)
 @ConditionalOnClass(MybatisPlusAutoConfiguration.class)
-@EnableConfigurationProperties(MybatisProperties.class)
+@EnableConfigurationProperties( {MybatisProperties.class, DataSourceProperties.class})
 public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
 
+    /**
+     * 初始化 MybatisAutoConfiguration 配置类
+     * <p>
+     * 在配置类实例化时记录日志信息, 用于调试或监控自动配置的加载过程
+     */
     public MybatisAutoConfiguration() {
         log.info("启动自动配置: [{}]", this.getClass());
     }
