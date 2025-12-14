@@ -87,7 +87,7 @@ Materials）使用，为其他模块提供统一的依赖版本控制。
     <!-- 引入第三方依赖（版本由 BOM 管理） -->
     <dependency>
         <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-boot-starter</artifactId>
+        <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
     </dependency>
 </dependencies>
 ```
