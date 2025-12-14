@@ -1,5 +1,8 @@
 package dev.dong4j.zeka.starter.dict.service.impl;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.starter.dict.dao.DictionaryValueMapper;
 import dev.dong4j.zeka.starter.dict.entity.converter.DictionaryValueConverter;
@@ -10,8 +13,6 @@ import dev.dong4j.zeka.starter.dict.service.DictionaryValueService;
 import dev.dong4j.zeka.starter.mybatis.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p> 字典值表 服务接口实现类 </p>
@@ -38,7 +39,7 @@ public class DictionaryValueServiceImpl extends BaseServiceImpl<DictionaryValueM
     public DictionaryValueDTO detail(Long id) {
         final DictionaryValue po = this.baseMapper.selectById(id);
         BaseCodes.DATA_ERROR.notNull(po);
-        return DictionaryValueConverter.INSTANCE.dto(po);
+        return DictionaryValueConverter.INSTANCE.p2d(po);
     }
 
     /**
