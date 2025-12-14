@@ -2,6 +2,18 @@ package dev.dong4j.zeka.starter.dict.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
 import dev.dong4j.zeka.kernel.common.api.BaseCodes;
 import dev.dong4j.zeka.kernel.validation.group.UpdateGroup;
 import dev.dong4j.zeka.starter.dict.entity.dto.DictionaryValueDTO;
@@ -13,16 +25,7 @@ import dev.dong4j.zeka.starter.rest.annotation.RestControllerWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
-import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * <p> 字典值表 控制器 </p>
@@ -92,7 +95,7 @@ public class DictionaryValueController extends ServletController {
     @GetMapping("/{id}")
     @Operation(summary = "详情")
     @ApiOperationSupport(order = 4)
-    public DictionaryValueDTO detail(@PathVariable("id") Long id) {
+    public DictionaryValueDTO detail(@PathVariable Long id) {
         return this.dictionaryValueService.detail(id);
     }
 
@@ -106,7 +109,7 @@ public class DictionaryValueController extends ServletController {
     @PutMapping("/{id}")
     @Operation(summary = "修改数据")
     @ApiOperationSupport(order = 5)
-    public void edit(@PathVariable("id") Long id, @Validated({UpdateGroup.class, Default.class}) @RequestBody DictionaryValueForm form) {
+    public void edit(@PathVariable Long id, @Validated( {UpdateGroup.class, Default.class}) @RequestBody DictionaryValueForm form) {
         BaseCodes.PARAM_VERIFY_ERROR.isTrue(id.equals(form.getId()), "id 不一致");
         BaseCodes.DATA_ERROR.notNull(dictionaryValueService.getById(form.getId()), "指定的数据不存在: " + id);
         this.dictionaryValueService.edit(form);
