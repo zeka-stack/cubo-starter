@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.util;
 
+import org.jetbrains.annotations.Contract;
+
 import dev.dong4j.zeka.kernel.common.util.AesUtils;
 import dev.dong4j.zeka.kernel.common.util.Base64Utils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.Contract;
 
 /**
  * MyBatis SQL工具类，提供敏感数据加密和SQL格式化功能

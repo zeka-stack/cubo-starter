@@ -1,11 +1,12 @@
 package dev.dong4j.zeka.starter.mybatis.util;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
-import org.jetbrains.annotations.Contract;
 
 /**
  * Performs formatting of basic SQL statements (DML + query).
@@ -363,7 +364,8 @@ public class SqlFormatter {
         }
 
         /**
-         * End new clause
+         * 结束新语句块
+         * <p> 处理 SQL 语句块结束时的格式化逻辑, 包括缩进调整和状态更新 </p>
          *
          * @since 1.0.0
          */
