@@ -1,5 +1,27 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Properties;
+
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
@@ -12,25 +34,7 @@ import dev.dong4j.zeka.starter.endpoint.ReactiveEndpointLauncherInitiation;
 import dev.dong4j.zeka.starter.endpoint.autoconfigure.EndpointProperties;
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.reactive.ReactiveInitializationService;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.RequestPredicates;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
 
 /**
  * Reactive 环境下的启动信息自动配置类
@@ -72,6 +76,8 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
      * 如果在 classpath 下存在 git.properties 文件，则将访问 /start 的请求
      * 重定向到 /git 端点，用于显示 Git 相关信息。
      * <p>
+     * 同时提供健康检查接口 /check，用于检查应用是否正常运行。
+     * <p>
      * 使用 Reactive 方式处理请求和响应，支持非阻塞式操作。
      *
      * @return 路由函数定义
@@ -81,7 +87,7 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
     @Bean
     static RouterFunction<ServerResponse> routerFunction() {
         // 创建路由函数，将 GET /start 请求重定向到 Git 信息端点
-        return RouterFunctions.route(
+        RouterFunction<ServerResponse> startRoute = RouterFunctions.route(
             // 匹配 GET 请求到 /start 路径
             RequestPredicates.GET(LibraryEnum.START_URL),
             // 返回临时重定向响应，重定向到本地 Git 信息端点
@@ -91,6 +97,18 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
                 + ConfigKit.getPort()
                 + ConfigKit.getContextPath()
                 + "/git")).build());
+
+        // 创建健康检查路由，返回 "ok" 状态
+        RouterFunction<ServerResponse> checkRoute = RouterFunctions.route(
+            // 匹配 GET 请求到 /check 路径
+            RequestPredicates.GET("/check"),
+            // 返回 JSON 格式的健康检查响应
+            request -> ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(R.succeed("ok"))));
+
+        // 组合多个路由函数
+        return startRoute.and(checkRoute);
     }
 
     /**

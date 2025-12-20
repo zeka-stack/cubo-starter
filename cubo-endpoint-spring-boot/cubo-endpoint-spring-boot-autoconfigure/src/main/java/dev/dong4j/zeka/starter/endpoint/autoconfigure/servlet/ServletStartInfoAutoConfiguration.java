@@ -1,5 +1,18 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet;
 
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.DispatcherServlet;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
@@ -14,29 +27,18 @@ import dev.dong4j.zeka.starter.endpoint.servlet.ServletInitializationService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * Servlet 环境下的启动信息自动配置类
- *
+ * <p>
  * 该类为传统的 Servlet Web 环境提供启动信息和 Git 信息相关的端点配置。
  * 主要包括：
- *
+ * <p>
  * 1. 创建用于显示应用版本和 Git 信息的 Actuator 端点
  * 2. 配置 Servlet 环境下的初始化服务
  * 3. 支持根据是否存在 git.properties 文件来提供不同的信息展示
- *
+ * <p>
  * 仅在 Servlet Web 环境下生效，使用条件注解确保兼容性。
  *
  * @author dong4j
@@ -63,7 +65,7 @@ public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration 
 
     /**
      * 创建启动信息端点
-     *
+     * <p>
      * 创建用于显示应用启动信息和 Git 相关信息的 Actuator 端点。
      * 该端点可以通过 /actuator/start 访问。
      *
@@ -77,7 +79,7 @@ public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration 
 
     /**
      * 启动信息 Actuator 端点内部类
-     *
+     * <p>
      * 提供用于显示应用版本信息和 Git 信息的 Web 端点。
      * 通过 @WebEndpoint 注解注册为 id 为 "start" 的 Actuator 端点。
      * 支持根据 git.properties 文件的存在情况提供不同的响应。
@@ -96,7 +98,7 @@ public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration 
 
         /**
          * 获取应用版本信息
-         *
+         * <p>
          * 显示 Git 相关信息，如果本地编译运行没有生成 git.properties 文件，
          * 则直接重定向到 /actuator/info 端点。
          * 如果存在 git.properties 文件，则读取并返回其中的所有属性。
@@ -130,7 +132,7 @@ public class ServletStartInfoAutoConfiguration implements ZekaAutoConfiguration 
 
     /**
      * 创建 Servlet 初始化服务
-     *
+     * <p>
      * 在 Servlet 环境下创建初始化服务实现，用于应用预热。
      * 仅在没有其他 InitializationService 实现时才会创建。
      *

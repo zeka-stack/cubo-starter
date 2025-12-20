@@ -1,17 +1,7 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet;
 
 import com.google.common.collect.Lists;
-import dev.dong4j.zeka.kernel.common.api.R;
-import dev.dong4j.zeka.kernel.common.api.Result;
-import dev.dong4j.zeka.kernel.common.util.SecurityUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.Builder;
-import lombok.Data;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -24,17 +14,30 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import dev.dong4j.zeka.kernel.common.api.R;
+import dev.dong4j.zeka.kernel.common.api.Result;
+import dev.dong4j.zeka.kernel.common.util.SecurityUtils;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import lombok.Builder;
+import lombok.Data;
+
 /**
  * 项目信息端点自动配置类
- *
+ * <p>
  * 该类提供了获取应用中所有接口信息的 REST 端点。
  * 主要功能包括：
- *
+ * <p>
  * 1. 扫描和收集应用中所有的 RequestMapping 信息
  * 2. 提供接口的详细信息，包括 URL、HTTP 方法、参数类型等
  * 3. 过滤掉默认的系统接口，只显示业务相关的接口
  * 4. 支持 Spring Boot 2.x 和 3.x 的兼容性
- *
+ * <p>
  * 仅在 Servlet Web 环境下生效，适用于传统的 Spring MVC 应用。
  *
  * @author dong4j
@@ -55,13 +58,13 @@ public class ProjectInfoEndpointAutoConfiguration {
 
     /**
      * 获取所有应用接口信息
-     *
+     * <p>
      * 扫描和收集应用中所有的 RequestMapping 信息，包括：
      * - HTTP 请求方法（GET、POST 等）
      * - 请求 URL 路径
      * - Controller 类名和方法名
      * - 方法参数类型
-     *
+     * <p>
      * 会过滤掉默认的系统接口，只返回业务相关的接口信息。
      * 支持 Spring Boot 2.x 和 3.x 的兼容性处理。
      *
@@ -74,8 +77,10 @@ public class ProjectInfoEndpointAutoConfiguration {
         // 创建结果列表
         List<RequestToMethodItem> list = Lists.newArrayList();
         // 获取 Spring MVC 的请求处理器映射
+        // 使用 Bean 名称明确指定，避免在有多个 RequestMappingHandlerMapping 时出现冲突
+        // 例如：requestMappingHandlerMapping 和 controllerEndpointHandlerMapping
         RequestMappingHandlerMapping requestMappingHandlerMapping =
-            this.applicationContext.getBean(RequestMappingHandlerMapping.class);
+            this.applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
         // 获取所有的处理器方法
         Map<RequestMappingInfo, HandlerMethod> handlerMethods =
             requestMappingHandlerMapping.getHandlerMethods();
@@ -142,15 +147,30 @@ public class ProjectInfoEndpointAutoConfiguration {
     }
 
     /**
-     * 请求到方法的映射信息对象
+     * 健康检查接口
+     * <p>
+     * 用于检查应用是否正常运行，通常用于负载均衡器或监控系统的健康检查。
+     * 返回简单的状态信息，表示应用服务正常。
      *
+     * @return 健康检查响应结果
+     * @since 1.0.0
+     */
+    @Schema(description = "健康检查")
+    @GetMapping(value = "/check")
+    public Result<String> check() {
+        return R.succeed("ok");
+    }
+
+    /**
+     * 请求到方法的映射信息对象
+     * <p>
      * 该内部类用于封装单个接口的详细信息，包括：
      * - HTTP 请求方法（GET、POST 等）
      * - 请求 URL 路径
      * - Controller 类的完整名称
      * - 处理方法名
      * - 方法参数类型数组
-     *
+     * <p>
      * 使用 Lombok 注解简化代码，支持构建者模式和数据访问。
      *
      * @author dong4j
