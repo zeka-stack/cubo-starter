@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.dict.entity.form;
 
+import java.io.Serial;
+
 import dev.dong4j.zeka.kernel.common.base.BaseQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,13 +13,14 @@ import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 /**
- * <p> 字典值表 分页查询参数实体 (根据业务需求添加字段) </p>
+ * 字典值表查询类
+ * <p> 用于封装字典值表相关的查询条件和参数, 继承自基础查询类 BaseQuery, 提供对字典值表数据的查询支持.
  *
  * @author dong4j
  * @version 1.0.0
- * @email "mailto:dong4j@dong4j@gmail.com"
- * @date 2025.09.10 23:19
- * @since 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Data
 @SuperBuilder
@@ -29,11 +31,19 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @Schema(name = "字典值表-查询")
 public class DictionaryValueQuery extends BaseQuery<Long> {
-    /** serialVersionUID */
+    /**
+     * 序列化版本 UID
+     * <p>
+     * 用于支持序列化的版本控制, 确保在反序列化时与序列化时的类版本一致.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /** todo: [自动生成的字段, 避免此实体没有字段导致启动失败的问题, 可删除] */
+    /**
+     * 自动生成的字段, 需要删除!!!
+     *
+     * @deprecated 该字段为自动生成, 无实际用途, 建议删除.
+     */
     @Schema(description = "自动生成的字段, 需要删除!!!")
     private String autoField;
 }

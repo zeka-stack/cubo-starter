@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.check;
 
+import com.google.common.collect.Maps;
+
 import org.springframework.core.env.Environment;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Map;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@SuppressWarnings("PMD.UndefineMagicConstantRule")
 public class ShardingSphereJdbcUrlProvider implements JdbcUrlProvider {
 
     /**
@@ -29,7 +31,7 @@ public class ShardingSphereJdbcUrlProvider implements JdbcUrlProvider {
      */
     @Override
     public Map<String, String> getJdbcUrls(Environment environment) {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = Maps.newHashMapWithExpectedSize(2);
 
         String url = environment.getProperty("spring.datasource.url");
         if (url == null || !url.startsWith("jdbc:shardingsphere:")) {
@@ -37,10 +39,7 @@ public class ShardingSphereJdbcUrlProvider implements JdbcUrlProvider {
         }
 
         // 只能给出“提示级”告警
-        result.put(
-            "shardingsphere",
-            "jdbc:shardingsphere:(real datasource defined in config file)"
-                  );
+        result.put("shardingsphere", "jdbc:shardingsphere:(real datasource defined in config file)");
 
         return result;
     }

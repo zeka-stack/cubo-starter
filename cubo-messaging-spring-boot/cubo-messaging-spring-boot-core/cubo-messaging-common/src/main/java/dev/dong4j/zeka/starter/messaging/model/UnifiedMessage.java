@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.messaging.model;
 
-import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
 import java.util.HashMap;
 import java.util.Map;
+
+import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,7 +61,7 @@ public class UnifiedMessage {
      * 构造方法
      *
      * @param destination 消息目的地
-     * @param payload 消息负载
+     * @param payload     消息负载
      */
     public UnifiedMessage(String destination, Object payload) {
         this.destination = destination;
@@ -70,7 +71,7 @@ public class UnifiedMessage {
     /**
      * 添加消息头
      *
-     * @param key 消息头键
+     * @param key   消息头键
      * @param value 消息头值
      * @return 当前消息对象，支持链式调用
      */

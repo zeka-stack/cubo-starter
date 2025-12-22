@@ -9,14 +9,14 @@ import java.lang.annotation.Target;
 
 /**
  * 原始响应结果注解
- *
+ * <p>
  * 该注解用于标识方法，表示该方法的返回结果不需要被包装，直接返回原始值。
  * 主要用于在使用 @RestController 且返回结果为基础类型和 String 时，
  * 需要跳过框架的自动包装机制，直接返回原始值的场景。
- *
+ * <p>
  * 与 @ResponseWrapper 注解相反，被 @OriginalResponse 标识的方法不会
  * 被 ResponseWrapperAdvice 处理，直接返回方法的原始返回值。
- *
+ * <p>
  * 使用场景：
  * - 返回简单的字符串或数字
  * - 返回文件流或二进制数据

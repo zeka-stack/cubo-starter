@@ -3,29 +3,31 @@ package dev.dong4j.zeka.starter.mybatis.service.cqrs;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.Mapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
+
+import org.apache.ibatis.annotations.Param;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 基础命令 Mapper 接口
- *
+ * <p>
  * 该接口定义了 CQRS（命令查询职责分离）模式中的命令操作规范。
  * 主要用于处理数据的写入操作（增删改），与查询操作分离。
- *
+ * <p>
  * 主要功能：
  * 1. 提供数据插入操作方法
  * 2. 提供数据删除操作方法（单个、批量、条件删除）
  * 3. 提供数据更新操作方法（按 ID 更新、条件更新）
  * 4. 继承 MyBatis Plus 的 Mapper 接口，获得基础功能
- *
+ * <p>
  * CQRS 模式优势：
  * - 读写分离，提高系统性能
  * - 写操作优化，可以使用专门的写入模型
  * - 职责清晰，便于维护和扩展
  * - 支持复杂的事务处理场景
- *
+ * <p>
  * 使用场景：
  * - 需要明确区分读写操作的系统
  * - 高并发写入场景

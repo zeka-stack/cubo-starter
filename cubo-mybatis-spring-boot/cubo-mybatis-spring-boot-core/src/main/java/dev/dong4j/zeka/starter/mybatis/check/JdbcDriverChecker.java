@@ -1,11 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.check;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import java.util.List;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JDBC 驱动检查器类
@@ -20,10 +20,8 @@ import java.util.Map;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@Slf4j
 public final class JdbcDriverChecker {
-
-    /** 日志记录器, 用于记录 JdbcDriverChecker 类的相关日志信息 */
-    private static final Logger log = LoggerFactory.getLogger(JdbcDriverChecker.class);
 
     /**
      * 数据库类型解析器

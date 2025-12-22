@@ -1,20 +1,5 @@
 package dev.dong4j.zeka.starter.rest.handler;
 
-import dev.dong4j.zeka.kernel.common.api.Result;
-import dev.dong4j.zeka.kernel.common.asserts.Assertions;
-import dev.dong4j.zeka.kernel.common.base.BasePage;
-import dev.dong4j.zeka.kernel.common.constant.BasicConstant;
-import dev.dong4j.zeka.kernel.common.util.DataTypeUtils;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import dev.dong4j.zeka.starter.rest.advice.ResponseWrapperAdvice;
-import dev.dong4j.zeka.starter.rest.annotation.OriginalResponse;
-import dev.dong4j.zeka.starter.rest.utis.RestUtils;
-import jakarta.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
@@ -26,24 +11,41 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import dev.dong4j.zeka.kernel.common.api.Result;
+import dev.dong4j.zeka.kernel.common.asserts.Assertions;
+import dev.dong4j.zeka.kernel.common.base.BasePage;
+import dev.dong4j.zeka.kernel.common.constant.BasicConstant;
+import dev.dong4j.zeka.kernel.common.util.DataTypeUtils;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import dev.dong4j.zeka.starter.rest.advice.ResponseWrapperAdvice;
+import dev.dong4j.zeka.starter.rest.annotation.OriginalResponse;
+import dev.dong4j.zeka.starter.rest.utis.RestUtils;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 自定义返回值处理器
- *
+ * <p>
  * 该类是 Spring MVC 的自定义返回值处理器，用于在响应返回给客户端之前对返回值进行预处理和格式化。
  * 它采用装饰器模式包装了 Spring 的 RequestResponseBodyMethodProcessor，在保持原有功能的基础上
  * 增加了自动数据包装、类型转换和格式统一等功能。
- *
+ * <p>
  * 主要功能：
  * 1. 基础数据类型自动包装：将原始类型、String 等包装为统一的 Map 结构
  * 2. 分页数据处理：自动提取 BasePage 中的分页信息并返回
  * 3. 内容类型检测：根据 Content-Type 和 produces 配置决定是否进行包装
  * 4. 原始响应支持：通过 @OriginalResponse 注解跳过自动包装
  * 5. 字符串预处理：自动去除 String 类型返回值的首尾空白
- *
+ * <p>
  * 处理优先级：
  * 该处理器的执行优先级在 {@link ResponseWrapperAdvice} 之前，这样可以在全局响应包装之前
  * 先对返回值进行预处理，确保数据格式的统一性。
- *
+ * <p>
  * 包装条件：
  * 只有同时满足以下条件时才会进行数据包装：
  * 1. 方法上没有 @OriginalResponse 注解标识
@@ -51,35 +53,35 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
  * 3. 没有显式设置 produces 属性或 produces 为 "application/json"
  * 4. 返回值类型属于框架指定的包路径下的类
  * 5. 返回值类型支持响应通知处理
- *
+ * <p>
  * 数据包装策略：
  * - 基础类型（int、long、String等）：包装为 {"value": data} 格式的 Map
  * - Result 类型：提取其中的 data 字段进行包装
  * - BasePage 类型：提取其中的分页信息（pagination）
  * - 其他复杂类型：保持原样，交由后续的 ResponseWrapperAdvice 处理
- *
+ * <p>
  * 内容类型处理：
  * 1. 显式设置了 Content-Type：
- *    - 如果是 "application/json"：进行数据包装
- *    - 如果是其他类型：跳过包装，保持原样
- *
+ * - 如果是 "application/json"：进行数据包装
+ * - 如果是其他类型：跳过包装，保持原样
+ * <p>
  * 2. 未设置 Content-Type：
- *    - 检查 @RequestMapping 的 produces 属性
- *    - 未设置或设置为 "application/json"：进行数据包装
- *    - 设置为其他类型：跳过包装
- *
+ * - 检查 @RequestMapping 的 produces 属性
+ * - 未设置或设置为 "application/json"：进行数据包装
+ * - 设置为其他类型：跳过包装
+ * <p>
  * 使用场景：
  * - 统一 Web 端和客户端的数据模型，确保 data 字段都是 Object 类型
  * - 简化前端数据处理，基础类型也能通过统一的 data 字段访问
  * - 支持分页数据的自动解包，减少前端处理复杂度
  * - 保持与现有 API 的兼容性，支持原始响应格式
- *
+ * <p>
  * 设计特点：
  * - 装饰器模式：扩展而不修改 Spring 原有功能
  * - 条件化处理：只在需要时才进行数据包装
  * - 类型智能识别：根据返回值类型选择合适的处理策略
  * - 向后兼容：支持通过注解禁用自动包装
- *
+ * <p>
  * 注意事项：
  * - 该处理器需要与 ResponseWrapperAdvice 配合使用
  * - 包装逻辑只对特定包路径下的类生效
@@ -98,7 +100,7 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
 
     /**
      * 构造函数，创建自定义返回值处理器
-     *
+     * <p>
      * 该构造函数接受一个 RequestResponseBodyMethodProcessor 实例作为装饰目标。
      * 通过装饰器模式，在保持原有处理器功能的基础上，增加了自定义的数据包装逻辑。
      *
@@ -111,7 +113,7 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
 
     /**
      * 检查是否支持处理指定的返回类型
-     *
+     * <p>
      * 该方法直接委托给被装饰的目标处理器来决定是否支持处理特定的返回类型。
      * 这样可以确保装饰器与原始处理器在支持的返回类型上保持一致。
      *
@@ -126,10 +128,10 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
 
     /**
      * 处理返回结果，执行自定义的数据包装逻辑
-     *
+     * <p>
      * 该方法是整个处理器的核心，负责在返回值被写入响应之前进行各种预处理操作。
      * 它的执行优先级在 {@link ResponseWrapperAdvice} 之前，主要用于处理基础数据类型的自动包装。
-     *
+     * <p>
      * 处理流程：
      * 1. 字符串预处理：如果返回值是 String，自动去除首尾空白
      * 2. 类型检查：检查返回类型是否属于框架指定的包路径且支持通知处理
@@ -138,16 +140,16 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
      * 5. Produces 判断：检查 @RequestMapping 的 produces 属性
      * 6. 数据包装：满足条件时调用 returnValueWrapper 进行包装
      * 7. 委托处理：最终调用目标处理器完成响应写入
-     *
+     * <p>
      * 包装条件组合：
      * - 必须同时满足：没有 @OriginalResponse 注解 + 类型检查通过 + Content-Type 或 Produces 检查通过
-     *
+     * <p>
      * Content-Type 处理优先级：
      * 1. 显式设置了 response.setContentType("application/json")：直接进行包装
      * 2. 显式设置了其他 Content-Type：不进行包装，忽略 produces 配置
      * 3. 未设置 Content-Type：检查 @RequestMapping 的 produces 属性
-     *    - 未设置 produces 或 produces="application/json"：进行包装
-     *    - 设置了其他 produces 值：不进行包装
+     * - 未设置 produces 或 produces="application/json"：进行包装
+     * - 设置了其他 produces 值：不进行包装
      *
      * @param returnValue  需要处理的返回值
      * @param returnType   返回值的类型参数信息
@@ -180,7 +182,7 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
 
                 // 没有使用 response 写数据 或者显式设置了 Content-Type 为 application/json
                 boolean contentTypeIsJson = StringUtils.isNotBlank(contentType)
-                    && MediaType.parseMediaType(contentType).equalsTypeAndSubtype(MediaType.APPLICATION_JSON);
+                                            && MediaType.parseMediaType(contentType).equalsTypeAndSubtype(MediaType.APPLICATION_JSON);
 
                 // 显式使用 response.setContentType("application/json") 就优先使用
                 if (contentTypeIsJson) {
@@ -192,7 +194,7 @@ public class CustomizeReturnValueHandler implements HandlerMethodReturnValueHand
                         // 如果 rest api 上使用了 produces 属性, 则需要判断是否为 json
                         String[] serverProduces = requestMapping.produces();
                         String produceValue = serverProduces.length == 0 ? null
-                            : emptyToNull(serverProduces[0]);
+                                                                         : emptyToNull(serverProduces[0]);
                         // 没有显式设置 produces 或 produces 为 json 则包装
                         if (produceValue == null
                             || MediaType.parseMediaType(produceValue).equalsTypeAndSubtype(MediaType.APPLICATION_JSON)) {

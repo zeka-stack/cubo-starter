@@ -1,15 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.plugins;
 
 import com.baomidou.mybatisplus.core.toolkit.Constants;
-import dev.dong4j.zeka.kernel.common.annotation.SensitiveField;
-import dev.dong4j.zeka.kernel.common.util.AesUtils;
-import dev.dong4j.zeka.kernel.common.util.Base64Utils;
-import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
-import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -21,6 +13,17 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import dev.dong4j.zeka.kernel.common.annotation.SensitiveField;
+import dev.dong4j.zeka.kernel.common.util.AesUtils;
+import dev.dong4j.zeka.kernel.common.util.Base64Utils;
+import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
+import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
 
 /**
  * <p>Description: </p>

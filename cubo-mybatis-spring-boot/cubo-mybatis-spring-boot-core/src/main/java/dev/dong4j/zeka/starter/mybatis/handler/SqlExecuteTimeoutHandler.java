@@ -1,14 +1,16 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
-import dev.dong4j.zeka.kernel.common.event.BaseEventHandler;
-import dev.dong4j.zeka.kernel.common.event.SqlExecuteTimeoutEvent;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
+
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.event.BaseEventHandler;
+import dev.dong4j.zeka.kernel.common.event.SqlExecuteTimeoutEvent;
 
 /**
  * <p>Description: 异步监听日志事件 </p>
@@ -21,7 +23,7 @@ import org.springframework.scheduling.annotation.Async;
  */
 public class SqlExecuteTimeoutHandler extends BaseEventHandler<SqlExecuteTimeoutEvent> {
     /** 日志输出到指定的文件 */
-    private static final Logger log = LoggerFactory.getLogger("sql.timing");
+    private static final Logger LOG = LoggerFactory.getLogger("sql.timing");
 
     /**
      * 发送日志
@@ -35,6 +37,6 @@ public class SqlExecuteTimeoutHandler extends BaseEventHandler<SqlExecuteTimeout
     @EventListener
     public void handler(@NotNull SqlExecuteTimeoutEvent event) {
         Map<String, Object> source = event.getSource();
-        log.warn("{}", source.get("formatSql"));
+        LOG.warn("{}", source.get("formatSql"));
     }
 }

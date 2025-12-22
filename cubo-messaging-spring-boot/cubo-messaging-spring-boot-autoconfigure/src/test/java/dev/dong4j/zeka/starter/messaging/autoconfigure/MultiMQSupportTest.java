@@ -1,8 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -11,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ActiveProfiles;
+
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
 
 import static org.hamcrest.Matchers.any;
 import static org.mockito.ArgumentMatchers.anyString;

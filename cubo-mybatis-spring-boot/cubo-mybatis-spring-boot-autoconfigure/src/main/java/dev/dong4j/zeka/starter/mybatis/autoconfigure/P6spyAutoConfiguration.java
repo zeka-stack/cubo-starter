@@ -4,13 +4,7 @@ import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyDriver;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.option.SystemProperties;
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
-import dev.dong4j.zeka.kernel.common.exception.StarterException;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.starter.mybatis.plugins.PerformanceInterceptor;
-import java.lang.reflect.Field;
-import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -18,15 +12,24 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.kernel.common.exception.StarterException;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.mybatis.plugins.PerformanceInterceptor;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * P6spy SQL 监控自动配置类
- *
+ * <p>
  * 该配置类用于自动配置 P6spy SQL 监控功能，主要功能包括：
  * 1. 验证数据源 URL 配置的正确性（必须包含 jdbc:p6spy: 前缀）
  * 2. 动态加载和配置 P6spy 相关参数
  * 3. 支持通过配置文件自定义 P6spy 行为
  * 4. 与 MyBatis Plus 集成，提供更好的 SQL 日志输出
- *
+ * <p>
  * 注意：
  * - 该配置类仅在类路径中存在 P6SpyDriver 时生效
  * - 需要正确配置数据源驱动为 P6spy 驱动
@@ -49,18 +52,18 @@ public class P6spyAutoConfiguration implements ZekaAutoConfiguration {
 
     /**
      * P6spy 自动配置构造方法
-     *
+     * <p>
      * 该构造方法在 Spring 容器初始化时执行，负责：
      * 1. 验证数据源 URL 配置是否正确（必须包含 jdbc:p6spy: 前缀）
      * 2. 通过反射获取 P6spyProperties 中的所有配置属性
      * 3. 优先使用系统属性中的自定义配置
      * 4. 将配置加载到 P6spy 的活动实例中
      * 5. 重新加载 P6spy 模块管理器以应用新配置
-     *
+     * <p>
      * 配置优先级：系统属性 > P6spyProperties 默认值 > P6spy 内置默认值
      *
      * @param environment Spring 环境对象，用于获取配置属性
-     * @param properties P6spy 配置属性对象
+     * @param properties  P6spy 配置属性对象
      * @throws StarterException 当数据源 URL 配置错误时抛出异常
      * @since 1.0.0
      */

@@ -1,16 +1,5 @@
 package dev.dong4j.zeka.starter.mybatis.plugins;
 
-import dev.dong4j.zeka.kernel.common.annotation.SensitiveBody;
-import dev.dong4j.zeka.kernel.common.annotation.SensitiveField;
-import dev.dong4j.zeka.kernel.common.base.BaseDTO;
-import dev.dong4j.zeka.kernel.common.util.AesUtils;
-import dev.dong4j.zeka.kernel.common.util.Base64Utils;
-import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import dev.dong4j.zeka.starter.mybatis.base.BasePO;
-import java.sql.Statement;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
@@ -19,6 +8,19 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.sql.Statement;
+import java.util.List;
+
+import dev.dong4j.zeka.kernel.common.annotation.SensitiveBody;
+import dev.dong4j.zeka.kernel.common.annotation.SensitiveField;
+import dev.dong4j.zeka.kernel.common.base.BaseDTO;
+import dev.dong4j.zeka.kernel.common.util.AesUtils;
+import dev.dong4j.zeka.kernel.common.util.Base64Utils;
+import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import dev.dong4j.zeka.starter.mybatis.base.BasePO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Description: </p>
@@ -92,7 +94,7 @@ public class SensitiveFieldDecryptIntercepter implements Interceptor {
             if (!StringUtils.isEmpty(fieldValue)) {
                 try {
                     String decrypt = AesUtils.decryptToStr(Base64Utils.decodeFromString(String.valueOf(fieldValue)),
-                        this.sensitiveKey);
+                                                           this.sensitiveKey);
 
                     ReflectionUtils.setFieldValue(o, field.getName(), decrypt);
                 } catch (Exception e) {

@@ -3,6 +3,7 @@ package dev.dong4j.zeka.starter.mybatis.base;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serial;
 import java.io.Serializable;
 

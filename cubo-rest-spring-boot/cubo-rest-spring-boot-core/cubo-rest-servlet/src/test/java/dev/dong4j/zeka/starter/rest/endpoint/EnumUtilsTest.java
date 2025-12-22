@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.rest.endpoint;
 
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 /**
  *

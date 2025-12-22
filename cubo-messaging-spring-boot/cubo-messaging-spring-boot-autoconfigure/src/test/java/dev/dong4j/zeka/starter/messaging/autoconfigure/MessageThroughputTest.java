@@ -1,11 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
-import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
+import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 
 import static org.hamcrest.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -58,7 +60,7 @@ class MessageThroughputTest {
         double throughput = (double) messageCount / (duration / 1000.0);
 
         System.out.printf("Sent %d messages in %d ms. Throughput: %.2f msg/s%n",
-            messageCount, duration, throughput);
+                          messageCount, duration, throughput);
 
         // 验证发送调用次数
         verify(kafkaTemplate, times(messageCount)).send((Message<?>) any(ProducerRecord.class));

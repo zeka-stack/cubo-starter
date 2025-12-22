@@ -1,11 +1,12 @@
 package dev.dong4j.zeka.starter.launcher.exception;
 
-import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import java.io.Serial;
+
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
 
 /**
  * 启动器相关异常类，继承自 LowestException
- *
+ * <p>
  * 该类用于封装启动过程中可能出现的各种异常情况，
  * 包括但不限于：
  * 1. 配置加载异常

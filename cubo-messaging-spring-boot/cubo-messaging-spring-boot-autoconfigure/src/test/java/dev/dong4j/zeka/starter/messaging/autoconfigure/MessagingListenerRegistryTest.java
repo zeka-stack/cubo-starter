@@ -1,13 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
-import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
-import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
-import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +7,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.lang.reflect.Method;
+
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
+import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
+import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;

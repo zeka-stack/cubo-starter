@@ -1,22 +1,5 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
-import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
-import dev.dong4j.zeka.starter.rest.autoconfigure.supportss.XssProperties;
-import dev.dong4j.zeka.starter.rest.handler.CustomizeReturnValueHandler;
-import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
-import dev.dong4j.zeka.starter.rest.interceptor.AuthenticationInterceptor;
-import dev.dong4j.zeka.starter.rest.interceptor.CurrentUserInterceptor;
-import dev.dong4j.zeka.starter.rest.interceptor.TraceInterceptor;
-import dev.dong4j.zeka.starter.rest.support.CurrentUserArgumentResolver;
-import dev.dong4j.zeka.starter.rest.support.CurrentUserService;
-import jakarta.servlet.Servlet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -30,6 +13,25 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
+import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
+import dev.dong4j.zeka.starter.rest.autoconfigure.supportss.XssProperties;
+import dev.dong4j.zeka.starter.rest.handler.CustomizeReturnValueHandler;
+import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
+import dev.dong4j.zeka.starter.rest.interceptor.AuthenticationInterceptor;
+import dev.dong4j.zeka.starter.rest.interceptor.CurrentUserInterceptor;
+import dev.dong4j.zeka.starter.rest.interceptor.TraceInterceptor;
+import dev.dong4j.zeka.starter.rest.support.CurrentUserArgumentResolver;
+import dev.dong4j.zeka.starter.rest.support.CurrentUserService;
+import jakarta.servlet.Servlet;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Servlet Web 环境 REST 自动配置类
@@ -169,18 +171,18 @@ public class ServletAutoConfiguration implements ZekaAutoConfiguration {
      * @param currentUserService 当前用户信息服务，用于验证和解析用户信息
      * @return 认证拦截器实例
      * @TokenRequired 注解进行工作，只有标记了该注解的 API 才会进行
-     * Token 认证检查。
-     * <p>
-     * 认证特点：
-     * - 基于注解的认证机制，精确控制到方法级别
-     * - 支持 JWT Token 的验证和解析
-     * - 提供明确的错误信息和异常处理
-     * - 不影响 API 文档的可读性
-     * <p>
-     * 优势：
-     * - 相比于在 Controller 方法中直接注入 CurrentUser
-     * - 避免在 Swagger 等 API 文档中显示不必要的参数
-     * - 提供更加灵活和精准的认证控制
+     *     Token 认证检查。
+     *     <p>
+     *     认证特点：
+     *     - 基于注解的认证机制，精确控制到方法级别
+     *     - 支持 JWT Token 的验证和解析
+     *     - 提供明确的错误信息和异常处理
+     *     - 不影响 API 文档的可读性
+     *     <p>
+     *     优势：
+     *     - 相比于在 Controller 方法中直接注入 CurrentUser
+     *     - 避免在 Swagger 等 API 文档中显示不必要的参数
+     *     - 提供更加灵活和精准的认证控制
      * @since 1.0.0
      */
     @Bean
@@ -266,7 +268,7 @@ public class ServletAutoConfiguration implements ZekaAutoConfiguration {
          *
          * @param adapter RequestMappingHandlerAdapter 提供者，用于延迟获取适配器实例
          */
-        public ConsumerMethodReturnValueHandlerAutoConfiguration(ObjectProvider<RequestMappingHandlerAdapter> adapter) {
+        ConsumerMethodReturnValueHandlerAutoConfiguration(ObjectProvider<RequestMappingHandlerAdapter> adapter) {
             log.info("启动自动配置: [{}]", this.getClass());
             if (adapter.getIfAvailable() != null) {
                 this.adapter = adapter.getIfAvailable();

@@ -3,6 +3,20 @@ package dev.dong4j.zeka.starter.rest.serialize;
 import com.fasterxml.jackson.core.json.PackageVersion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
 import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
@@ -13,20 +27,9 @@ import dev.dong4j.zeka.kernel.common.util.Tools;
 import dev.dong4j.zeka.starter.rest.entity.GenderEnum;
 import dev.dong4j.zeka.starter.rest.entity.UserForm;
 import dev.dong4j.zeka.starter.rest.entity.UserType;
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
 
 /**
  * <p>Description:  </p>
@@ -255,7 +258,8 @@ class EntityEnumSerializerTest {
 
         Assertions.assertEquals(GenderEnum.WOMEN, userForm.getGender());
         Assertions.assertEquals(UserType.SA, userForm.getType());
-        Assertions.assertArrayEquals(userForm.getGenderList().toArray(), Arrays.asList(GenderEnum.MAN, GenderEnum.WOMEN, GenderEnum.UNKNOWN).toArray());
+        Assertions.assertArrayEquals(userForm.getGenderList().toArray(), Arrays.asList(GenderEnum.MAN, GenderEnum.WOMEN,
+                                                                                       GenderEnum.UNKNOWN).toArray());
     }
 
 

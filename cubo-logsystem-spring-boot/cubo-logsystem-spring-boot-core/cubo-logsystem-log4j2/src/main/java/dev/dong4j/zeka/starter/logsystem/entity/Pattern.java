@@ -4,20 +4,20 @@ import lombok.Data;
 
 /**
  * 日志输出格式配置实体类
- *
+ * <p>
  * 该类封装了日志输出的各种格式配置，包括控制台和文件的输出格式。
  * 主要功能包括：
  * 1. 定义日志级别、时间、标记等格式模式
  * 2. 支持控制台和文件的不同输出格式
  * 3. 提供日志文件滚动和压缩的格式配置
  * 4. 支持彩色输出和位置信息显示
- *
+ * <p>
  * 使用场景：
  * - 日志系统格式配置的绑定
  * - 多环境下的日志格式定制
  * - 日志输出格式的统一管理
  * - 开发和生产环境的格式差异化配置
- *
+ * <p>
  * 设计意图：
  * 通过统一的格式配置实体类，简化日志输出格式的管理和定制，
  * 提供灵活的日志格式配置能力。
@@ -47,5 +47,6 @@ public class Pattern {
     private String file = "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p - [%15.15t] %c{1.} :: %m%n%xwEx";
 
     /** 输出到控制台的格式，此配置只对 log4j2-console.xml 有效，支持彩色输出和位置信息 */
-    private String console = "%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{[%5p]} %clr{-}{faint} %clr{[%15.15t]}{faint} %location{.} %clr{::}{faint} %m%n%xwEx";
+    private String console =
+        "%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{[%5p]} %clr{-}{faint} %clr{[%15.15t]}{faint} %location{.} %clr{::}{faint} %m%n%xwEx";
 }

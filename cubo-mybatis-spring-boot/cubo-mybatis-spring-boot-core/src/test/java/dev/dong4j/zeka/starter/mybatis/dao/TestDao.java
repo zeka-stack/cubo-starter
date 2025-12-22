@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import dev.dong4j.zeka.starter.mybatis.base.BaseDao;
 import dev.dong4j.zeka.starter.mybatis.entity.po.Test;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>Description: sku Dao 接口  </p>

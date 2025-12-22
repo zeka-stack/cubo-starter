@@ -1,20 +1,22 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.boot.logging.LogLevel;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+
+import java.util.List;
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.starter.logsystem.Constants;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
 import dev.dong4j.zeka.starter.logsystem.entity.LogFile;
 import dev.dong4j.zeka.starter.logsystem.entity.Pattern;
-import java.util.List;
-import java.util.Map;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.boot.logging.LogLevel;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * 日志系统配置属性类

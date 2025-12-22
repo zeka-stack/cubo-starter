@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.autoconfigure;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import dev.dong4j.zeka.starter.mybatis.logger.ZekaP6spySlf4jLogger;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
 /**

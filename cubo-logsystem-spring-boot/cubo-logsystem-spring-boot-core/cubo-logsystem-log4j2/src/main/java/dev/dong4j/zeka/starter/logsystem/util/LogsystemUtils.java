@@ -1,13 +1,5 @@
 package dev.dong4j.zeka.starter.logsystem.util;
 
-import dev.dong4j.zeka.starter.logsystem.listener.ZekaLoggingListener;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -18,27 +10,37 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.util.StringUtils;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import dev.dong4j.zeka.starter.logsystem.listener.ZekaLoggingListener;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 日志系统工具类
- *
+ * <p>
  * 该类提供直接修改日志级别的工具方法，主要用于单元测试环境下的日志级别动态调整。
  * 主要功能包括：
  * 1. 提供日志级别的动态设置方法
  * 2. 支持Spring Boot日志级别与Log4j2级别的转换
  * 3. 提供Logger配置的获取和更新功能
  * 4. 支持日志级别的双向转换映射
- *
+ * <p>
  * 使用场景：
  * - 单元测试中的日志级别动态调整
  * - 非容器环境下的日志级别修改
  * - 调试时的临时日志级别调整
  * - 测试用例中的日志输出控制
- *
+ * <p>
  * 注意事项：
  * - 此类仅适用于单元测试（非容器启动时）动态修改日志级别
  * - 如果在容器中动态修改日志级别，请使用 {@link LoggingSystem#get(java.lang.ClassLoader)}
  * - 可参考 {@link ZekaLoggingListener} 了解容器环境下的日志级别管理
- *
+ * <p>
  * 设计意图：
  * 通过提供简单易用的工具方法，简化单元测试中的日志级别管理，
  * 同时避免在容器环境下的复杂配置。
@@ -69,22 +71,22 @@ public class LogsystemUtils {
 
     /**
      * 设置日志级别
-     *
+     * <p>
      * 动态设置指定Logger的日志级别，如果Logger不存在则创建新的Logger配置。
      * 该方法会将Spring Boot的日志级别转换为Log4j2的日志级别，然后应用到Logger配置中。
-     *
+     * <p>
      * 使用场景：
      * - 单元测试中的日志级别动态调整
      * - 调试时的临时日志级别修改
      * - 测试用例中的日志输出控制
-     *
+     * <p>
      * 注意事项：
      * - 此方法仅适用于非容器环境
      * - 修改后会立即生效，无需重启应用
      * - 如果Logger不存在，会自动创建新的Logger配置
      *
      * @param loggerName Logger名称，null或空字符串表示根Logger
-     * @param logLevel 要设置的日志级别
+     * @param logLevel   要设置的日志级别
      * @since 1.0.0
      */
     public void setLogLevel(String loggerName, LogLevel logLevel) {
@@ -104,7 +106,7 @@ public class LogsystemUtils {
 
     /**
      * 获取Logger配置
-     *
+     * <p>
      * 根据Logger名称获取对应的Logger配置对象。如果名称为空或为根Logger名称，
      * 则返回根Logger的配置。
      *
@@ -122,7 +124,7 @@ public class LogsystemUtils {
 
     /**
      * 获取Logger上下文
-     *
+     * <p>
      * 获取当前Log4j2的Logger上下文，用于访问Logger配置和进行配置更新。
      *
      * @return Log4j2的Logger上下文对象
@@ -134,13 +136,13 @@ public class LogsystemUtils {
 
     /**
      * 日志级别转换器内部类
-     *
+     * <p>
      * 该类负责Spring Boot日志级别与Log4j2日志级别之间的双向转换。
      * 主要功能包括：
      * 1. 维护两种日志级别之间的映射关系
      * 2. 提供双向转换方法
      * 3. 支持获取所有支持的日志级别
-     *
+     * <p>
      * 使用场景：
      * - Spring Boot日志级别转换为Log4j2级别
      * - Log4j2级别转换为Spring Boot级别
@@ -163,7 +165,7 @@ public class LogsystemUtils {
 
         /**
          * 构造函数
-         *
+         * <p>
          * 初始化日志级别转换器，创建双向映射表。
          *
          * @since 1.0.0
@@ -175,11 +177,11 @@ public class LogsystemUtils {
 
         /**
          * 添加日志级别映射
-         *
+         * <p>
          * 在Spring Boot日志级别和原生日志级别之间建立映射关系。
          * 如果映射已存在，则不会覆盖现有映射。
          *
-         * @param system Spring Boot日志级别
+         * @param system      Spring Boot日志级别
          * @param nativeLevel 原生日志级别
          * @since 1.0.0
          */

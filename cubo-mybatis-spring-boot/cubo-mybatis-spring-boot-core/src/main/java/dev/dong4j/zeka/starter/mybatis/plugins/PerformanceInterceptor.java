@@ -91,6 +91,7 @@ import lombok.extern.slf4j.Slf4j;
     @Signature(type = StatementHandler.class, method = "update", args = {Statement.class}),
     @Signature(type = StatementHandler.class, method = "batch", args = {Statement.class})
 })
+@SuppressWarnings("PMD.UndefineMagicConstantRule")
 public class PerformanceInterceptor implements Interceptor {
     /** DELEGATE */
     private static final String DELEGATE = "delegate";
@@ -115,7 +116,7 @@ public class PerformanceInterceptor implements Interceptor {
      * @throws Throwable 如果 SQL 执行过程中发生异常
      */
     @Override
-    @SuppressWarnings( {"checkstyle:NestedIfDepth", "D"})
+    @SuppressWarnings(value = {"checkstyle:NestedIfDepth", "D"})
     public Object intercept(@NotNull Invocation invocation) throws Throwable {
         // 计算执行 SQL 耗时
         long start = SystemClock.now();
@@ -184,13 +185,14 @@ public class PerformanceInterceptor implements Interceptor {
     }
 
     /**
-     * 获取原始 SQL 语句
-     * 因为在使用数据库连接池（如 Druid）或 MyBatis 自身的动态代理机制时，Statement 对象通常是经过多层代理的,
-     * 只有访问到最内层的原始 Statement 实例，才能调用其 getSql() 方法（Druid 提供）或通过其他方式正确提取出实际执行的 SQL。
-     * 如果不穿透代理层，仅操作外层代理对象，可能会导致获取不到 SQL 或获取的是占位符形式的 SQL（如带有 ? 参数）。
+     * 从调用上下文中提取原始 SQL 语句
+     * <p> 该方法尝试从 Statement 对象中提取实际执行的 SQL 语句. 如果无法从 Statement 中提取, 则尝试从 BoundSql 中获取 SQL.
+     * 若两者均无法获取, 则返回空字符串.
      *
-     * @param invocation 调用上下文
-     * @return 提取到的原始 SQL
+     * @param invocation      调用上下文, 用于获取参数
+     * @param metaObject      用于访问目标对象的元数据对象
+     * @param mappedStatement 与 SQL 语句相关联的 MappedStatement 对象
+     * @return 提取到的原始 SQL 语句, 若无法获取则返回空字符串
      */
     private String getSql(@NotNull Invocation invocation, MetaObject metaObject, MappedStatement mappedStatement) {
         String rawSql = null;

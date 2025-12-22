@@ -1,13 +1,14 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
 import dev.dong4j.zeka.starter.mybatis.common.entity.dto.UserDTO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
 import dev.dong4j.zeka.starter.mybatis.common.entity.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * <p>Description: </p>
@@ -31,7 +32,7 @@ class UserOuterWrapperTest {
         UserDTO dto = UserOuterWrapper.INSTANCE.to(vo);
         log.info("dto = [{}]", dto);
         Assertions.assertEquals(dto.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new).getValue());
+                                EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new).getValue());
     }
 
     /**
@@ -45,7 +46,7 @@ class UserOuterWrapperTest {
         UserVO vo = UserOuterWrapper.INSTANCE.from(dto);
         log.info("vo = [{}]", vo);
         Assertions.assertEquals(vo.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new).getDesc());
+                                EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new).getDesc());
     }
 
 }

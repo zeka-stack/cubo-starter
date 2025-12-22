@@ -1,5 +1,11 @@
 package dev.dong4j.zeka.starter.launcher.runner;
 
+import org.slf4j.MDC;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.context.SpringContext;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
@@ -7,26 +13,21 @@ import dev.dong4j.zeka.kernel.common.util.StartUtils;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * 启动信息输出运行器，在应用启动完成后输出相关信息
- *
+ * <p>
  * 该类实现了 ApplicationRunner 接口，会在应用启动完成后执行，
  * 主要功能包括：
  * 1. 显示调试信息（配置信息和 Spring 上下文信息）
  * 2. 根据启动类型决定是否输出启动信息
  * 3. 输出库组件信息和简单启动信息
- *
+ * <p>
  * 使用场景：
  * 1. 开发环境调试
  * 2. 生产环境启动日志
  * 3. 单元测试环境
- *
+ * <p>
  * 注意：在单元测试环境下会跳过信息输出
  *
  * @author dong4j

@@ -1,15 +1,17 @@
 package dev.dong4j.zeka.starter.messaging.template;
 
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapter;
-import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
-import dev.dong4j.zeka.starter.messaging.util.TopicAndTagUtils;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.template.adapter.MessagingTemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
+import dev.dong4j.zeka.starter.messaging.util.TopicAndTagUtils;
 
 public class RocketMQMessagingTemplateAdapter implements MessagingTemplateAdapter {
 
@@ -24,7 +26,7 @@ public class RocketMQMessagingTemplateAdapter implements MessagingTemplateAdapte
         String destination = TopicAndTagUtils.withTopicAndTag(
             unifiedMessage.getDestination(),
             TopicAndTagUtils.extractTag(unifiedMessage)
-        );
+                                                             );
 
         Message<?> springMessage = createSpringMessage(unifiedMessage);
         org.apache.rocketmq.client.producer.SendResult rocketResult = rocketMQTemplate.syncSend(destination, springMessage);
@@ -39,7 +41,7 @@ public class RocketMQMessagingTemplateAdapter implements MessagingTemplateAdapte
             String destination = TopicAndTagUtils.withTopicAndTag(
                 unifiedMessage.getDestination(),
                 TopicAndTagUtils.extractTag(unifiedMessage)
-            );
+                                                                 );
 
             Message<?> springMessage = createSpringMessage(unifiedMessage);
             rocketMQTemplate.asyncSend(destination, springMessage, new SendCallback() {
@@ -68,7 +70,7 @@ public class RocketMQMessagingTemplateAdapter implements MessagingTemplateAdapte
         String destination = TopicAndTagUtils.withTopicAndTag(
             unifiedMessage.getDestination(),
             TopicAndTagUtils.extractTag(unifiedMessage)
-        );
+                                                             );
 
         Message<?> springMessage = createSpringMessage(unifiedMessage);
         rocketMQTemplate.sendOneWay(destination, springMessage);

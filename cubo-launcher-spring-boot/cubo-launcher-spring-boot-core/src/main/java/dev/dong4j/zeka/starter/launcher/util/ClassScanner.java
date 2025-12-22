@@ -1,5 +1,7 @@
 package dev.dong4j.zeka.starter.launcher.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -11,18 +13,18 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 类扫描器工具类，用于扫描指定包及其子包中的所有类
- *
+ * <p>
  * 该类提供了以下功能：
  * 1. 支持从文件系统和 JAR 包中扫描类
  * 2. 递归扫描子包
  * 3. 自动处理类加载和异常情况
- *
+ * <p>
  * 使用场景：
  * 1. 自动发现和注册组件
  * 2. 动态加载类
@@ -40,7 +42,7 @@ public class ClassScanner {
 
     /**
      * 获取指定包及其子包中的所有类
-     *
+     * <p>
      * 该方法会扫描指定包路径下的所有类文件，包括：
      * 1. 文件系统中的类文件
      * 2. JAR 包中的类文件
@@ -80,7 +82,7 @@ public class ClassScanner {
 
     /**
      * 扫描 JAR 包中的类
-     *
+     * <p>
      * 该方法会遍历 JAR 包中的所有条目，找到匹配包路径的类文件，
      * 并加载这些类。
      *
@@ -117,7 +119,7 @@ public class ClassScanner {
 
     /**
      * 从文件系统中获取包下的所有类
-     *
+     * <p>
      * 该方法会递归扫描指定目录下的所有类文件，
      * 并加载这些类。
      *
@@ -136,8 +138,8 @@ public class ClassScanner {
         }
 
         File[] files = dir.listFiles(file ->
-            file.isDirectory() || file.getName().endsWith(".class")
-        );
+                                         file.isDirectory() || file.getName().endsWith(".class")
+                                    );
 
         if (files == null || files.length == 0) {
             log.debug("包 [{}] 下没有类文件", packageName);
@@ -151,7 +153,7 @@ public class ClassScanner {
                     packageName + "." + file.getName(),
                     file.getAbsolutePath(),
                     classes
-                );
+                                                );
             } else {
                 String className = file.getName().substring(0, file.getName().length() - 6);
                 String fullClassName = packageName + '.' + className;

@@ -1,16 +1,18 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.KafkaMessagingTemplateAdapter;
-import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
-import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
-import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
+
+import java.util.concurrent.CompletableFuture;
+
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.template.KafkaMessagingTemplateAdapter;
+import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
+import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

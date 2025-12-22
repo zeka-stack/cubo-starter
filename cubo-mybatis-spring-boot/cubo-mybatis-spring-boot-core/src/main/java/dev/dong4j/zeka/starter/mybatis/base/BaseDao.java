@@ -2,12 +2,15 @@ package dev.dong4j.zeka.starter.mybatis.base;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import dev.dong4j.zeka.kernel.common.base.BaseDTO;
-import dev.dong4j.zeka.kernel.common.base.BaseQuery;
-import java.io.Serializable;
-import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.cursor.Cursor;
+
+import java.io.Serializable;
+import java.util.List;
+
+import dev.dong4j.zeka.kernel.common.base.BaseDTO;
+import dev.dong4j.zeka.kernel.common.base.BaseQuery;
 
 /**
  * 基础数据访问接口
@@ -91,7 +94,7 @@ public interface BaseDao<T> extends BaseMapper<T> {
      * @param <D>   DTO 类型，继承自 BaseDTO
      * @param <Q>   查询条件类型，继承自 BaseQuery
      * @param query 查询参数对象，包含查询条件和分页信息
-     * @return List<D> 查询结果列表
+     * @return 查询结果列表
      * @since 1.0.0
      */
     <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> List<D> page(@Param("query") Q query);
@@ -117,7 +120,7 @@ public interface BaseDao<T> extends BaseMapper<T> {
      * @param <Q>   查询条件类型，继承自 BaseQuery
      * @param page  分页参数对象，包含页码、页大小等信息
      * @param query 查询参数对象，包含查询条件
-     * @return IPage<D> 分页结果对象，包含数据列表和分页信息
+     * @return 分页结果对象，包含数据列表和分页信息
      * @since 1.0.0
      */
     <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> IPage<D> page(@Param("page") IPage<D> page,
@@ -147,7 +150,7 @@ public interface BaseDao<T> extends BaseMapper<T> {
      * @param <D>   DTO 类型，继承自 BaseDTO
      * @param <Q>   查询条件类型，继承自 BaseQuery
      * @param query 查询参数对象
-     * @return Cursor<D> 数据库游标，需要手动关闭
+     * @return 数据库游标，需要手动关闭
      * @since 1.0.0
      */
     <D extends BaseDTO<? extends Serializable>, Q extends BaseQuery<?>> Cursor<D> stream(@Param("query") Q query);

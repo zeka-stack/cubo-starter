@@ -1,8 +1,11 @@
-package dev.dong4j.zeka.starter.{{name}}.autoconfigure;
+package dev.dong4j.zeka.starter.
+
+{{name}}.autoconfigure;
 
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -19,14 +22,20 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnProperty(
-    prefix = {{Name}}Properties.PREFIX,
-    name = ZekaProperties.ENABLED,
-    havingValue = ZekaProperties.ON,
-    matchIfMissing = true)
-@EnableConfigurationProperties({{Name}}Properties.class)
-public class {{Name}}AutoConfiguration implements ZekaAutoConfiguration {
+    prefix = {{Name}} Properties.PREFIX,
+    name =ZekaProperties.ENABLED,
+    havingValue =ZekaProperties.ON,
+    matchIfMissing =true)
+    @EnableConfigurationProperties( {{Name}} Properties .class)
+    public class {{Name}}AutoConfiguration implements
 
-    public {{Name}}AutoConfiguration() {
-        log.info("启动自动配置: [{}]", this.getClass());
+    ZekaAutoConfiguration {
+
+        public {
+            {
+                Name
+            }
+        } AutoConfiguration() {
+            log.info("启动自动配置: [{}]", this.getClass());
+        }
     }
-}

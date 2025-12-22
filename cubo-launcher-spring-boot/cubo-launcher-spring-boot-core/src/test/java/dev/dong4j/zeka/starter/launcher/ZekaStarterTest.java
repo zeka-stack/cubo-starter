@@ -1,20 +1,21 @@
 package dev.dong4j.zeka.starter.launcher;
 
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.starter.launcher.app.ApplicationTest;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 /**
  * ZekaStarter 测试类
- *
+ * <p>
  * 该类用于测试 ZekaStarter 的核心功能，包括：
  * 1. 应用启动流程
  * 2. 配置加载
  * 3. 自动装配
- *
+ * <p>
  * 测试场景：
  * 1. 直接运行带有 @SpringBootApplication 注解的应用类
- *
+ * <p>
  * 注意：测试类应保持简单，专注于验证核心功能
  *
  * @author dong4j
@@ -28,7 +29,7 @@ class ZekaStarterTest {
 
     /**
      * 测试直接运行带有 @SpringBootApplication 注解的应用
-     *
+     * <p>
      * 该方法验证 ZekaStarter 能否正确启动一个 Spring Boot 应用，
      * 并完成基本的自动配置和上下文初始化。
      *

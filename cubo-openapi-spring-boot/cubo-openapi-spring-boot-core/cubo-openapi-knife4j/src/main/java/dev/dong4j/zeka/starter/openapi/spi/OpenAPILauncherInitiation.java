@@ -1,34 +1,36 @@
 package dev.dong4j.zeka.starter.openapi.spi;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
-import java.util.Map;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * OpenAPI启动初始化器
- *
+ * <p>
  * 该类负责在应用启动时设置OpenAPI相关的默认配置。
  * 通过LauncherInitiation机制，在系统启动时自动配置OpenAPI和Knife4j的相关参数。
- *
+ * <p>
  * 主要功能包括：
  * 1. 设置OpenAPI功能的启用状态
  * 2. 配置Swagger UI的访问路径和排序规则
  * 3. 配置API文档的访问路径和分组
  * 4. 设置Knife4j的各种增强功能配置
  * 5. 配置UI个性化设置和调试功能
- *
+ * <p>
  * 使用场景：
  * - 应用启动时的默认配置设置
  * - OpenAPI文档的自动配置
  * - Knife4j功能的初始化
  * - 开发环境的API文档配置
- *
+ * <p>
  * 设计意图：
  * 通过启动初始化器提供OpenAPI和Knife4j的开箱即用配置，
  * 简化开发人员的配置工作，提供标准化的API文档功能。
@@ -39,6 +41,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @date 2020.01.27 11:17
  * @since 1.0.0
  */
+@SuppressWarnings("PMD.ClassNamingShouldBeCamelRule")
 @AutoService(LauncherInitiation.class)
 public class OpenAPILauncherInitiation implements LauncherInitiation {
 
@@ -64,6 +67,7 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCommentBehindStatementRule")
     public Map<String, Object> setDefaultProperties(ConfigurableEnvironment env,
                                                     String appName,
                                                     boolean isLocalLaunch) {
@@ -129,7 +133,7 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取初始化器执行顺序
-     *
+     * <p>
      * 返回初始化器的执行顺序，使用最高优先级加1000，确保在大部分初始化器之前执行。
      *
      * @return 执行顺序值
@@ -142,7 +146,7 @@ public class OpenAPILauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取初始化器名称
-     *
+     * <p>
      * 返回初始化器的名称，用于标识和日志记录。
      *
      * @return 初始化器名称

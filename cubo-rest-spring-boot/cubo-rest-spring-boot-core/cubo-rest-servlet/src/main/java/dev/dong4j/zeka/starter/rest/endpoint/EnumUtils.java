@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.rest.endpoint;
 
-import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
 
 /**
  * 枚举工具类，用于将枚举转换为指定格式的JSON结构

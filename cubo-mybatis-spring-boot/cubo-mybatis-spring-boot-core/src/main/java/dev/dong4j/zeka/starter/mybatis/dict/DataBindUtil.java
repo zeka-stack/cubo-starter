@@ -1,7 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.dict;
 
-import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
-import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.session.Configuration;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -13,8 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.session.Configuration;
+
+import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
+import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
 
 /**
  * <p>Description: </p>

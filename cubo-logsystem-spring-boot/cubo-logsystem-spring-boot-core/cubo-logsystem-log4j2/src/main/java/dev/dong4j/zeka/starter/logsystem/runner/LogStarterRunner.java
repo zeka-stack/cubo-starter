@@ -1,27 +1,28 @@
 package dev.dong4j.zeka.starter.logsystem.runner;
 
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 日志启动运行器
- *
+ * <p>
  * 该类在Spring Boot应用启动完成后执行，负责初始化日志系统的输出流重定向。
  * 主要功能包括：
  * 1. 在应用启动完成后执行日志系统初始化
  * 2. 根据环境判断是否重定向系统输出流
  * 3. 将System.out和System.err重定向到日志系统
  * 4. 确保所有输出都通过统一的日志系统管理
- *
+ * <p>
  * 使用场景：
  * - Spring Boot应用启动时的日志系统初始化
  * - 非本地环境下的输出流重定向
  * - 统一管理应用的所有输出信息
- *
+ * <p>
  * 设计意图：
  * 通过CommandLineRunner机制，在应用完全启动后执行日志系统的最终初始化，
  * 确保所有输出都通过日志系统进行统一管理。
@@ -39,16 +40,16 @@ public class LogStarterRunner implements CommandLineRunner {
 
     /**
      * 执行日志系统初始化
-     *
+     * <p>
      * 在Spring Boot应用启动完成后执行，根据环境判断是否需要重定向系统输出流。
      * 在非本地环境下，将System.out和System.err重定向到日志系统，确保所有输出
      * 都通过统一的日志系统进行管理。
-     *
+     * <p>
      * 执行逻辑：
      * 1. 记录日志系统初始化信息
      * 2. 判断当前是否为非本地环境
      * 3. 如果是非本地环境，则重定向系统输出流到日志系统
-     *
+     * <p>
      * 注意事项：
      * - 仅在非本地环境下执行重定向操作
      * - 本地开发环境保持原有的控制台输出

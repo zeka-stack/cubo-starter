@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.logging.log4j.core.async;
 
 import com.lmax.disruptor.EventFactory;
@@ -27,8 +28,7 @@ import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.AbstractLifeCycle;
 import org.apache.logging.log4j.core.LogEvent;
@@ -41,6 +41,9 @@ import org.apache.logging.log4j.core.util.Log4jThread;
 import org.apache.logging.log4j.core.util.Log4jThreadFactory;
 import org.apache.logging.log4j.core.util.Throwables;
 import org.apache.logging.log4j.message.ReusableMessage;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Helper class decoupling the {@code AsyncLoggerConfig} class from the LMAX Disruptor library.
@@ -95,7 +98,7 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
     /**
      * EventHandler performs the work in a separate thread.
      * <p>
-     *     <strong>Warning:</strong> this implementation only works with Disruptor 4.x.
+     * <strong>Warning:</strong> this implementation only works with Disruptor 4.x.
      * </p>
      */
     private static class Log4jEventWrapperHandler implements EventHandler<Log4jEventWrapper> {
@@ -230,7 +233,7 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
     public synchronized void start() {
         if (disruptor != null) {
             LOGGER.trace("AsyncLoggerConfigDisruptor not starting new disruptor for this configuration, "
-                + "using existing object.");
+                         + "using existing object.");
             return;
         }
         LOGGER.trace("AsyncLoggerConfigDisruptor creating new disruptor for this configuration.");
@@ -259,7 +262,7 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
 
         LOGGER.debug(
             "Starting AsyncLoggerConfig disruptor for this configuration with ringbufferSize={}, "
-                + "waitStrategy={}, exceptionHandler={}...",
+            + "waitStrategy={}, exceptionHandler={}...",
             disruptor.getRingBuffer().getBufferSize(),
             waitStrategy.getClass().getSimpleName(),
             errorHandler);
@@ -362,7 +365,7 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
                 event.getLevel(),
                 event.getLoggerName(),
                 event.getMessage().getFormattedMessage()
-                    + (event.getThrown() == null ? "" : Throwables.toStringList(event.getThrown())));
+                + (event.getThrown() == null ? "" : Throwables.toStringList(event.getThrown())));
         }
     }
 
@@ -393,10 +396,10 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
         if (!alreadyLoggedWarning) {
             LOGGER.warn(
                 "Custom log event of type {} contains a mutable message of type {}."
-                    + " AsyncLoggerConfig does not know how to make an immutable copy of this message."
-                    + " This may result in ConcurrentModificationExceptions or incorrect log messages"
-                    + " if the application modifies objects in the message while"
-                    + " the background thread is writing it to the appenders.",
+                + " AsyncLoggerConfig does not know how to make an immutable copy of this message."
+                + " This may result in ConcurrentModificationExceptions or incorrect log messages"
+                + " if the application modifies objects in the message while"
+                + " the background thread is writing it to the appenders.",
                 logEvent.getClass().getName(),
                 logEvent.getMessage().getClass().getName());
             alreadyLoggedWarning = true;
@@ -415,13 +418,13 @@ public class AsyncLoggerConfigDisruptor extends AbstractLifeCycle implements Asy
 
     private boolean synchronizeEnqueueWhenQueueFull() {
         return DisruptorUtil.ASYNC_CONFIG_SYNCHRONIZE_ENQUEUE_WHEN_QUEUE_FULL
-            // Background thread must never block
-            && backgroundThreadId != Thread.currentThread().getId()
-            // Threads owned by log4j are most likely to result in
-            // deadlocks because they generally consume events.
-            // This prevents deadlocks between AsyncLoggerContext
-            // disruptors.
-            && !(Thread.currentThread() instanceof Log4jThread);
+               // Background thread must never block
+               && backgroundThreadId != Thread.currentThread().getId()
+               // Threads owned by log4j are most likely to result in
+               // deadlocks because they generally consume events.
+               // This prevents deadlocks between AsyncLoggerContext
+               // disruptors.
+               && !(Thread.currentThread() instanceof Log4jThread);
     }
 
     @Override

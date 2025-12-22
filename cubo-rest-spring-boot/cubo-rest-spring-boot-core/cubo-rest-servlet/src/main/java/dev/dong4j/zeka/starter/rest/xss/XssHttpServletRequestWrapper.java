@@ -1,20 +1,23 @@
 package dev.dong4j.zeka.starter.rest.xss;
 
 import com.google.common.collect.Sets;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
 import dev.dong4j.zeka.kernel.common.constant.BasicConstant;
 import dev.dong4j.zeka.kernel.common.util.Charsets;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.common.util.WebUtils;
 import dev.dong4j.zeka.kernel.web.support.CacheRequestEnhanceWrapper;
 import jakarta.servlet.ServletInputStream;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 /**
  * <p>Description: xss 过滤处理, 在 cache request 的基础上对 xss 进行处理 </p>
@@ -179,8 +182,8 @@ public class XssHttpServletRequestWrapper extends CacheRequestEnhanceWrapper {
         for (String keyword : NOT_ALLOWED_KEY_WORDS) {
             boolean lengthMatched = paramValue.length() > keyword.length() + 4;
             boolean containsMatched = paramValue.contains(" " + keyword)
-                || paramValue.contains(keyword + " ")
-                || paramValue.contains(" " + keyword + " ");
+                                      || paramValue.contains(keyword + " ")
+                                      || paramValue.contains(" " + keyword + " ");
 
             if (lengthMatched && containsMatched) {
                 paramValue = StringUtils.replace(paramValue, keyword, REPLACED_STRING);

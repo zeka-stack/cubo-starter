@@ -1,18 +1,19 @@
 package dev.dong4j.zeka.starter.endpoint;
 
+import org.jetbrains.annotations.NotNull;
+
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.endpoint.constant.Endpoint;
 import dev.dong4j.zeka.starter.endpoint.spi.EndpointLauncherInitiation;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Servlet 环境下的 Endpoint 模块启动初始化器
- *
+ * <p>
  * 通过 SPI 机制自动加载 Servlet 环境下的 Endpoint 模块默认配置。
  * 继承自 EndpointLauncherInitiation，为传统的 Spring MVC Web 应用
  * 提供 Actuator 和管理端点的配置支持。
- *
+ * <p>
  * 使用 @AutoService 注解自动注册到 SPI 机制中。
  *
  * @author dong4j
@@ -26,7 +27,7 @@ public class ServletEndpointLauncherInitiation extends EndpointLauncherInitiatio
 
     /**
      * 获取模块名称
-     *
+     * <p>
      * 返回 Servlet 环境下的 Endpoint 模块名称，
      * 用于在日志和监控中标识该初始化器。
      *

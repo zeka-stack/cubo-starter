@@ -1,26 +1,27 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure;
 
-import dev.dong4j.zeka.kernel.test.ZekaTest;
-import dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive.ReactiveStartInfoAutoConfiguration;
-import dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet.ServletStartInfoAutoConfiguration;
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
+import dev.dong4j.zeka.kernel.test.ZekaTest;
+import dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive.ReactiveStartInfoAutoConfiguration;
+import dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet.ServletStartInfoAutoConfiguration;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Endpoint 模块自动配置测试类
- *
+ * <p>
  * 该测试类用于验证 cubo-endpoint-spring-boot 模块的自动配置功能。
  * 主要测试内容包括：
- *
+ * <p>
  * 1. 自动配置类的正常加载
  * 2. Servlet 和 Reactive 环境下的配置兼容性
  * 3. Web 应用类型的正确识别
  * 4. 相关 Bean 的创建和注入
- *
+ * <p>
  * 使用 @ZekaTest 注解来加载测试所需的配置类。
  *
  * @author dong4j
@@ -49,7 +50,7 @@ class EndpointAutoConfigurationTest {
 
     /**
      * 测试 Web 应用类型识别
-     *
+     * <p>
      * 检测当前应用上下文的类型，判断是否为 Web 环境以及具体类型。
      * 支持三种类型：
      * - Servlet：传统的 Spring MVC Web 环境

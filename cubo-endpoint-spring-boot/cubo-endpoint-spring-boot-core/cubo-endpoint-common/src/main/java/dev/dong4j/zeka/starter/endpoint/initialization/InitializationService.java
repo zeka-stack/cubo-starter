@@ -1,15 +1,17 @@
 package dev.dong4j.zeka.starter.endpoint.initialization;
 
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import java.math.BigDecimal;
 import org.jetbrains.annotations.NotNull;
+
+import java.math.BigDecimal;
+
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 
 /**
  * 应用初始化服务接口
- *
+ * <p>
  * 该接口定义了应用预热初始化的核心方法，主要用于在应用启动完成后
  * 执行预热操作，以减少用户第一次访问时的响应延迟。
- *
+ * <p>
  * 支持 Servlet 和 Reactive 两种不同的 Web 技术栈实现，通过发送 HTTP 请求
  * 来触发各项组件的初始化加载。
  *
@@ -23,7 +25,7 @@ public interface InitializationService {
 
     /**
      * 发送预热 REST 请求
-     *
+     * <p>
      * 默认实现，通过发送 POST 请求到本地的 /warmup 端点来触发预热操作。
      * 该方法会根据当前应用的端口配置自动构建请求 URL。
      *
@@ -40,7 +42,7 @@ public interface InitializationService {
 
     /**
      * 发送 HTTP 请求的具体实现
-     *
+     * <p>
      * 由子类实现，支持不同的 Web 技术栈（Servlet 或 Reactive）。
      * 用于向指定的预热端点发送 POST 请求。
      *
@@ -51,7 +53,7 @@ public interface InitializationService {
 
     /**
      * 创建示例预热请求数据
-     *
+     * <p>
      * 默认实现，创建一个包含各种数据类型的示例对象，
      * 用于测试 JSON 序列化、参数验证等功能的正常工作。
      *

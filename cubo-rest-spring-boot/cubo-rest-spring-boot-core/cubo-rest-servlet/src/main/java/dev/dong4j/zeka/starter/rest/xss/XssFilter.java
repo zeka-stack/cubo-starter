@@ -1,5 +1,10 @@
 package dev.dong4j.zeka.starter.rest.xss;
 
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import java.io.IOException;
+import java.util.List;
+
 import dev.dong4j.zeka.kernel.web.support.CacheRequestEnhanceWrapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -8,10 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 /**
  * <p>Description: XSS过滤 </p>
@@ -56,10 +58,10 @@ public class XssFilter implements Filter {
         } else {
             if (request instanceof CacheRequestEnhanceWrapper) {
                 chain.doFilter(new XssHttpServletRequestWrapper(((CacheRequestEnhanceWrapper) request).getCachingRequestWrapper()),
-                    response);
+                               response);
             } else {
                 chain.doFilter(new XssHttpServletRequestWrapper(new ContentCachingRequestWrapper((HttpServletRequest) request)),
-                    response);
+                               response);
             }
         }
     }

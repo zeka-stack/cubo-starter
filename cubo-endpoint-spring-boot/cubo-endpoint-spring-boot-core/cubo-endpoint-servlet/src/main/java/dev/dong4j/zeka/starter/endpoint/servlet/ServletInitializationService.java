@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Servlet 环境下的初始化服务实现
- *
+ * <p>
  * 在传统的 Servlet Web 环境下实现预热初始化功能。
  * 使用 Hutool 的 HttpUtil 工具类发送 HTTP POST 请求来触发预热操作。
- *
+ * <p>
  * 通过向本地的 /warmup 端点发送包含示例数据的 POST 请求，
  * 来预加载 Spring MVC、Jackson、验证器等组件。
  *
@@ -26,7 +26,7 @@ public class ServletInitializationService implements InitializationService {
 
     /**
      * 发送 HTTP 预热请求
-     *
+     * <p>
      * 使用 Hutool 的 HttpUtil 工具类向指定的预热端点发送 POST 请求。
      * 请求体为 JSON 格式的示例数据，用于触发各项组件的初始化。
      * 如果请求失败会记录调试日志但不会抛出异常。

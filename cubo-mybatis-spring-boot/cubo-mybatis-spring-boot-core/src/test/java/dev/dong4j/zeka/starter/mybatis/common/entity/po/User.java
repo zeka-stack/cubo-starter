@@ -1,10 +1,12 @@
 package dev.dong4j.zeka.starter.mybatis.common.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
+
 import dev.dong4j.zeka.kernel.common.enums.EnabledEnum;
 import dev.dong4j.zeka.starter.mybatis.base.BaseExtendPO;
 import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

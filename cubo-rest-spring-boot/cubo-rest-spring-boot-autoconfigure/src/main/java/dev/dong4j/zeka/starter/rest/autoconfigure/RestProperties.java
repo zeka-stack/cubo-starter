@@ -1,20 +1,21 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+
 import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * REST 模块配置属性类
- *
+ * <p>
  * 该类定义了 cubo-rest-spring-boot 模块的所有配置属性，
  * 包括 HTTP 客户端配置、连接池配置、JSON 序列化配置、文件上传配置等。
- *
+ * <p>
  * 主要配置项：
  * 1. HTTP 请求超时设置（读取、写入、连接超时）
  * 2. 连接池配置（最大空闲连接数、保活时间）
@@ -22,7 +23,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  * 4. 中间件功能开关（缓存过滤器、异常过滤器等）
  * 5. JSON 序列化配置（时间格式、时区等）
  * 6. 文件上传配置（临时目录等）
- *
+ * <p>
  * 支持配置动态刷新，使用 @RefreshScope 注解。
  *
  * @author dong4j
@@ -68,14 +69,14 @@ public class RestProperties extends ZekaProperties {
 
     /**
      * HTTP 连接池配置类
-     *
+     * <p>
      * 该内部类用于配置 HTTP 客户端的连接池参数，
      * 主要用于优化 HTTP 请求的性能和资源管理。
-     *
+     * <p>
      * 配置项说明：
      * - maxIdleConnections：最大空闲连接数，用于连接复用
      * - keepAliveDuration：连接保活时间，超过此时间的空闲连接将被关闭
-     *
+     * <p>
      * 这些配置对于高并发场景下的 HTTP 请求性能至关重要。
      *
      * @author dong4j
@@ -94,15 +95,15 @@ public class RestProperties extends ZekaProperties {
 
     /**
      * JSON 序列化和反序列化配置类
-     *
+     * <p>
      * 该内部类用于配置 Jackson 的序列化和反序列化行为，
      * 主要用于统一 API 响应的 JSON 格式。
-     *
+     * <p>
      * 配置项说明：
      * - dateFormat：时间字段的序列化格式
      * - timeZone：时区设置，影响时间序列化结果
      * - defaultPropertyInclusion：控制空值字段是否参与序列化
-     *
+     * <p>
      * 这些配置确保了前后端交互中时间格式的一致性。
      *
      * @author dong4j
@@ -123,13 +124,13 @@ public class RestProperties extends ZekaProperties {
 
     /**
      * 文件上传配置类
-     *
+     * <p>
      * 该内部类用于配置文件上传相关的参数，
      * 主要用于设置 Undertow 容器处理 multipart 请求时的临时文件存储位置。
-     *
+     * <p>
      * 配置项说明：
      * - location：文件上传时的临时存储目录，默认使用系统临时目录
-     *
+     * <p>
      * 合理的临时目录配置可以避免磁盘空间不足和权限问题。
      *
      * @author dong4j

@@ -1,28 +1,30 @@
 package dev.dong4j.zeka.starter.mybatis.spi;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
-import java.util.Map;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * MyBatis 启动初始化器
- *
+ * <p>
  * 该类通过 SPI 机制自动加载 MyBatis Plus 的默认配置，在应用启动时
  * 为 MyBatis Plus 提供合理的默认配置值。
- *
+ * <p>
  * 主要功能：
  * 1. 配置 Mapper XML 文件的扫描路径
  * 2. 配置 MyBatis 的基本行为参数
  * 3. 配置逻辑删除的默认值
  * 4. 配置主键生成策略
  * 5. 配置日志实现类
- *
+ * <p>
  * 配置项包括：
  * - Mapper 文件位置：支持 classpath 和 jar 包中的 XML 文件
  * - 缓存配置：启用二级缓存
@@ -41,20 +43,19 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class MybatisLauncherInitiation implements LauncherInitiation {
     /**
      * 设置默认属性
+     * <p>
+     * 该方法在应用启动时被调用, 用于设置 MyBatis Plus 的默认配置.
+     * <p>
+     * 配置的主要参数:
+     * 1. Mapper XML 文件扫描路径, 支持多级目录和 jar 包
+     * 2. MyBatis 核心配置: 缓存, 命名转换, 空值处理等
+     * 3. 逻辑删除配置: 已删除值为 1, 未删除值为 0
+     * 4. 主键生成策略: 使用数据库自增
+     * 5. 日志配置: 使用自定义的无输出日志实现
      *
-     * 该方法在应用启动时被调用，用于设置 MyBatis Plus 的默认配置。
-     *
-     * 配置的主要参数：
-     * 1. Mapper XML 文件扫描路径，支持多级目录和 jar 包
-     * 2. MyBatis 核心配置：缓存、命名转换、空值处理等
-     * 3. 逻辑删除配置：已删除值为 1，未删除值为 0
-     * 4. 主键生成策略：使用数据库自增
-     * 5. 日志配置：使用自定义的无输出日志实现
-     *
-     * @param env Spring 环境配置对象
-     * @param appName 应用名称
+     * @param env           Spring 环境配置对象
+     * @param appName       应用名称
      * @param isLocalLaunch 是否为本地启动
-     * @return Map<String, Object> 默认配置属性映射
      * @see dev.dong4j.zeka.starter.mybatis.logger.NoLogOutImpl
      * @since 1.0.0
      */
@@ -80,7 +81,7 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取执行顺序
-     *
+     * <p>
      * 该方法返回初始化器的执行顺序，数值越小优先级越高。
      * 设置为 HIGHEST_PRECEDENCE + 200，确保在大部分配置之前执行，
      * 但在核心框架配置之后执行。
@@ -95,7 +96,7 @@ public class MybatisLauncherInitiation implements LauncherInitiation {
 
     /**
      * 获取初始化器名称
-     *
+     * <p>
      * 该方法返回初始化器的唯一标识名称，用于日志记录和调试。
      * 名称对应当前 starter 模块的名称。
      *

@@ -1,15 +1,5 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.servlet;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.web.exception.ServletGlobalExceptionHandler;
-import dev.dong4j.zeka.kernel.web.handler.ServletErrorController;
-import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
-import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
-import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
-import jakarta.servlet.Servlet;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -26,6 +16,17 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.kernel.web.exception.ServletGlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.web.handler.ServletErrorController;
+import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
+import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
+import dev.dong4j.zeka.starter.rest.handler.ZekaServletExceptionErrorAttributes;
+import jakarta.servlet.Servlet;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Servlet 全局异常处理自动配置类

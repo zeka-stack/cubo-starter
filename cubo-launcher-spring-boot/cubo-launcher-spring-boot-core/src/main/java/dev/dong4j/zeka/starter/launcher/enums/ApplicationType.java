@@ -4,13 +4,13 @@ import org.springframework.util.ClassUtils;
 
 /**
  * 应用类型枚举，用于定义和识别不同类型的应用
- *
+ * <p>
  * 该枚举定义了四种应用类型：
  * 1. NONE - 非 Web 应用，启动完成后自动退出
  * 2. SERVICE - 非 Web 应用，但启动后不会退出（如 Dubbo 服务提供者）
  * 3. SERVLET - 传统 Servlet Web 应用
  * 4. REACTIVE - 响应式 WebFlux 应用
- *
+ * <p>
  * 提供了自动检测应用类型的方法，通过分析类路径和应用上下文类型来确定应用类型。
  *
  * @author dong4j
@@ -55,7 +55,7 @@ public enum ApplicationType {
 
     /**
      * 从类路径推断应用类型
-     *
+     * <p>
      * 通过检查类路径中是否存在特定的指示器类来确定应用类型：
      * 1. 如果存在 WebFlux 指示器类但不存在 WebMVC 和 Jersey 指示器类，则为 REACTIVE 类型
      * 2. 如果不存在任何 Servlet 指示器类，则为 NONE 类型
@@ -80,7 +80,7 @@ public enum ApplicationType {
 
     /**
      * 从应用上下文类推断应用类型
-     *
+     * <p>
      * 通过检查应用上下文类的类型来确定应用类型：
      * 1. 如果是 WebApplicationContext 的子类，则为 SERVLET 类型
      * 2. 如果是 ReactiveWebApplicationContext 的子类，则为 REACTIVE 类型
@@ -102,7 +102,7 @@ public enum ApplicationType {
 
     /**
      * 检查指定类型是否可分配给目标类型
-     *
+     * <p>
      * 通过类名解析目标类，并检查指定类型是否是目标类的子类或实现类。
      * 该方法处理了可能出现的类加载异常，确保在类不存在时返回 false 而不是抛出异常。
      *

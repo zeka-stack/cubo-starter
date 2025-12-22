@@ -1,10 +1,12 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>Description: Xss配置类</p>

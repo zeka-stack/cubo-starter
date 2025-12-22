@@ -1,7 +1,8 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.test.ZekaTest;
 import org.junit.jupiter.api.Test;
+
+import dev.dong4j.zeka.kernel.test.ZekaTest;
 
 
 /**

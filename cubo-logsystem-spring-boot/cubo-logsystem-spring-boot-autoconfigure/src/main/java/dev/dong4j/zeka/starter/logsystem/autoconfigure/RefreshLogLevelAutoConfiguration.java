@@ -1,21 +1,5 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.config.refresh.ConfigChangedHandler;
-import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherCustomizer;
-import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherRunner;
-import dev.dong4j.zeka.kernel.common.config.refresh.DynamicConfigLoader;
-import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRefresher;
-import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRegistry;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.common.util.FileUtils;
-import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
-import dev.dong4j.zeka.starter.logsystem.handler.AutoChangeLogLevelEventHandler;
-import dev.dong4j.zeka.starter.logsystem.handler.ManualChangeLogLevelEventHandler;
-import java.io.File;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.jetbrains.annotations.Contract;
@@ -31,56 +15,55 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
+import java.io.File;
+import java.util.List;
+
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigChangedHandler;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherCustomizer;
+import dev.dong4j.zeka.kernel.common.config.refresh.ConfigFileWatcherRunner;
+import dev.dong4j.zeka.kernel.common.config.refresh.DynamicConfigLoader;
+import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRefresher;
+import dev.dong4j.zeka.kernel.common.config.refresh.RefreshScopeRegistry;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.kernel.common.util.FileUtils;
+import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
+import dev.dong4j.zeka.starter.logsystem.handler.AutoChangeLogLevelEventHandler;
+import dev.dong4j.zeka.starter.logsystem.handler.ManualChangeLogLevelEventHandler;
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * 动态日志级别刷新自动配置类
- *
- * 该类提供日志级别的动态刷新功能，支持在运行时修改日志级别而无需重启应用。
- * 主要功能包括：
- * 1. 支持Spring Boot环境下的日志级别动态刷新
- * 2. 支持Spring Cloud环境下的配置中心动态刷新
- * 3. 提供配置文件监听和自动重载功能
- * 4. 支持手动和自动两种日志级别修改方式
- *
- * 使用场景：
- * - 生产环境动态调整日志级别进行问题排查
- * - 开发环境快速切换日志输出级别
- * - 配置中心统一管理日志级别配置
- * - 微服务架构下的日志级别集中控制
- *
- * 设计意图：
- * 通过提供灵活的日志级别动态调整机制，提升运维效率和问题排查能力，
- * 同时支持多种环境下的不同刷新策略。
+ * 日志级别动态刷新自动配置类
+ * <p> 用于在 Spring Boot 和 Spring Cloud 环境中实现日志配置文件的动态刷新功能, 支持在不重启应用的情况下更新日志级别配置.
+ * <p> 该配置类通过监听配置文件变化, 自动触发日志配置的重新加载, 适用于需要实时调整日志输出的场景.
  *
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
- * @date 2025.07.30 15:37
- * @since 1.0.0
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Slf4j
 @AutoConfiguration
 public class RefreshLogLevelAutoConfiguration {
 
     /**
-     * Spring Boot环境下的日志动态刷新配置
-     *
-     * 该类专门处理Spring Boot环境下的日志级别动态刷新功能。
-     * 主要功能包括：
-     * 1. 配置文件监听和自动重载
-     * 2. 刷新范围注册和管理
-     * 3. 配置变更处理器注册
-     * 4. 日志配置文件监控
-     *
-     * 使用场景：
-     * - 本地开发环境的日志级别动态调整
-     * - 配置文件修改后的自动重载
-     * - 无需重启应用即可调整日志输出
+     * Spring Boot 动态更改日志级别自动配置类
+     * <p> 该类在满足特定条件时启用动态更改日志级别的功能. 通过监听日志配置文件的变化,
+     * 实现日志配置的热加载, 无需重启应用程序即可生效.
+     * <p>
+     * 主要功能包括:
+     * - 自动配置 RefreshScopeRegistry 和 RefreshScopeRefresher, 用于管理刷新范围的注册和刷新操作.
+     * - 提供 DynamicConfigLoader, 用于加载动态配置.
+     * - 实现 ConfigChangedHandler, 当检测到 Log4j2 配置文件变化时, 重新加载日志配置.
+     * - 提供 ConfigFileWatcherRunner 和 ConfigFileWatcherCustomizer, 用于监控和自定义配置文件的变更处理.
      *
      * @author dong4j
      * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
-     * @date 2025.07.30
-     * @since 1.0.0
+     * @date 2025.12.22
+     * @since 2.0.0
      */
     @AutoConfiguration
     @ConditionalOnClass(LogPrintStream.class)
@@ -88,18 +71,24 @@ public class RefreshLogLevelAutoConfiguration {
     @ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".refresh")
     static class SpringBootDynamicChangeLogLevel implements ZekaAutoConfiguration {
 
-        public SpringBootDynamicChangeLogLevel() {
+        /**
+         * 初始化日志动态刷新配置
+         * <p> 在类加载时执行, 用于记录自动配置的启动信息.
+         *
+         * @since 1.0.0
+         */
+        SpringBootDynamicChangeLogLevel() {
             log.info("启动自动配置: [{}]", this.getClass());
         }
 
         /**
-         * 创建刷新范围注册表Bean
+         * 创建刷新范围注册表 Bean
+         * <p>
+         * 用于管理需要动态刷新的 Bean 范围, 支持配置变更时的精准刷新.
+         * 该注册表会跟踪所有标记为 @RefreshScope 的 Bean, 并在配置变更时
+         * 只刷新受影响的 Bean, 避免全量刷新带来的性能问题.
          *
-         * 用于管理需要动态刷新的Bean范围，支持配置变更时的精准刷新。
-         * 该注册表会跟踪所有标记为@RefreshScope的Bean，并在配置变更时
-         * 只刷新受影响的Bean，避免全量刷新带来的性能问题。
-         *
-         * @param context Spring应用上下文，用于获取Bean定义和实例
+         * @param context Spring 应用上下文, 用于获取 Bean 定义和实例
          * @return 刷新范围注册表实例
          */
         @Bean
@@ -109,28 +98,30 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 创建配置刷新器Bean
+         * 创建配置刷新器 Bean
+         * <p> 负责执行配置变更时的刷新逻辑, 根据变更的配置项精准刷新受影响的 Bean.
+         * 该刷新器会分析配置变更的扁平化 key 集合, 只刷新真正受影响的 Bean,
+         * 避免不必要的全量刷新, 提升刷新性能和稳定性.
          *
-         * 负责执行配置变更时的刷新逻辑，根据变更的配置项精准刷新受影响的Bean。
-         * 该刷新器会分析配置变更的扁平化key集合，只刷新真正受影响的Bean，
-         * 避免不必要的全量刷新，提升刷新性能和稳定性。
-         *
-         * @param environment 环境配置，用于获取当前配置信息
-         * @param registry 刷新范围注册表，用于管理需要刷新的Bean
-         * @param loader 动态配置加载器，用于加载和解析配置变更
+         * @param environment 环境配置, 用于获取当前配置信息
+         * @param registry    刷新范围注册表, 用于管理需要刷新的 Bean
+         * @param loader      动态配置加载器, 用于加载和解析配置变更
          * @return 配置刷新器实例
          */
         @Bean
         @ConditionalOnMissingBean
-        public RefreshScopeRefresher refreshScopeRefresher(Environment environment, RefreshScopeRegistry registry, DynamicConfigLoader loader) {
+        public RefreshScopeRefresher refreshScopeRefresher(Environment environment, RefreshScopeRegistry registry,
+                                                           DynamicConfigLoader loader) {
             return new RefreshScopeRefresher(environment, registry, loader);
         }
 
         /**
-         * 配置加载器(yaml)
+         * 创建动态配置加载器 Bean
+         * <p> 用于加载和解析动态配置信息, 支持在运行时读取和解析配置变更.
+         * 该加载器能够监听配置文件的变化, 并将变更内容转换为可使用的配置数据.
          *
-         * @param environment 环境
-         * @return 3:配置加载器
+         * @param environment 环境配置, 用于获取当前应用的配置信息
+         * @return 动态配置加载器实例
          */
         @Bean
         @ConditionalOnMissingBean
@@ -139,10 +130,11 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 配置更改处理程序, 最高优先级
+         * 创建配置更改处理程序, 用于处理 Log4j2 配置文件的变更
+         * <p> 当 Log4j2 配置文件发生变更时, 此处理程序会重新加载配置文件, 并更新日志配置.
          *
-         * @param logSystemProperties 日志系统属性
-         * @return 自定义文件变动处理逻辑
+         * @param logSystemProperties 日志系统属性, 包含配置文件路径等信息
+         * @return 配置更改处理程序实例
          */
         @Bean
         @Order(-1000)
@@ -160,9 +152,11 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 配置文件监听器(yaml 文件)
+         * 配置文件监听器 (yaml 文件)
+         * <p> 创建一个配置文件监听器, 用于监听配置文件的变化并执行相应的处理逻辑.
          *
-         * @param loader 加载程序
+         * @param loader          加载程序, 用于加载和解析配置文件
+         * @param handlerProvider 处理程序提供者, 提供配置变更时的处理逻辑
          * @return 配置变更监听执行器
          */
         @Bean
@@ -174,11 +168,12 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 添加 springboot 应用日志配置文件监控
-         * 1. 配置的日志文件名
-         * todo-dong4j : (2025.07.30 20:07) [这个文件在 jar 包中, 无法监测文件变动]
+         * 添加 Spring Boot 应用的日志配置文件监控
+         * <p> 配置需要监听的日志文件, 确保在配置文件发生变化时能够触发相应的处理逻辑.
          *
-         * @return 自定义需要监听的文件
+         * @param logSystemProperties 日志系统属性, 包含配置文件路径等信息
+         * @return 配置文件监控自定义器, 用于注册需要监听的文件
+         * @since 1.0.0
          */
         @Bean
         public ConfigFileWatcherCustomizer log4j2XmlFileWatcher(LogSystemProperties logSystemProperties) {
@@ -188,38 +183,34 @@ public class RefreshLogLevelAutoConfiguration {
     }
 
     /**
-     * Spring Cloud环境下的日志动态刷新配置
-     *
-     * 该类专门处理Spring Cloud环境下的日志级别动态刷新功能。
-     * 主要功能包括：
-     * 1. 监听配置中心的环境变更事件
-     * 2. 自动检测日志配置变更并应用
-     * 3. 支持手动触发日志级别修改
-     * 4. 提供事件驱动的日志级别更新机制
-     *
-     * 使用场景：
-     * - 微服务架构下的配置中心统一管理
-     * - 生产环境的日志级别集中控制
-     * - 配置变更的实时生效
-     * - 运维人员的手动日志级别调整
+     * Spring Cloud 动态变更日志级别自动配置类
+     * <p> 该类在满足特定条件时自动配置日志级别的动态变更相关事件处理器. 通过监听环境变化事件,
+     * 实现日志级别的自动调整. 具体功能包括自动配置日志级别变更事件处理器和手动日志级别变更事件处理器.
      *
      * @author dong4j
      * @version 1.0.0
      * @email "mailto:dong4j@gmail.com"
-     * @date 2025.07.30
-     * @since 1.0.0
+     * @date 2025.12.22
+     * @since 2.0.0
      */
     @AutoConfiguration
     @ConditionalOnClass(EnvironmentChangeEvent.class)
     @ConditionalOnEnabled(value = LogSystemProperties.PREFIX + ".refresh")
     static class SpringCloudDynamicChangeLogLevel implements ZekaAutoConfiguration {
 
-        public SpringCloudDynamicChangeLogLevel() {
+        /**
+         * 构造方法, 用于初始化 SpringCloudDynamicChangeLogLevel 实例
+         * <p> 在实例化时记录日志, 表明自动配置已启动
+         *
+         * @since 1.0.0
+         */
+        SpringCloudDynamicChangeLogLevel() {
             log.info("启动自动配置: [{}]", this.getClass());
         }
 
         /**
-         * 当环境配置改变时 自动检查是否需要修改日志等级
+         * 当环境配置改变时, 自动检查是否需要修改日志等级
+         * <p> 该方法用于创建并返回一个自动处理日志等级变更的事件处理器, 用于监听配置中心的环境变更事件, 并根据配置变化动态调整日志级别.
          *
          * @return the logging level rebinder
          * @since 1.0.0
@@ -232,10 +223,10 @@ public class RefreshLogLevelAutoConfiguration {
         }
 
         /**
-         * 监听 ChangeLogLevelEvent 以动态修改日志等级 (手动修改事件)
+         * 注册手动日志级别修改事件处理器
+         * <p> 当检测到没有手动日志级别修改事件处理器时, 创建并注册一个默认的处理器.
          *
-         * @return the logging level refresh event handler
-         * @since 1.0.0
+         * @return 手动日志级别修改事件处理器实例
          */
         @Bean
         @ConditionalOnMissingBean(ManualChangeLogLevelEventHandler.class)

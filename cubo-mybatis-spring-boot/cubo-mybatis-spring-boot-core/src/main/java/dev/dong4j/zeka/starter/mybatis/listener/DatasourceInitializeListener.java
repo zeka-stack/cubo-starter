@@ -1,17 +1,19 @@
 package dev.dong4j.zeka.starter.mybatis.listener;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.ZekaApplicationListener;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.processor.annotation.AutoListener;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * 数据源初始化监听器
@@ -97,18 +99,18 @@ public class DatasourceInitializeListener implements ZekaApplicationListener {
                     String value;
                     if (StringUtils.isBlank(property)) {
                         value = String.join(StringPool.COMMA,
-                            DATASOURCE_AUTOCONFIGURATION,
-                            MYBATISPLUS_AUTOCONFIGURATION,
-                            DRUIDDATASOURCE_AUTOCONFIGURE,
-                            MYBATIS_AUTOCONFIGURATION);
+                                            DATASOURCE_AUTOCONFIGURATION,
+                                            MYBATISPLUS_AUTOCONFIGURATION,
+                                            DRUIDDATASOURCE_AUTOCONFIGURE,
+                                            MYBATIS_AUTOCONFIGURATION);
 
                     } else {
                         value = String.join(StringPool.COMMA,
-                            property,
-                            DATASOURCE_AUTOCONFIGURATION,
-                            MYBATISPLUS_AUTOCONFIGURATION,
-                            DRUIDDATASOURCE_AUTOCONFIGURE,
-                            MYBATIS_AUTOCONFIGURATION);
+                                            property,
+                                            DATASOURCE_AUTOCONFIGURATION,
+                                            MYBATISPLUS_AUTOCONFIGURATION,
+                                            DRUIDDATASOURCE_AUTOCONFIGURE,
+                                            MYBATIS_AUTOCONFIGURATION);
                     }
                     System.setProperty(ConfigKey.SpringConfigKey.AUTOCONFIGURE_EXCLUDE, value);
                 }

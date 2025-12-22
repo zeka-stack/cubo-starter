@@ -1,5 +1,13 @@
 package dev.dong4j.zeka.starter.rest.endpoint;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
@@ -9,13 +17,7 @@ import dev.dong4j.zeka.starter.rest.annotation.RestControllerWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 提供一个 RESTful 端点, 用于查询在系统中注册的所有实现了 {@link SerializeEnum} 接口的枚举.
@@ -113,7 +115,7 @@ public class EnumsEndpoint {
      * 请求示例: GET /zeka-stack/enums/deleted_enum
      *
      * @param type 枚举的类型 (e.g., "deleted_enum").
-     * @return 返回一个包含该枚举所有值和描述的 Result<EnumInfo> 对象. 如果未找到, 则返回包含null的Result对象.
+     * @return 返回一个包含该枚举所有值和描述的 Result 对象. 如果未找到, 则返回包含null的Result对象.
      * @since 1.0.0
      */
     @GetMapping("/{type}")
@@ -131,7 +133,7 @@ public class EnumsEndpoint {
      * <p>
      * 请求示例: GET /zeka-stack/enums
      *
-     * @return 返回一个包含所有枚举详细信息的Result<List<EnumInfo>>对象.
+     * @return 返回一个包含所有枚举详细信息的Result对象.
      * @since 2.0.0
      */
     @GetMapping

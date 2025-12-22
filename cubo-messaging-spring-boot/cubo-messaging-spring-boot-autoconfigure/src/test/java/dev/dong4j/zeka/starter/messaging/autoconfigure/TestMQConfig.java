@@ -1,7 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
-import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +7,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.core.KafkaTemplate;
+
+import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
+import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
 
 import static org.mockito.Mockito.mock;
 

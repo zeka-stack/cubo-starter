@@ -1,11 +1,5 @@
 package dev.dong4j.zeka.starter.logsystem;
 
-import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
-import dev.dong4j.zeka.kernel.common.util.Jsons;
-import dev.dong4j.zeka.starter.logsystem.listener.ZekaLoggingListener;
-import java.util.Locale;
-import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggerGroup;
@@ -15,25 +9,33 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 
+import java.util.Locale;
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
+import dev.dong4j.zeka.kernel.common.util.Jsons;
+import dev.dong4j.zeka.starter.logsystem.listener.ZekaLoggingListener;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 抽象日志级别配置基类
- *
+ * <p>
  * 该类是日志级别配置的抽象基类，提供统一的日志级别变更处理框架。
  * 通过监听应用事件，实现日志级别的动态调整和配置。
- *
+ * <p>
  * 主要功能包括：
  * 1. 监听应用事件，触发日志级别变更
  * 2. 提供统一的日志级别配置处理框架
  * 3. 支持日志级别分组的管理
  * 4. 处理日志级别字符串到枚举的转换
  * 5. 提供环境感知的配置能力
- *
+ * <p>
  * 使用场景：
  * - 动态调整应用日志级别
  * - 配置中心变更时的日志级别同步
  * - 运行时日志级别管理
  * - 多环境下的日志级别配置
- *
+ * <p>
  * 设计意图：
  * 通过抽象基类提供统一的日志级别配置处理框架，简化具体实现类的开发，
  * 确保日志级别变更的一致性和可扩展性。

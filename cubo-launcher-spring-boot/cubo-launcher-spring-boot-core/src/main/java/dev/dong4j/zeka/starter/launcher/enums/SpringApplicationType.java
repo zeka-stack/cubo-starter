@@ -1,15 +1,16 @@
 package dev.dong4j.zeka.starter.launcher.enums;
 
-import dev.dong4j.zeka.kernel.common.exception.StarterException;
 import org.springframework.util.ClassUtils;
+
+import dev.dong4j.zeka.kernel.common.exception.StarterException;
 
 /**
  * Spring 应用类型枚举，用于区分 Spring Boot 和 Spring Cloud 应用
- *
+ * <p>
  * 该枚举定义了两种 Spring 应用类型：
  * 1. BOOT - 标准 Spring Boot 应用
  * 2. CLOUD - Spring Cloud 应用（包含 Spring Boot）
- *
+ * <p>
  * 提供了自动检测应用类型的方法，通过分析类路径中是否存在特定的标识类来确定应用类型。
  * 这种区分对于配置加载顺序和特定功能的启用非常重要。
  *
@@ -33,12 +34,12 @@ public enum SpringApplicationType {
 
     /**
      * 从类路径推断 Spring 应用类型
-     *
+     * <p>
      * 通过检查类路径中是否存在特定的指示器类来确定应用类型：
      * 1. 如果存在 Spring Cloud 的引导配置类，则为 CLOUD 类型
      * 2. 如果存在 Spring Boot 版本类，则为 BOOT 类型
      * 3. 如果两者都不存在，则抛出异常，表示不是 Spring Boot/Cloud 应用
-     *
+     * <p>
      * 这种检测方式确保了框架能够正确识别应用类型，并加载相应的配置。
      *
      * @return 推断出的 Spring 应用类型

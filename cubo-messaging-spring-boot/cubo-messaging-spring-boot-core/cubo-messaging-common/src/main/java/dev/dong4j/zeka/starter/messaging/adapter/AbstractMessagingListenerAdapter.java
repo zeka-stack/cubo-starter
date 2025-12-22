@@ -20,12 +20,14 @@
  * @date 2023.05.15
  * @since 1.0.0
  */
+
 package dev.dong4j.zeka.starter.messaging.adapter;
+
+import java.lang.reflect.Method;
 
 import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
-import java.lang.reflect.Method;
 import lombok.Getter;
 
 public abstract class AbstractMessagingListenerAdapter {
@@ -38,8 +40,8 @@ public abstract class AbstractMessagingListenerAdapter {
      * 构造方法
      *
      * @param handlerMethod 消息处理方法
-     * @param context 消息处理上下文
-     * @param method 目标业务方法
+     * @param context       消息处理上下文
+     * @param method        目标业务方法
      */
     public AbstractMessagingListenerAdapter(MessagingHandlerMethod handlerMethod,
                                             MessagingContext context,

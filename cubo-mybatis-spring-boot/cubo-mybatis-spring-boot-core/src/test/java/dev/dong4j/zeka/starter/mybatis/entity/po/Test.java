@@ -1,6 +1,7 @@
 package dev.dong4j.zeka.starter.mybatis.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import dev.dong4j.zeka.starter.mybatis.base.BaseExtendPO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

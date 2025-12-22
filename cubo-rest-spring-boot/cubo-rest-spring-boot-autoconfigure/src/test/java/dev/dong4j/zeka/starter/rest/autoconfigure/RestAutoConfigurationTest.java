@@ -1,5 +1,7 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure;
 
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.kernel.test.ZekaTest;
 import dev.dong4j.zeka.starter.rest.autoconfigure.reactive.WebFluxAutoConfiguration;
 import dev.dong4j.zeka.starter.rest.autoconfigure.reactive.WebfluxGlobalExceptionAutoConfiguration;
@@ -11,7 +13,6 @@ import dev.dong4j.zeka.starter.rest.autoconfigure.servlet.WebMvcStringTrimAutoCo
 import dev.dong4j.zeka.starter.rest.autoconfigure.supportss.JacksonConfiguration;
 import dev.dong4j.zeka.starter.rest.autoconfigure.supportss.RestTemplateAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 /**
  * 自动装配测试

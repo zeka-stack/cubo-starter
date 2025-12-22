@@ -51,10 +51,10 @@ public record SendResult(String topic, int partition, long offset, String messag
     @Override
     public @NotNull String toString() {
         return "SendResult{" +
-            "topic='" + topic + '\'' +
-            ", partition=" + partition +
-            ", offset=" + offset +
-            ", messageId='" + messageId + '\'' +
-            '}';
+               "topic='" + topic + '\'' +
+               ", partition=" + partition +
+               ", offset=" + offset +
+               ", messageId='" + messageId + '\'' +
+               '}';
     }
 }

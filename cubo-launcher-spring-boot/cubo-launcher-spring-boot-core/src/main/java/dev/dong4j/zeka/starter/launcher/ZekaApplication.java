@@ -1,5 +1,26 @@
 package dev.dong4j.zeka.starter.launcher;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.SimpleCommandLinePropertySource;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.stream.Collectors;
+
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
@@ -15,42 +36,23 @@ import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.kernel.common.util.Tools;
 import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
 import dev.dong4j.zeka.starter.launcher.enums.SpringApplicationType;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.ServiceLoader;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertySource;
-import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 /**
- * Spring Boot 应用启动类封装，提供统一的应用启动流程和配置管理
- *
- * 主要功能：
- * 1. 自动加载默认配置，简化应用启动过程
- * 2. 通过 SPI 机制加载其他包的处理类，实现模块化扩展
+ * Spring Boot 应用启动类封装, 提供统一的应用启动流程和配置管理
+ * <p>
+ * 主要功能:
+ * 1. 自动加载默认配置, 简化应用启动过程
+ * 2. 通过 SPI 机制加载其他包的处理类, 实现模块化扩展
  * 3. 统一管理应用名称和环境配置
- * 4. 支持多种应用类型（Web、Service等）的自动识别和配置
- *
- * 应用名称(appName)读取优先级：
+ * 4. 支持多种应用类型 (Web,Service 等) 的自动识别和配置
+ * <p>
+ * 应用名称 (appName) 读取优先级:
  * 1. JVM 环境变量
  * 2. 配置文件中的设置
- * 3. run() 方法显式指定
- * 4. 应用所在目录名（默认值）
+ * 3. run()方法显式指定
+ * 4. 应用所在目录名(默认值)
  *
  * @author dong4j
  * @version 1.0.0
@@ -60,8 +62,21 @@ import org.springframework.core.env.SimpleCommandLinePropertySource;
  */
 @Slf4j
 public final class ZekaApplication {
-    /** 保存最主要的配置 */
+    /**
+     * 保存最主要的配置
+     * <p>
+     * 用于存储应用启动过程中需要的核心配置信息, 包括应用名称, 版本, 包路径等关键属性.
+     * 该配置在应用启动时被加载, 并在多个初始化过程中被使用.
+     *
+     * @since 1.0.0
+     */
     private static final Properties MAIN_PROPERTIES;
+    /**
+     * 存储启动初始化器列表
+     * <p> 用于在应用启动时执行一系列初始化操作
+     *
+     * @since 1.0.0
+     */
     private static List<LauncherInitiation> launcherInitiations;
 
     static {
@@ -69,9 +84,9 @@ public final class ZekaApplication {
     }
 
     /**
-     * 私有构造方法，防止实例化
-     *
-     * 该类设计为工具类，不应被直接实例化使用
+     * 私有构造方法, 防止实例化
+     * <p>
+     * 该类设计为工具类, 不应被直接实例化使用
      *
      * @since 1.0.0
      */
@@ -82,8 +97,8 @@ public final class ZekaApplication {
 
     /**
      * 运行 Spring Boot 应用并返回应用上下文
-     *
-     * 此方法会自动推断应用类型，并使用默认的应用名称
+     * <p>
+     * 此方法会自动推断应用类型, 并使用默认的应用名称
      *
      * @param source 包含 @SpringBootApplication 注解的主类
      * @param args   命令行参数
@@ -98,10 +113,10 @@ public final class ZekaApplication {
 
     /**
      * 使用指定的应用名称运行 Spring Boot 应用
+     * <p>
+     * 此方法允许显式指定应用名称, 并自动推断应用类型
      *
-     * 此方法允许显式指定应用名称，并自动推断应用类型
-     *
-     * @param appName 应用名称，将用作 spring.application.name
+     * @param appName 应用名称, 将用作 spring.application.name
      * @param source  包含 @SpringBootApplication 注解的主类
      * @param args    命令行参数
      * @return Spring 应用上下文
@@ -115,11 +130,11 @@ public final class ZekaApplication {
 
     /**
      * 使用默认应用名称和指定应用类型运行 Spring Boot 应用
-     *
-     * 如果未显式设置应用名称，则使用从配置中读取的默认应用名
+     * <p>
+     * 如果未显式设置应用名称, 则使用从配置中读取的默认应用名
      *
      * @param source          包含 @SpringBootApplication 注解的主类
-     * @param applicationType 应用类型（SERVLET、REACTIVE、SERVICE、NONE）
+     * @param applicationType 应用类型 (SERVLET,REACTIVE,SERVICE,NONE)
      * @param args            命令行参数
      * @return Spring 应用上下文
      * @since 1.0.0
@@ -131,13 +146,13 @@ public final class ZekaApplication {
 
     /**
      * 创建并运行 Spring Boot 应用上下文
+     * <p>
+     * 完整的应用启动方法, 支持指定应用名称和应用类型
+     * 示例:java -jar app.jar --spring.profiles.active=prod --server.port=2333
      *
-     * 完整的应用启动方法，支持指定应用名称和应用类型
-     * 示例：java -jar app.jar --spring.profiles.active=prod --server.port=2333
-     *
-     * @param appName         应用名称，将用作 spring.application.name
+     * @param appName         应用名称, 将用作 spring.application.name
      * @param source          包含 @SpringBootApplication 注解的主类
-     * @param applicationType 应用类型（SERVLET、REACTIVE、SERVICE、NONE）
+     * @param applicationType 应用类型 (SERVLET,REACTIVE,SERVICE,NONE)
      * @param args            命令行参数
      * @return 创建的 Spring 应用上下文
      * @since 1.0.0
@@ -162,8 +177,8 @@ public final class ZekaApplication {
 
     /**
      * 创建 SpringApplicationBuilder 并进行配置
-     *
-     * 该方法负责：
+     * <p>
+     * 该方法负责:
      * 1. 设置默认配置和环境变量
      * 2. 通过 SPI 机制加载其他包的组件
      * 3. 配置应用类型和环境
@@ -212,7 +227,7 @@ public final class ZekaApplication {
         }
 
         propertySources.addLast(new MapPropertySource(DefaultEnvironment.DEFAULT_PROPERTIES_PROPERTY_SOURCE_NAME,
-            Tools.getMapFromProperties(defaultProperties)));
+                                                      Tools.getMapFromProperties(defaultProperties)));
 
         return builder;
     }
@@ -220,11 +235,12 @@ public final class ZekaApplication {
     /**
      * 执行 starter 组件启动 spi
      *
-     * @param appName           app name
-     * @param environment       environment
-     * @param defaultProperties default properties
+     * @param appName           应用名称
+     * @param environment       应用环境配置
+     * @param defaultProperties 默认属性配置
      * @since 2024.2.0
      */
+    @SuppressWarnings("PMD.LowerCamelCaseVariableNamingRule")
     private static void launcherSPI(String appName, ConfigurableEnvironment environment, Properties defaultProperties) {
         // 加载自定义 SPI 组件, 用于在容器启动前注入自定义逻辑, 比如设置组件的默认配置以减少业务上的配置
         ServiceLoader<LauncherInitiation> loader = ServiceLoader.load(LauncherInitiation.class);
@@ -234,19 +250,19 @@ public final class ZekaApplication {
             .collect(Collectors.toList());
 
         launcherInitiations.forEach(launcherService -> launcherService.launcherWrapper(environment,
-            defaultProperties,
-            appName,
-            ConfigKit.isLocalLaunch()));
+                                                                                       defaultProperties,
+                                                                                       appName,
+                                                                                       ConfigKit.isLocalLaunch()));
 
     }
 
     /**
      * 构建默认的应用属性配置
-     *
-     * 设置应用的基本信息，包括：
+     * <p>
+     * 设置应用的基本信息, 包括:
      * - 版本信息
-     * - 组ID
-     * - 构件ID
+     * - 组 ID
+     * - 构件 ID
      * - 应用名称
      * - 包名等
      *
@@ -258,15 +274,15 @@ public final class ZekaApplication {
     private static Properties buildDefaultProperties(String appName) {
         Properties defaultProperties = new Properties();
         defaultProperties.setProperty(ConfigKey.POM_INFO_VERSION,
-            MAIN_PROPERTIES.getProperty("version",
-                System.getProperty(ConfigKey.SERVICE_VERSION)));
+                                      MAIN_PROPERTIES.getProperty("version",
+                                                                  System.getProperty(ConfigKey.SERVICE_VERSION)));
         defaultProperties.setProperty(ConfigKey.POM_INFO_GROUPID,
-            MAIN_PROPERTIES.getProperty("groupId", App.BASE_PACKAGES));
+                                      MAIN_PROPERTIES.getProperty("groupId", App.BASE_PACKAGES));
         defaultProperties.setProperty(ConfigKey.POM_INFO_ARTIFACTID,
-            appName);
+                                      appName);
         defaultProperties.setProperty(ConfigKey.SERVICE_VERSION,
-            MAIN_PROPERTIES.getProperty("version",
-                System.getProperty(ConfigKey.SERVICE_VERSION)));
+                                      MAIN_PROPERTIES.getProperty("version",
+                                                                  System.getProperty(ConfigKey.SERVICE_VERSION)));
 
         // 设置默认应用名, 可以通过环境变量修改或者是配置文件修改
         defaultProperties.setProperty(ConfigKey.SpringConfigKey.APPLICATION_NAME, appName);
@@ -277,20 +293,20 @@ public final class ZekaApplication {
     }
 
     /**
-     * 加载主要配置属性，并确定应用名称
-     *
-     * 应用名称获取逻辑：
-     * 1. 如果是通过 jar 启动应用，从 MANIFEST.MF 或 build-info.properties 中获取 artifactId
-     * 2. 如果是在 IDE 中运行，从配置文件中读取 spring.application.name
-     * 3. 如果以上都为空，则解析 classpath 路径，使用当前目录名
-     *
-     * 注意: applicationName 规定使用 maven 中的 artifactId，日志文件保存路径也会使用到 artifactId
-     * 配置链: maven.artifactId --> spring.application.name --> 日志路径
+     * 加载主要配置属性, 并确定应用名称
+     * <p>
+     * 应用名称获取逻辑:
+     * 1. 如果是通过 jar 启动应用, 从 MANIFEST.MF 或 build-info.properties 中获取 artifactId
+     * 2. 如果是在 IDE 中运行, 从配置文件中读取 spring.application.name
+     * 3. 如果以上都为空, 则解析 classpath 路径, 使用当前目录名
+     * <p>
+     * 注意: applicationName 规定使用 maven 中的 artifactId, 日志文件保存路径也会使用到 artifactId
+     * 配置链: maven.artifactId-->spring.application.name--> 日志路径
      *
      * @return 包含应用主要配置的 Properties 对象
      * @since 1.0.0
      */
-    @SuppressWarnings("D")
+    @SuppressWarnings("PMD.AvoidComplexConditionRule")
     @NotNull
     private static Properties loadMainProperties() {
         log.info("App NameSpace: [{}], 如果不正确请设置 JVM 变量/系统环境变量: 「user.namespace」或: [ZEKA_NAME_SPACE]", App.ZEKA_NAME_SPACE);
@@ -346,15 +362,15 @@ public final class ZekaApplication {
             }
 
             if (name != null && !name.equals(StringPool.DOLLAR_LEFT_BRACE
-                + ConfigKey.SpringConfigKey.PACKAGE_NAME
-                + StringPool.RIGHT_BRACE)) {
+                                             + ConfigKey.SpringConfigKey.PACKAGE_NAME
+                                             + StringPool.RIGHT_BRACE)) {
                 applicationName = name.toString();
             } else {
                 File file = new File(configFilePath);
                 // 直接解析文件目录, 使用当前目录名作为应用名 (target 上一级目录)
                 applicationName = file.getParentFile().getParentFile().getName();
                 log.debug("未显式设置 application name 或者未正确解析 ${package.name} (可能需要重新编译项目), 读取当前模块名作为应用名: [{}]",
-                    applicationName);
+                          applicationName);
                 if (StringUtils.isBlank(startType)) {
                     // 如果 startType 为 null, 则是从 IDE 中启动
                     System.setProperty(App.START_TYPE, App.START_IDEA);

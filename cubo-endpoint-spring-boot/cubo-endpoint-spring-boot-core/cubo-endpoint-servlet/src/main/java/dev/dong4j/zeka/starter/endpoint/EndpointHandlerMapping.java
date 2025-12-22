@@ -2,28 +2,31 @@ package dev.dong4j.zeka.starter.endpoint;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 自定义 Endpoint 处理器映射
- *
+ * <p>
  * 自动将被 @Endpoint 注解标识的类注册为一个 Controller。
  * 继承自 Spring MVC 的 RequestMappingHandlerMapping，实现了自定义的
  * 请求映射处理逻辑。
- *
+ * <p>
  * 主要功能：
  * 1. 识别和处理 @Endpoint 注解的类
  * 2. 支持自定义路径映射
  * 3. 设置适当的优先级以避免与业务 Controller 冲突
- *
+ * <p>
  * 参考文档：http://monkeywie.cn/2020/06/22/custom-springmvc-requestmappinghandlermapping
  *
  * @author dong4j
@@ -42,7 +45,7 @@ public abstract class EndpointHandlerMapping extends RequestMappingHandlerMappin
 
     /**
      * 获取映射路径
-     *
+     * <p>
      * 根据默认路径获取对应的自定义路径，如果没有自定义路径则返回默认路径。
      *
      * @param defaultPath 默认路径
@@ -60,7 +63,7 @@ public abstract class EndpointHandlerMapping extends RequestMappingHandlerMappin
 
     /**
      * 构造方法
-     *
+     * <p>
      * 初始化 EndpointHandlerMapping，设置适当的优先级以确保
      * 用户自定义的映射具有更高的优先级（除了资源映射）。
      *
@@ -73,7 +76,7 @@ public abstract class EndpointHandlerMapping extends RequestMappingHandlerMappin
 
     /**
      * 检测是否为 Endpoint 处理器
-     *
+     * <p>
      * 重写父类方法，用于检测被 @Endpoint 注解标识的 Bean。
      * 只有被 @Endpoint 注解标识的类才会被此处理器处理。
      *
@@ -89,11 +92,11 @@ public abstract class EndpointHandlerMapping extends RequestMappingHandlerMappin
 
     /**
      * 获取方法的请求映射信息
-     *
+     * <p>
      * 重写父类方法，用于处理 Endpoint 方法的请求映射。
      * 支持自定义路径映射，并记录所有注册的路径。
      *
-     * @param method 方法对象
+     * @param method      方法对象
      * @param handlerType 处理器类型
      * @return 请求映射信息，如果无法处理则返回 null
      * @since 1.0.0
@@ -126,12 +129,12 @@ public abstract class EndpointHandlerMapping extends RequestMappingHandlerMappin
 
         // 返回新的请求映射信息，保留其他所有条件
         return new RequestMappingInfo(patternsInfo,
-            defaultMapping.getMethodsCondition(),
-            defaultMapping.getParamsCondition(),
-            defaultMapping.getHeadersCondition(),
-            defaultMapping.getConsumesCondition(),
-            defaultMapping.getProducesCondition(),
-            defaultMapping.getCustomCondition());
+                                      defaultMapping.getMethodsCondition(),
+                                      defaultMapping.getParamsCondition(),
+                                      defaultMapping.getHeadersCondition(),
+                                      defaultMapping.getConsumesCondition(),
+                                      defaultMapping.getProducesCondition(),
+                                      defaultMapping.getCustomCondition());
 
     }
 

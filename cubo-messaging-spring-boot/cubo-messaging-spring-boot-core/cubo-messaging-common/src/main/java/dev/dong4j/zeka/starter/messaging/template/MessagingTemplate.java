@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.messaging.template;
 
+import java.util.concurrent.CompletableFuture;
+
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 消息模板接口
@@ -58,8 +59,8 @@ public interface MessagingTemplate {
     /**
      * 获取原生消息模板
      *
-     * @param <T> 模板类型
-     * @param type 消息中间件类型
+     * @param <T>           模板类型
+     * @param type          消息中间件类型
      * @param templateClass 模板类
      * @return 原生模板实例
      */

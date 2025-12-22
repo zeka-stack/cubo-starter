@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.logsystem.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 日志系统输出追加器

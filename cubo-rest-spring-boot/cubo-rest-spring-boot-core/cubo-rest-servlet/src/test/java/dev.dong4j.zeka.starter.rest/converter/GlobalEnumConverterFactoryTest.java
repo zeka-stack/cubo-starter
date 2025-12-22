@@ -1,9 +1,11 @@
 package dev.dong4j.zeka.starter.rest.converter;
 
-import dev.dong4j.zeka.starter.rest.entity.UserType;
-import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
+
+import dev.dong4j.zeka.starter.rest.entity.UserType;
 
 /**
  * <p>Description:  </p>

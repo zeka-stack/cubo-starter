@@ -1,10 +1,12 @@
 package dev.dong4j.zeka.starter.messaging.adapter;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+
+import java.lang.reflect.Method;
+
 import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
-import java.lang.reflect.Method;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 /**
  * Kafka 消息监听适配器
@@ -34,8 +36,8 @@ public class KafkaMessagingListenerAdapter extends AbstractMessagingListenerAdap
      * 构造方法
      *
      * @param handlerMethod 消息处理方法
-     * @param context 消息上下文
-     * @param method 业务方法
+     * @param context       消息上下文
+     * @param method        业务方法
      */
     public KafkaMessagingListenerAdapter(MessagingHandlerMethod handlerMethod,
                                          MessagingContext context,

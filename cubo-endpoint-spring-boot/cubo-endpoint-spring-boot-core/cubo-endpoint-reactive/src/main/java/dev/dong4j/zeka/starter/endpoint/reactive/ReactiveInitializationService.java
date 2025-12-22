@@ -1,10 +1,12 @@
 package dev.dong4j.zeka.starter.endpoint.reactive;
 
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.Duration;
+
 import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
 import dev.dong4j.zeka.starter.endpoint.initialization.WarmUpRequestDTO;
-import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -12,13 +14,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * Reactive 环境下的初始化服务实现
- *
+ * <p>
  * 在 Spring WebFlux Reactive Web 环境下实现预热初始化功能。
  * 使用 Spring WebClient 发送异步非阻塞的 HTTP POST 请求来触发预热操作。
- *
+ * <p>
  * 通过向本地的 /warmup 端点发送包含示例数据的 POST 请求，
  * 来预加载 WebFlux、Jackson、验证器等组件。
- *
+ * <p>
  * 支持请求超时控制，默认超时时间为 5 秒。
  *
  * @author dong4j
@@ -35,7 +37,7 @@ public class ReactiveInitializationService implements InitializationService {
 
     /**
      * 构造方法
-     *
+     * <p>
      * 初始化 Reactive 初始化服务，接收 WebClient.Builder 实例
      * 用于创建具有默认配置的 HTTP 客户端。
      *
@@ -48,7 +50,7 @@ public class ReactiveInitializationService implements InitializationService {
 
     /**
      * 发送 Reactive HTTP 预热请求
-     *
+     * <p>
      * 使用 WebClient 向指定的预热端点发送异步的 POST 请求。
      * 请求体为 JSON 格式的示例数据，用于触发各项 Reactive 组件的初始化。
      * 设置 5 秒超时时间，并使用 block() 等待请求完成。

@@ -1,19 +1,20 @@
 package dev.dong4j.zeka.starter.launcher.banner;
 
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.common.util.Tools;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.kernel.common.util.Tools;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Banner 打印工具类，负责加载和显示应用启动 Banner
- *
+ * <p>
  * 该类会按照以下顺序查找 Banner 文件：
  * 1. 优先查找项目根目录下的 banner.txt 文件
  * 2. 如果不存在，则使用内置的 banner/default.banner 文件
- *
+ * <p>
  * 加载到 Banner 文件后，会将其内容与应用信息（版本、名称、环境）一起显示。
  *
  * @author dong4j
@@ -29,7 +30,7 @@ public class BannerPrinter {
 
     /**
      * 输出 Banner 信息
-     *
+     * <p>
      * 该方法会按照优先级查找并加载 Banner 文件：
      * 1. 首先尝试加载项目中的自定义 banner.txt 文件
      * 2. 如果未找到，则加载内置的 banner/default.banner 文件
@@ -56,14 +57,14 @@ public class BannerPrinter {
         String appName = ConfigKit.getAppName();
         String profile = ConfigKit.getProfile();
         version = Tools.isBlank(version)
-            ? "JDK (version: " + System.getProperty("java.version") + ")"
-            : "Framework (version: " + version + ")";
+                  ? "JDK (version: " + System.getProperty("java.version") + ")"
+                  : "Framework (version: " + version + ")";
         print(inputStream, profile, version, appName);
     }
 
     /**
      * 打印 Banner 内容
-     *
+     * <p>
      * 调用默认的 Banner 实现类来打印 Banner 内容，
      * 将加载的 Banner 文件内容与应用信息一起显示。
      *

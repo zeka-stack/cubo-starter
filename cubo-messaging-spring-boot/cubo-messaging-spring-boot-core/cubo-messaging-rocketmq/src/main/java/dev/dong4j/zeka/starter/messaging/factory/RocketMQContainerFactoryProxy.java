@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.messaging.factory;
 
+import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.apache.rocketmq.spring.support.DefaultRocketMQListenerContainer;
+
 import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.adapter.RocketMQMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.apache.rocketmq.spring.support.DefaultRocketMQListenerContainer;
 
 /**
  * RocketMQ 容器工厂代理类
@@ -77,7 +78,7 @@ public class RocketMQContainerFactoryProxy implements MessagingListenerContainer
     /**
      * 创建 RocketMQ 监听容器
      *
-     * @param listener RocketMQ 监听器
+     * @param listener   RocketMQ 监听器
      * @param annotation MessagingListener 注解实例
      * @return RocketMQ 监听容器
      */

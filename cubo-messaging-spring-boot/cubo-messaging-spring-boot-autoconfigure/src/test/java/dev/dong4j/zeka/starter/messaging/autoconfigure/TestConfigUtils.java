@@ -1,11 +1,13 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.rocketmq.common.message.MessageExt;
+
+import java.util.UUID;
+
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
-import java.util.UUID;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.rocketmq.common.message.MessageExt;
 
 public class TestConfigUtils {
 

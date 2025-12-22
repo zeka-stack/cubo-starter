@@ -1,28 +1,30 @@
 package dev.dong4j.zeka.starter.rest.converter;
 
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
-import dev.dong4j.zeka.kernel.common.util.DateUtils;
-import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.Date;
+
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.kernel.common.util.DateUtils;
+
 /**
  * 字符串到日期转换器
- *
+ * <p>
  * 该转换器专门用于在 Spring MVC Controller 层将字符串类型的参数转换为 Date 类型。
  * 主要应用于基础字段转换（非实体类型），实体类的日期转换由 Jackson 处理。
- *
+ * <p>
  * 功能特点：
  * 1. 支持多种日期格式的自动识别和转换
  * 2. 可通过系统属性配置自定义日期格式
  * 3. 处理空字符串时返回 null，避免转换异常
  * 4. 与 Jackson 日期配置保持一致
- *
+ * <p>
  * 使用场景：
  * - URL 路径参数中的日期字符串转换
  * - 查询参数中的日期字符串转换
  * - 表单数据中的日期字符串转换
- *
+ * <p>
  * 配置方式：
  * 可通过 zeka-stack.json.date-format 系统属性自定义日期格式。
  *
@@ -39,10 +41,10 @@ public class StringToDateConverter implements Converter<String, Date> {
 
     /**
      * 将字符串转换为日期对象
-     *
+     * <p>
      * 该方法是 Spring Converter 接口的核心实现，负责将前端传递的字符串
      * 转换为 Java Date 对象。支持自定义日期格式配置。
-     *
+     * <p>
      * 转换逻辑：
      * 1. 检查源字符串是否为空，空字符串返回 null
      * 2. 优先使用系统属性中配置的日期格式

@@ -1,17 +1,19 @@
 package dev.dong4j.zeka.starter.rest.utis;
 
-import dev.dong4j.zeka.ZekaStack;
-import dev.dong4j.zeka.kernel.common.constant.App;
-import dev.dong4j.zeka.starter.rest.annotation.ResponseWrapper;
-import dev.dong4j.zeka.starter.rest.annotation.RestControllerWrapper;
-import java.lang.annotation.Annotation;
-import java.util.Objects;
-import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.annotation.Annotation;
+import java.util.Objects;
+
+import dev.dong4j.zeka.ZekaStack;
+import dev.dong4j.zeka.kernel.common.constant.App;
+import dev.dong4j.zeka.starter.rest.annotation.ResponseWrapper;
+import dev.dong4j.zeka.starter.rest.annotation.RestControllerWrapper;
+import lombok.experimental.UtilityClass;
 
 /**
  * REST 模块工具类
@@ -129,6 +131,6 @@ public class RestUtils {
      */
     public boolean zekaClass(@NotNull MethodParameter returnType) {
         return StringUtils.containsIgnoreCase(returnType.getDeclaringClass().getPackage().getName(), App.BASE_PACKAGES)
-            || StringUtils.containsIgnoreCase(returnType.getDeclaringClass().getPackage().getName(), ZekaStack.class.getPackageName());
+               || StringUtils.containsIgnoreCase(returnType.getDeclaringClass().getPackage().getName(), ZekaStack.class.getPackageName());
     }
 }

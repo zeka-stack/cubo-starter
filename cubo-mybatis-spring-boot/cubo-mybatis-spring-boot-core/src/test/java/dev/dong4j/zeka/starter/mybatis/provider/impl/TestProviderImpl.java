@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.provider.impl;
 
+import org.springframework.stereotype.Component;
+
 import dev.dong4j.zeka.kernel.common.base.CrudDelegateImpl;
 import dev.dong4j.zeka.starter.mybatis.entity.dto.TestDTO;
 import dev.dong4j.zeka.starter.mybatis.provider.TestProvider;
 import dev.dong4j.zeka.starter.mybatis.repository.TestRepositoryService;
-import org.springframework.stereotype.Component;
 
 /**
  * <p>Description:  </p>

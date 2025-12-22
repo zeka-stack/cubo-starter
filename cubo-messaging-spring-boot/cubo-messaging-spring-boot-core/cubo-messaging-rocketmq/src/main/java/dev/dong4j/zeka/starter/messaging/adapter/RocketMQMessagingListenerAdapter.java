@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.messaging.adapter;
 
+import java.lang.reflect.Method;
+
 import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
-import java.lang.reflect.Method;
 
 /**
  * RocketMQ 消息监听适配器

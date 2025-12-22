@@ -45,7 +45,7 @@ import dev.dong4j.zeka.starter.mybatis.check.SpringSingleJdbcUrlProvider;
 @ConditionalOnProperty(value = ConfigKey.MYBATIS_JDBC_CHECK_ENABLED,
                        havingValue = ConfigDefaultValue.TRUE_STRING,
                        matchIfMissing = true)
-@EnableConfigurationProperties( {DataSourceProperties.class})
+@EnableConfigurationProperties(value = {DataSourceProperties.class})
 public class JdbcCheckAutoConfiguration implements ZekaAutoConfiguration {
     /** 用于检查 JDBC 驱动程序的工具 */
     private final JdbcDriverChecker checker;

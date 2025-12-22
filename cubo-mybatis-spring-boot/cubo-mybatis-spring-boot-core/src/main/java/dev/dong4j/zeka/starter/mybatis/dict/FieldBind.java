@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Target(value = {ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 public @interface FieldBind {
     /**
      * Target

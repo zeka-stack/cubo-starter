@@ -34,7 +34,7 @@ public class TopicAndTagUtils {
      * 组合 Topic 和 Tag
      *
      * @param topic 主题
-     * @param tag 标签
+     * @param tag   标签
      * @return 组合后的字符串
      */
     public static String withTopicAndTag(String topic, String tag) {

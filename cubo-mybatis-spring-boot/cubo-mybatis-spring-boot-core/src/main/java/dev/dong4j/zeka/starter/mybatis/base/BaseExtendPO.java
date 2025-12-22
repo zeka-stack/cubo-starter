@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+
+import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 
 /**
  * 扩展基础持久化对象抽象类

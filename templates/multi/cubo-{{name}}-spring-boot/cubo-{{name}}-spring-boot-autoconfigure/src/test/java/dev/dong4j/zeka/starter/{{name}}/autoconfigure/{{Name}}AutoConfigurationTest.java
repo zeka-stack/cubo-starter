@@ -1,7 +1,10 @@
-package dev.dong4j.zeka.starter.{{name}}.autoconfigure;
+package dev.dong4j.zeka.starter.
+
+{{name}}.autoconfigure;
 
 import dev.dong4j.zeka.kernel.test.ZekaTest;
 import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,11 +17,12 @@ import org.junit.jupiter.api.Test;
  * @since 1.0.0
  */
 @Slf4j
-@ZekaTest(classes = {{{Name}}AutoConfiguration.class})
-class {{Name}}AutoConfigurationTest {
+@ZekaTest(classes = {{{Name}}AutoConfiguration.class}) class {{Name}}
 
-    @Test
-    void test() {
-        log.info("hello tester");
+    AutoConfigurationTest {
+
+        @Test
+        void test () {
+            log.info("hello tester");
+        }
     }
-}

@@ -14,6 +14,7 @@ import java.util.Optional;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@SuppressWarnings("PMD.UndefineMagicConstantRule")
 public class DefaultDbTypeResolver implements DbTypeResolver {
 
     /**

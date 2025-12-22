@@ -5,16 +5,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import dev.dong4j.zeka.kernel.common.api.BaseCodes;
-import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.exception.LowestException;
-import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Objects;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.GenericTypeResolver;
@@ -31,31 +22,43 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Objects;
+
+import dev.dong4j.zeka.kernel.common.api.BaseCodes;
+import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
+import dev.dong4j.zeka.kernel.common.util.ObjectUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+
 /**
  * REST 接口参数自定义处理与绑定的抽象基类
- *
+ * <p>
  * 该抽象类提供了一个通用的框架，用于实现自定义的方法参数解析器。
  * 它封装了从 HTTP 请求中解析和绑定参数的通用逻辑，
  * 包括 JSON 反序列化、类型转换、异常处理等功能。
- *
+ * <p>
  * 主要功能：
  * 1. 支持基于注解的参数解析（泛型 A 为注解类型）
  * 2. JSON 请求体的解析和反序列化
  * 3. 枚举类型的特殊处理和转换
  * 4. 请求类型和数据格式的验证
  * 5. 完善的异常处理和错误信息
- *
+ * <p>
  * 技术特点：
  * - 使用 Jackson ObjectMapper 进行 JSON 处理
  * - 集成了全局枚举转换器工厂
  * - 支持 Jackson 的视图功能和高级特性
  * - 保证了请求的可重复读取
- *
+ * <p>
  * 安全限制：
  * - 仅支持 POST 和 PUT 请求方法
  * - 要求使用 CacheRequestEnhanceWrapper 包装请求
  * - 验证请求体的有效性和可读性
- *
+ * <p>
  * 继承方式：
  * 子类需要实现两个抽象方法：
  * - supportsAnnotation(): 返回支持的注解类型
@@ -77,11 +80,11 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
 
     /**
      * 构造方法，初始化参数解析器的核心组件
-     *
+     * <p>
      * 通过构造参数注入必要的依赖组件，包括 JSON 处理器和枚举转换器。
      * 这些组件在参数解析过程中将被用于各种数据类型的转换和处理。
      *
-     * @param objectMapper JSON 对象映射器，用于处理 JSON 数据的序列化和反序列化
+     * @param objectMapper               JSON 对象映射器，用于处理 JSON 数据的序列化和反序列化
      * @param globalEnumConverterFactory 全局枚举转换器工厂，用于处理枚举类型的参数转换
      * @since 1.0.0
      */
@@ -151,12 +154,12 @@ public abstract class AbstractMethodArgumentResolver<A extends Annotation> imple
     private void check(A annotation, HttpServletRequest request) {
         BaseCodes.PARAM_VERIFY_ERROR.notNull(request, "Request is null");
         BaseCodes.PARAM_VERIFY_ERROR.isTrue(HttpServletRequestWrapper.class.isAssignableFrom(request.getClass()),
-            "为避免 Request 多次读取可能导致 NPE 问题, "
-                + "Request 必须使用 CacheRequestEnhanceWrapper 进行包装处理");
+                                            "为避免 Request 多次读取可能导致 NPE 问题, "
+                                            + "Request 必须使用 CacheRequestEnhanceWrapper 进行包装处理");
         BaseCodes.PARAM_VERIFY_ERROR.isTrue(HttpMethod.POST.name().equalsIgnoreCase(Objects.requireNonNull(request).getMethod())
-                || HttpMethod.PUT.name().equalsIgnoreCase(request.getMethod()),
-            "@" + Objects.requireNonNull(annotation).getClass().getSimpleName()
-                + " 只支持 POST/PUT 请求.");
+                                            || HttpMethod.PUT.name().equalsIgnoreCase(request.getMethod()),
+                                            "@" + Objects.requireNonNull(annotation).getClass().getSimpleName()
+                                            + " 只支持 POST/PUT 请求.");
     }
 
     /**

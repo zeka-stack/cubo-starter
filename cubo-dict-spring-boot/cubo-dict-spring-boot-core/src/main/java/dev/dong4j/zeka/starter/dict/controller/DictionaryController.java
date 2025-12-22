@@ -1,6 +1,14 @@
 package dev.dong4j.zeka.starter.dict.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.api.R;
 import dev.dong4j.zeka.kernel.common.api.Result;
 import dev.dong4j.zeka.starter.dict.entity.dto.DictionaryOption;
@@ -10,34 +18,32 @@ import dev.dong4j.zeka.starter.rest.annotation.RestControllerWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
- * 字典控制器（前端接口）
+ * 字典管理控制器
+ * <p> 该控制器提供了与字典相关的 RESTful API 接口, 包括获取字典选项列表, 刷新字典缓存, 清除字典缓存等功能. 通过这些接口可以方便地管理和操作字典数据.
  *
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
- * @date 2025.09.10 23:30
- * @since 1.0.0
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Tag(name = "字典管理接口")
 @AllArgsConstructor
 @RestControllerWrapper("/dicts")
 public class DictionaryController extends ServletController {
 
+    /** 字典服务依赖, 用于处理字典相关的业务逻辑 */
     private final DictionaryService dictionaryService;
 
     /**
      * 根据类型编码获取字典选项列表
+     * <p> 通过指定的字典类型编码查询对应的字典选项列表, 并返回结果
      *
      * @param typeCode 字典类型编码
-     * @return 字典选项列表
+     * @return 包含字典选项的列表结果
      * @since 1.0.0
      */
     @GetMapping("/options/{typeCode}")
@@ -52,6 +58,7 @@ public class DictionaryController extends ServletController {
 
     /**
      * 获取所有字典选项
+     * <p> 返回系统中所有字典类型的选项列表, 以 Map 形式组织, 键为类型编码, 值为对应的字典选项列表.
      *
      * @return 所有字典选项
      * @since 1.0.0
@@ -66,10 +73,10 @@ public class DictionaryController extends ServletController {
 
     /**
      * 刷新指定字典类型缓存
+     * <p> 根据传入的字典类型编码, 刷新对应的缓存数据
      *
      * @param typeCode 字典类型编码
-     * @return 操作结果
-     * @since 1.0.0
+     * @return 操作结果, 表示刷新缓存是否成功
      */
     @PostMapping("/refresh/{typeCode}")
     @Operation(summary = "刷新指定字典类型缓存")
@@ -83,8 +90,9 @@ public class DictionaryController extends ServletController {
 
     /**
      * 刷新所有字典缓存
+     * <p> 调用字典服务的 refreshAllCache 方法来刷新所有字典类型的缓存
      *
-     * @return 操作结果
+     * @return 操作结果, 表示刷新操作是否成功
      * @since 1.0.0
      */
     @PostMapping("/refresh")
@@ -97,6 +105,7 @@ public class DictionaryController extends ServletController {
 
     /**
      * 清除指定字典类型缓存
+     * <p> 根据给定的字典类型编码清除对应的缓存数据
      *
      * @param typeCode 字典类型编码
      * @return 操作结果
@@ -114,9 +123,9 @@ public class DictionaryController extends ServletController {
 
     /**
      * 清除所有字典缓存
+     * <p> 清除系统中所有字典类型的缓存数据
      *
-     * @return 操作结果
-     * @since 1.0.0
+     * @return 操作结果, 成功时返回空对象
      */
     @PostMapping("/clear")
     @Operation(summary = "清除所有字典缓存")

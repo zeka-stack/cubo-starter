@@ -1,18 +1,20 @@
 package dev.dong4j.zeka.starter.rest.mapping;
 
-import dev.dong4j.zeka.kernel.common.context.EarlySpringContext;
-import dev.dong4j.zeka.starter.rest.annotation.ApiVersion;
-import dev.dong4j.zeka.starter.rest.condition.ApiVersionCondition;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+
+import dev.dong4j.zeka.kernel.common.context.EarlySpringContext;
+import dev.dong4j.zeka.starter.rest.annotation.ApiVersion;
+import dev.dong4j.zeka.starter.rest.condition.ApiVersionCondition;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Description: api handler mapping </p>
@@ -100,17 +102,17 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
             RequestMappingInfo newMappingInfo = RequestMappingInfo.paths(patterns)
                 .methods(mapping.getMethodsCondition().getMethods().toArray(new RequestMethod[0]))
                 .params(mapping.getParamsCondition().getExpressions().stream()
-                    .map(Object::toString)
-                    .toArray(String[]::new))
+                            .map(Object::toString)
+                            .toArray(String[]::new))
                 .headers(mapping.getHeadersCondition().getExpressions().stream()
-                    .map(Object::toString)
-                    .toArray(String[]::new))
+                             .map(Object::toString)
+                             .toArray(String[]::new))
                 .consumes(mapping.getConsumesCondition().getExpressions().stream()
-                    .map(Object::toString)
-                    .toArray(String[]::new))
+                              .map(Object::toString)
+                              .toArray(String[]::new))
                 .produces(mapping.getProducesCondition().getExpressions().stream()
-                    .map(Object::toString)
-                    .toArray(String[]::new))
+                              .map(Object::toString)
+                              .toArray(String[]::new))
                 .build();
 
             // 添加自定义版本条件

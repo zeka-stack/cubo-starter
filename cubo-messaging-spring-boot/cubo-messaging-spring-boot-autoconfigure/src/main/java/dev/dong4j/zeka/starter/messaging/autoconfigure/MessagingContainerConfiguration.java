@@ -1,12 +1,7 @@
 // UnifiedMQConfiguration.java
+
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.starter.messaging.factory.DefaultRocketMQContainerRegistry;
-import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
-import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
-import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
-import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,21 +9,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.starter.messaging.factory.DefaultRocketMQContainerRegistry;
+import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
+import dev.dong4j.zeka.starter.messaging.registry.MessagingListenerRegistry;
+import dev.dong4j.zeka.starter.messaging.registry.MessagingRegistrationHandler;
+import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
+
 /**
  * 消息容器自动配置类
- *
+ * <p>
  * 该类负责配置消息监听容器相关的组件，包括：
  * 1. 消息类型检测器
  * 2. Kafka 监听器端点注册表
  * 3. RocketMQ 容器注册器
  * 4. 消息注册处理器
  * 5. 消息监听器注册表
- *
+ * <p>
  * 使用场景：
  * 1. 自动配置消息监听容器
  * 2. 集成多种消息中间件(Kafka, RocketMQ)
  * 3. 提供统一的注册管理机制
- *
+ * <p>
  * 配置属性前缀：zeka.messaging
  *
  * @author dong4j
@@ -55,7 +57,7 @@ public class MessagingContainerConfiguration {
 
     /**
      * 创建 Kafka 监听器端点注册表 Bean
-     *
+     * <p>
      * 注意：如果 Spring Kafka 已经自动配置了该 Bean，则不会重复创建
      *
      * @return Kafka 监听器端点注册表实例
@@ -98,7 +100,8 @@ public class MessagingContainerConfiguration {
      * @return 消息监听器注册表实例
      */
     @Bean
-    public MessagingListenerRegistry messagingListenerRegistry(MessagingRegistrationHandler registrationHandler, MessagingTypeDetector typeDetector) {
+    public MessagingListenerRegistry messagingListenerRegistry(MessagingRegistrationHandler registrationHandler,
+                                                               MessagingTypeDetector typeDetector) {
         return new MessagingListenerRegistry(registrationHandler, typeDetector);
     }
 

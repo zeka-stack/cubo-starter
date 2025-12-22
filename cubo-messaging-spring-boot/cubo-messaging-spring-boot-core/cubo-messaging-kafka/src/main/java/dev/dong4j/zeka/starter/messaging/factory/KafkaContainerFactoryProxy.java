@@ -1,14 +1,15 @@
 package dev.dong4j.zeka.starter.messaging.factory;
 
-import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.adapter.KafkaMessagingListenerAdapter;
-import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import dev.dong4j.zeka.starter.messaging.util.MethodInvokerWrapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.config.KafkaListenerEndpoint;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.config.MethodKafkaListenerEndpoint;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+
+import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.adapter.KafkaMessagingListenerAdapter;
+import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
+import dev.dong4j.zeka.starter.messaging.util.MethodInvokerWrapper;
 
 /**
  * Kafka 容器工厂代理类
@@ -69,7 +70,7 @@ public class KafkaContainerFactoryProxy implements MessagingListenerContainerFac
     /**
      * 创建 Kafka 监听端点
      *
-     * @param adapter 消息监听适配器
+     * @param adapter    消息监听适配器
      * @param annotation MessagingListener 注解实例
      * @return Kafka 监听端点
      */

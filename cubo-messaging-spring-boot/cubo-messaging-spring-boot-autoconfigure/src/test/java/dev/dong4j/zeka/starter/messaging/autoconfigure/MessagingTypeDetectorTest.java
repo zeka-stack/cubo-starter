@@ -1,13 +1,14 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
-import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
+
+import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
+import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

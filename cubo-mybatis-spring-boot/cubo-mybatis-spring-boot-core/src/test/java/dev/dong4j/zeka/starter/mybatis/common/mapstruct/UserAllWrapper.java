@@ -1,5 +1,10 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
+
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.mapstruct.DeletedEnumConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.EnabledEnumConverter;
@@ -9,10 +14,6 @@ import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
 import dev.dong4j.zeka.starter.mybatis.common.entity.po.User;
 import dev.dong4j.zeka.starter.mybatis.common.entity.vo.UserVO;
 import dev.dong4j.zeka.starter.mybatis.mapstruct.BaseWrapper;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
 /**
  * <p>Description:  user 转换器, 默认提供 4 种转换, 根据业务需求重写转换逻辑 </p>

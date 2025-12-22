@@ -1,6 +1,5 @@
 package dev.dong4j.zeka.starter.launcher.annotation;
 
-import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -8,9 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
+
 /**
  * 应用运行类型注解
- *
+ * <p>
  * 该注解用于标记应用的运行类型，支持以下类型：
  * 1. STANDALONE - 独立应用
  * 2. WEB - Web应用

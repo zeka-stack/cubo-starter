@@ -1,11 +1,5 @@
 package dev.dong4j.zeka.starter.rest.advice;
 
-import dev.dong4j.zeka.kernel.common.api.Result;
-import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import jakarta.servlet.Servlet;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
@@ -15,6 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import dev.dong4j.zeka.kernel.common.api.Result;
+import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Description: Servlet 异常全局处理扩展，用于处理 Web 层特定异常</p>
@@ -77,7 +78,8 @@ public class ServletExtendExceptionHandler implements ZekaAutoConfiguration {
     @SuppressWarnings("all")
     @ExceptionHandler(value = CannotAcquireLockException.class)
     public Result<?> cannotAcquireLockException(HttpServletRequest req, NumberFormatException e) {
-        log.error("死锁异常：{}，为了避免锁表，请使用'select * from information_schema.INNODB_TRX' 如果锁表了，快速kill 某个trx_mysql_thread_id，以解除锁表", e.getMessage());
+        log.error("死锁异常：{}，为了避免锁表，请使用'select * from information_schema.INNODB_TRX' 如果锁表了，快速kill 某个trx_mysql_thread_id，以解除锁表",
+                  e.getMessage());
         return GlobalExceptionHandler.result(e, req, "锁表异常！请检查管理员处理！");
     }
 }

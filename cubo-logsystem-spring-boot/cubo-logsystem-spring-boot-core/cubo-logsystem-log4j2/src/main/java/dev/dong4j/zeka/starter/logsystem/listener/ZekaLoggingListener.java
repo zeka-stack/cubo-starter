@@ -1,30 +1,5 @@
 package dev.dong4j.zeka.starter.logsystem.listener;
 
-import dev.dong4j.zeka.kernel.common.ZekaApplicationListener;
-import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
-import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
-import dev.dong4j.zeka.kernel.common.support.StrFormatter;
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.kernel.common.util.GsonUtils;
-import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import dev.dong4j.zeka.processor.annotation.AutoListener;
-import dev.dong4j.zeka.starter.logsystem.Constants;
-import dev.dong4j.zeka.starter.logsystem.enums.LogAppenderType;
-import dev.dong4j.zeka.starter.logsystem.handler.AdditionalProcessor;
-import dev.dong4j.zeka.starter.logsystem.handler.LogFileProcessor;
-import dev.dong4j.zeka.starter.logsystem.handler.PatternProcessor;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -49,32 +24,59 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ResourceUtils;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+
+import dev.dong4j.zeka.kernel.common.ZekaApplicationListener;
+import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.kernel.common.enums.ZekaEnv;
+import dev.dong4j.zeka.kernel.common.support.StrFormatter;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.kernel.common.util.GsonUtils;
+import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
+import dev.dong4j.zeka.processor.annotation.AutoListener;
+import dev.dong4j.zeka.starter.logsystem.Constants;
+import dev.dong4j.zeka.starter.logsystem.enums.LogAppenderType;
+import dev.dong4j.zeka.starter.logsystem.handler.AdditionalProcessor;
+import dev.dong4j.zeka.starter.logsystem.handler.LogFileProcessor;
+import dev.dong4j.zeka.starter.logsystem.handler.PatternProcessor;
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 import static org.springframework.boot.context.logging.LoggingApplicationListener.CONFIG_PROPERTY;
 
 /**
  * Zeka日志系统监听器
- *
+ * <p>
  * 该类是日志系统的核心监听器，负责在日志系统加载之前将自定义配置注入到日志配置文件中，
  * 完成日志系统的自定义配置。通过监听Spring Boot应用的生命周期事件，实现日志系统的
  * 分阶段初始化和配置。
- *
+ * <p>
  * 主要功能包括：
  * 1. 监听应用环境准备事件，进行第一次日志系统初始化
  * 2. 监听应用上下文初始化事件，进行第二次日志系统初始化
  * 3. 处理日志文件配置、格式配置、级别配置等
  * 4. 支持多环境下的日志配置切换
  * 5. 提供日志配置信息的调试输出
- *
+ * <p>
  * 初始化阶段：
  * - 第一次初始化：在环境准备阶段，只能读取本地配置
  * - 第二次初始化：在上下文初始化阶段，可以读取Nacos等配置中心的配置
- *
+ * <p>
  * 使用场景：
  * - Spring Boot应用启动时的日志系统初始化
  * - 多环境下的日志配置管理
  * - 配置中心变更时的日志系统重新配置
  * - 开发和生产环境的差异化日志配置
- *
+ * <p>
  * 设计意图：
  * 通过分阶段初始化，确保日志系统能够在不同阶段获取到正确的配置，
  * 支持配置中心的动态配置和本地配置的优先级管理。
@@ -302,10 +304,11 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      * @param environment environment
      * @since 1.0.0
      */
+    @SuppressWarnings("PMD.UndefineMagicConstantRule")
     private void initializeSystem(ConfigurableEnvironment environment) {
         LoggingInitializationContext initializationContext = new LoggingInitializationContext(environment);
         String logConfig = environment.getProperty(ConfigKey.LogSystemConfigKey.LOG_CONFIG,
-            environment.getProperty(CONFIG_PROPERTY, LogAppenderType.FILE.getConfig()));
+                                                   environment.getProperty(CONFIG_PROPERTY, LogAppenderType.FILE.getConfig()));
         if (!logConfig.startsWith("classpath")) {
             logConfig = "classpath:" + logConfig;
         }
@@ -427,10 +430,10 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
                 system.setLogLevel(name, level);
             } catch (RuntimeException ex) {
                 LogFactory.getLog(this.getClass()).error(LogMessage.format("Cannot set level '%s' for '%s'",
-                    level,
-                    StringUtils.isBlank(name)
-                        ? LoggingSystem.ROOT_LOGGER_NAME
-                        : name));
+                                                                           level,
+                                                                           StringUtils.isBlank(name)
+                                                                           ? LoggingSystem.ROOT_LOGGER_NAME
+                                                                           : name));
             }
         };
     }
@@ -440,7 +443,7 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
      *
      * @since 1.0.0
      */
-    @SuppressWarnings({"checkstyle:Regexp", "DuplicatedCode"})
+    @SuppressWarnings(value = {"checkstyle:Regexp", "DuplicatedCode"})
     private void printLogConfigInfo() {
 
         if (ConfigKit.isDebugModel()) {
@@ -451,33 +454,33 @@ public class ZekaLoggingListener implements ZekaApplicationListener {
 
                 list.add(StrFormatter.format("当前启动环境 zekaEnv: {}", this.zekaEnv.getName()));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_CONFIG,
-                    System.getProperty(LoggingApplicationListener.CONFIG_PROPERTY)));
+                                             System.getProperty(LoggingApplicationListener.CONFIG_PROPERTY)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_PATH, this.logFileProcessor.getPath()));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_NAME, this.logFileProcessor.getName()));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_APP_NAME,
-                    System.getProperty(Constants.APP_NAME)));
+                                             System.getProperty(Constants.APP_NAME)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.SHOW_LOG_LOCATION,
-                    System.getProperty(Constants.SHOW_LOG_LOCATION)));
+                                             System.getProperty(Constants.SHOW_LOG_LOCATION)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_PATTERN_CONSOLE,
-                    System.getProperty(Constants.CONSOLE_LOG_PATTERN)));
+                                             System.getProperty(Constants.CONSOLE_LOG_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_PATTERN_FILE,
-                    System.getProperty(Constants.FILE_LOG_PATTERN)));
+                                             System.getProperty(Constants.FILE_LOG_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_PATTERN_LEVEL,
-                    System.getProperty(Constants.LOG_LEVEL_PATTERN)));
+                                             System.getProperty(Constants.LOG_LEVEL_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_PATTERN_DATEFORMAT,
-                    System.getProperty(Constants.LOG_DATEFORMAT_PATTERN)));
+                                             System.getProperty(Constants.LOG_DATEFORMAT_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.ROLLING_FILE_NAME,
-                    System.getProperty(Constants.ROLLING_FILE_NAME_PATTERN)));
+                                             System.getProperty(Constants.ROLLING_FILE_NAME_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.MARKER_PATTERN,
-                    System.getProperty(Constants.MARKER_PATTERN)));
+                                             System.getProperty(Constants.MARKER_PATTERN)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_CLEAN_HISTORY,
-                    System.getProperty(Constants.FILE_CLEAN_HISTORY_ON_START)));
+                                             System.getProperty(Constants.FILE_CLEAN_HISTORY_ON_START)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_MAX_HISTORY,
-                    System.getProperty(Constants.FILE_MAX_HISTORY)));
+                                             System.getProperty(Constants.FILE_MAX_HISTORY)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_MAX_SIZE,
-                    System.getProperty(Constants.FILE_MAX_SIZE)));
+                                             System.getProperty(Constants.FILE_MAX_SIZE)));
                 list.add(StrFormatter.format("{}: {}", ConfigKey.LogSystemConfigKey.LOG_FILE_TOTAL_SIZE_CAP,
-                    System.getProperty(Constants.FILE_TOTAL_SIZE_CAP)));
+                                             System.getProperty(Constants.FILE_TOTAL_SIZE_CAP)));
                 System.out.println("==================== 日志配置 ====================");
                 loggerConfigurations.forEach(log -> list.add(StrFormatter.format("{}: {}", log.getName(), log.getEffectiveLevel())));
                 System.out.println(GsonUtils.toJson(list, true));

@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
  * @date 2020.02.17 18:10
  * @since 1.0.0
  */
-@SuppressWarnings({"all"})
+@SuppressWarnings( {"all"})
 public class SqlFormatter {
 
     /** WHITESPACE */
@@ -165,11 +165,11 @@ public class SqlFormatter {
             char begin = tok.charAt(0);
             boolean isIdentifier = Character.isJavaIdentifierStart(begin) || '"' == begin;
             return isIdentifier
-                && !LOGICAL.contains(tok)
-                && !END_CLAUSES.contains(tok)
-                && !QUANTIFIERS.contains(tok)
-                && !DML.contains(tok)
-                && !MISC.contains(tok);
+                   && !LOGICAL.contains(tok)
+                   && !END_CLAUSES.contains(tok)
+                   && !QUANTIFIERS.contains(tok)
+                   && !DML.contains(tok)
+                   && !MISC.contains(tok);
         }
 
         /**
@@ -385,8 +385,8 @@ public class SqlFormatter {
             this.newline();
             this.afterBeginBeforeEnd = false;
             this.afterByOrSetOrFromOrSelect = "by".equals(this.lcToken)
-                || "set".equals(this.lcToken)
-                || "from".equals(this.lcToken);
+                                              || "set".equals(this.lcToken)
+                                              || "from".equals(this.lcToken);
         }
 
         /**

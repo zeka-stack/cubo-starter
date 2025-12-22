@@ -1,25 +1,26 @@
 package dev.dong4j.zeka.starter.logsystem.entity;
 
+import org.jetbrains.annotations.Contract;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.Contract;
 
 /**
  * 日志文件配置实体类
- *
+ * <p>
  * 该类封装了日志文件相关的所有配置信息，包括文件路径、名称、大小限制等。
  * 主要功能包括：
  * 1. 定义日志文件的基本属性（名称、路径）
  * 2. 配置日志文件的存储策略（大小、保留时间）
  * 3. 支持日志文件的清理和轮转配置
  * 4. 提供日志文件配置的默认值
- *
+ * <p>
  * 使用场景：
  * - 日志系统配置文件绑定
  * - 日志文件路径和名称的动态配置
  * - 日志存储策略的个性化设置
  * - 多环境下的日志配置管理
- *
+ * <p>
  * 设计意图：
  * 通过统一的配置实体类，简化日志文件配置的管理和使用，
  * 提供灵活的日志存储策略配置能力。
@@ -53,7 +54,7 @@ public class LogFile {
 
     /**
      * 带参数的构造函数
-     *
+     * <p>
      * 创建指定名称和路径的日志文件配置实例。
      *
      * @param name 日志文件名

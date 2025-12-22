@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.rest.spi;
 
+import org.jetbrains.annotations.NotNull;
+
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.processor.annotation.AutoService;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Description: rest 加载默认配置 </p>

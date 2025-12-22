@@ -1,14 +1,5 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.reactive;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.ConfigKit;
-import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
-import dev.dong4j.zeka.starter.rest.handler.JsonErrorWebExceptionHandler;
-import dev.dong4j.zeka.starter.rest.handler.ZekaWebfluxExceptionErrorAttributes;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -30,6 +21,17 @@ import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.codec.support.DefaultServerCodecConfigurer;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.view.ViewResolver;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.util.ConfigKit;
+import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
+import dev.dong4j.zeka.starter.rest.handler.JsonErrorWebExceptionHandler;
+import dev.dong4j.zeka.starter.rest.handler.ZekaWebfluxExceptionErrorAttributes;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * WebFlux 全局异常处理自动配置类
@@ -185,9 +187,9 @@ public class WebfluxGlobalExceptionAutoConfiguration implements ZekaAutoConfigur
     public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
         log.info("初始化自定义全局异常处理器: {}", JsonErrorWebExceptionHandler.class);
         JsonErrorWebExceptionHandler exceptionHandler = new JsonErrorWebExceptionHandler(errorAttributes,
-            this.resourceProperties.getResources(),
-            this.serverProperties.getError(),
-            this.applicationContext);
+                                                                                         this.resourceProperties.getResources(),
+                                                                                         this.serverProperties.getError(),
+                                                                                         this.applicationContext);
         exceptionHandler.setViewResolvers(this.viewResolvers);
         exceptionHandler.setMessageWriters(this.serverCodecConfigurer.getWriters());
         exceptionHandler.setMessageReaders(this.serverCodecConfigurer.getReaders());

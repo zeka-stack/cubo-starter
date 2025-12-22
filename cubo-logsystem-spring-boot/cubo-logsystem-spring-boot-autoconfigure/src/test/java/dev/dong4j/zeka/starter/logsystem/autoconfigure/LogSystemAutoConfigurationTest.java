@@ -1,7 +1,8 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>Description:  </p>

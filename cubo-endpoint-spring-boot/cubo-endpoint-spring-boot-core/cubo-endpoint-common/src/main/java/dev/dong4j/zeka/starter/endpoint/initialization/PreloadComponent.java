@@ -2,28 +2,31 @@ package dev.dong4j.zeka.starter.endpoint.initialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.util.StopWatch;
+
+import java.util.Set;
+
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.util.StopWatch;
 
 /**
  * 应用预加载组件
- *
+ * <p>
  * 该组件在应用启动完成后自动执行预热逻辑，通过模拟真实的请求场景
  * 来触发 Spring Boot 应用的各项初始化操作，包括：
- *
+ * <p>
  * 1. Jackson JSON 序列化/反序列化器的初始化
  * 2. Bean Validation 验证器的初始化
  * 3. HTTP 客户端和连接池的初始化
  * 4. 其他可能导致第一次访问慢的组件
- *
+ * <p>
  * 这样可以显著减少用户第一次访问时的响应延迟。
  *
  * @author dong4j
@@ -51,7 +54,7 @@ public class PreloadComponent {
 
     /**
      * 应用启动完成事件处理器
-     *
+     * <p>
      * 在接收到 ApplicationReadyEvent 事件后，执行预热逻辑，
      * 包括手动验证、JSON 序列化和发送预热请求。
      * 使用 StopWatch 统计预热耗时。
@@ -77,7 +80,7 @@ public class PreloadComponent {
 
     /**
      * 执行 JSON 序列化预热
-     *
+     * <p>
      * 通过反序列化一个测试 JSON 字符串来预热 Jackson 序列化器，
      * 确保第一次真实请求时 JSON 处理已经被初始化。
      * 忽略可能的序列化异常，仅用于预热目的。
@@ -88,11 +91,11 @@ public class PreloadComponent {
     private void mapJson() {
         // 测试用的 JSON 字符串，包含多种数据类型
         final String json = "{\n" +
-            "    \"inputMessage\": \"abc\",\n" +
-            "    \"someNumber\": 123.4,\n" +
-            "    \"patternString\": \"this is a fixed string\",\n" +
-            "    \"selectOne\": \"TWO\"\n" +
-            "}";
+                            "    \"inputMessage\": \"abc\",\n" +
+                            "    \"someNumber\": 123.4,\n" +
+                            "    \"patternString\": \"this is a fixed string\",\n" +
+                            "    \"selectOne\": \"TWO\"\n" +
+                            "}";
 
         try {
             // 执行 JSON 反序列化预热
@@ -104,7 +107,7 @@ public class PreloadComponent {
 
     /**
      * 执行手动验证预热
-     *
+     * <p>
      * 通过创建 Bean Validation 验证器并执行一次验证操作来预热验证组件，
      * 确保第一次真实请求时验证器已经被初始化和加载。
      * 忽略验证结果，仅用于预热目的。

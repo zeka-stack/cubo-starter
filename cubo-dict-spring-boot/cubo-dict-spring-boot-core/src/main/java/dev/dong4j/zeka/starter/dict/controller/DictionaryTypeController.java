@@ -28,27 +28,29 @@ import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 
 /**
- * <p> 字典类型表 控制器 </p>
+ * 字典类型表控制器类
+ * <p> 提供字典类型相关的业务逻辑处理, 包括字典类型的列表查询, 分页查询, 新增, 详情, 修改和删除等操作
  *
  * @author dong4j
  * @version 1.0.0
- * @email "mailto:dong4j@dong4j@gmail.com"
- * @date 2025.09.10 23:19
- * @since 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Tag(name = "字典类型表接口")
 @AllArgsConstructor
 @RestControllerWrapper("/dicts/type")
 public class DictionaryTypeController extends ServletController {
 
-    /** DictionaryType service */
+    /** DictionaryType 服务接口, 用于操作字典类型相关数据 */
     private final DictionaryTypeService dictionaryTypeService;
 
     /**
-     * 根据条件查询全部数据
+     * 根据给定的查询参数查询字典类型表的所有数据
+     * <p> 此方法用于根据查询条件获取字典类型表中的所有记录, 并返回一个包含字典类型数据的对象集合.</p>
      *
-     * @param query 查询参数
-     * @return 对象集合
+     * @param query 包含查询条件的参数对象
+     * @return 包含字典类型数据的对象集合
      * @since 1.0.0
      */
     @GetMapping("/list")
@@ -59,10 +61,11 @@ public class DictionaryTypeController extends ServletController {
     }
 
     /**
-     * 分页查询
+     * 分页查询字典类型数据
+     * <p> 根据查询参数进行分页查询, 返回分页结果数据 </p>
      *
-     * @param query 查询参数
-     * @return 分页数据
+     * @param query 查询参数对象, 用于指定查询条件
+     * @return 分页数据对象, 包含分页结果信息
      * @since 1.0.0
      */
     @GetMapping("/page")
@@ -73,9 +76,10 @@ public class DictionaryTypeController extends ServletController {
     }
 
     /**
-     * 新增数据
+     * 新增字典类型数据
+     * <p> 根据传入的参数实体创建新的字典类型记录 </p>
      *
-     * @param form 参数实体
+     * @param form 包含字典类型信息的参数实体
      * @since 1.0.0
      */
     @PostMapping
@@ -87,9 +91,10 @@ public class DictionaryTypeController extends ServletController {
 
     /**
      * 通过主键查询单条数据
+     * <p> 根据给定的主键 ID 查询并返回单条数据
      *
-     * @param id 主键
-     * @return dto 单条数据
+     * @param id 主键 ID
+     * @return 单条数据
      * @since 1.0.0
      */
     @GetMapping("/{id}")
@@ -101,15 +106,16 @@ public class DictionaryTypeController extends ServletController {
 
     /**
      * 修改数据
+     * <p> 通过主键 ID 更新数据, 验证参数并调用服务层进行修改操作
      *
-     * @param id   主键
+     * @param id   主键 ID
      * @param form 参数实体
      * @since 1.0.0
      */
     @PutMapping("/{id}")
     @Operation(summary = "修改数据")
     @ApiOperationSupport(order = 5)
-    public void edit(@PathVariable Long id, @Validated( {UpdateGroup.class, Default.class}) @RequestBody DictionaryTypeForm form) {
+    public void edit(@PathVariable Long id, @Validated(value = {UpdateGroup.class, Default.class}) @RequestBody DictionaryTypeForm form) {
         BaseCodes.PARAM_VERIFY_ERROR.isTrue(id.equals(form.getId()), "id 不一致");
         BaseCodes.DATA_ERROR.notNull(dictionaryTypeService.getById(form.getId()), "指定的数据不存在: " + id);
         this.dictionaryTypeService.edit(form);
@@ -117,6 +123,7 @@ public class DictionaryTypeController extends ServletController {
 
     /**
      * 删除数据
+     * <p> 根据主键集合删除数据, 若传入的主键集合为空则抛出异常 </p>
      *
      * @param ids 主键集合
      * @since 1.0.0

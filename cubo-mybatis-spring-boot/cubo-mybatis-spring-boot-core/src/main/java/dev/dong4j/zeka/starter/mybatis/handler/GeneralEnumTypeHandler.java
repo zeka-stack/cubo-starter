@@ -2,11 +2,16 @@ package dev.dong4j.zeka.starter.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
-import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
-import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
-import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
+
+import org.apache.ibatis.reflection.DefaultReflectorFactory;
+import org.apache.ibatis.reflection.MetaClass;
+import org.apache.ibatis.reflection.ReflectorFactory;
+import org.apache.ibatis.reflection.invoker.Invoker;
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
@@ -18,38 +23,36 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.ibatis.reflection.DefaultReflectorFactory;
-import org.apache.ibatis.reflection.MetaClass;
-import org.apache.ibatis.reflection.ReflectorFactory;
-import org.apache.ibatis.reflection.invoker.Invoker;
-import org.apache.ibatis.type.BaseTypeHandler;
-import org.apache.ibatis.type.JdbcType;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+
+import dev.dong4j.zeka.kernel.common.annotation.SerializeValue;
+import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
+import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
+import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumSerializer;
 
 /**
  * 通用枚举类型处理器
- *
+ * <p>
  * 该处理器用于解决 MyBatis Plus 通用枚举的局限性，减少 SDK 模块的依赖。
  * 通过自定义实现替代 MyBatis Plus 的 MybatisEnumTypeHandler，提供更好的扩展性。
- *
+ * <p>
  * 主要功能：
  * 1. 支持自定义枚举 SerializeEnum 接口
  * 2. 替代 MyBatis Plus 的 IEnum 和 @EnumValue 注解
  * 3. 支持 Web 层和 Service 层共用相同的枚举
  * 4. 减少对 MyBatis Plus 的依赖
- *
+ * <p>
  * 设计优势：
  * - Web 层无需 MyBatis Plus 依赖即可进行枚举序列化/反序列化
  * - 统一的枚举处理机制，避免重复定义
  * - 更好的扩展性和可维护性
  * - 支持复杂的枚举值映射逻辑
- *
+ * <p>
  * 使用注意事项：
  * - 不要使用 typeEnumsPackage 来扫描通用枚举
  * - 扫描后会使用 MybatisEnumTypeHandler 处理，可能导致冲突
  * - 建议使用 SerializeEnum 接口定义枚举
- *
+ * <p>
  * 相关类：
  * - SerializeEnum：自定义枚举接口
  * - EntityEnumSerializer：枚举序列化器
@@ -99,7 +102,7 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
             name = findEnumValueFieldName(this.type)
                 .orElseThrow(() -> new IllegalArgumentException(
                     String.format("Could not find @SerializeValue in Class: %s.",
-                        this.type.getName())));
+                                  this.type.getName())));
         }
         // 是 SerializeEnum 子类, 则使用 SerializeEnum.getValue
         this.invoker = metaClass.getGetInvoker(name);
@@ -188,9 +191,9 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
     @Deprecated
     public static Optional<Field> dealEnumType(@NotNull Class<?> clazz) {
         return clazz.isEnum()
-            ? Arrays.stream(clazz.getDeclaredFields())
-            .filter(field -> field.isAnnotationPresent(SerializeValue.class)).findFirst()
-            : Optional.empty();
+               ? Arrays.stream(clazz.getDeclaredFields())
+                   .filter(field -> field.isAnnotationPresent(SerializeValue.class)).findFirst()
+               : Optional.empty();
     }
 
     /**
@@ -223,8 +226,8 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
     @Contract("null -> false")
     public static boolean isMpEnums(Class<?> clazz) {
         return clazz != null
-            && clazz.isEnum()
-            && (SerializeEnum.class.isAssignableFrom(clazz) || findEnumValueFieldName(clazz).isPresent());
+               && clazz.isEnum()
+               && (SerializeEnum.class.isAssignableFrom(clazz) || findEnumValueFieldName(clazz).isPresent());
     }
 
     /**
@@ -262,7 +265,7 @@ public class GeneralEnumTypeHandler<E extends Enum<?>> extends BaseTypeHandler<E
     private boolean equalsValue(Object sourceValue, Object targetValue) {
         if (sourceValue instanceof Number && targetValue instanceof Number
             && new BigDecimal(String.valueOf(sourceValue))
-            .compareTo(new BigDecimal(String.valueOf(targetValue))) == 0) {
+                   .compareTo(new BigDecimal(String.valueOf(targetValue))) == 0) {
             return true;
         }
         return Objects.equals(sourceValue, targetValue);

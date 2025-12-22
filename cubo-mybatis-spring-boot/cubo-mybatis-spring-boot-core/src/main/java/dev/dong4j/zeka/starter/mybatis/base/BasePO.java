@@ -2,9 +2,11 @@ package dev.dong4j.zeka.starter.mybatis.base;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import dev.dong4j.zeka.kernel.common.base.IBaseEntity;
+
 import java.io.Serial;
 import java.io.Serializable;
+
+import dev.dong4j.zeka.kernel.common.base.IBaseEntity;
 import lombok.Builder;
 
 /**

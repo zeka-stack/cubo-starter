@@ -1,13 +1,5 @@
 package dev.dong4j.zeka.starter.endpoint.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive.ReactiveStartInfoAutoConfiguration;
-import dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet.ServletStartInfoAutoConfiguration;
-import dev.dong4j.zeka.starter.endpoint.constant.Endpoint;
-import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
-import dev.dong4j.zeka.starter.endpoint.initialization.PreloadComponent;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -17,18 +9,27 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.endpoint.autoconfigure.reactive.ReactiveStartInfoAutoConfiguration;
+import dev.dong4j.zeka.starter.endpoint.autoconfigure.servlet.ServletStartInfoAutoConfiguration;
+import dev.dong4j.zeka.starter.endpoint.constant.Endpoint;
+import dev.dong4j.zeka.starter.endpoint.initialization.InitializationService;
+import dev.dong4j.zeka.starter.endpoint.initialization.PreloadComponent;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Endpoint 模块主自动配置类
- *
+ * <p>
  * 该类为 cubo-endpoint-spring-boot 模块提供主要的自动配置功能，
  * 负责根据不同的 Web 环境（Servlet 或 Reactive）加载相应的组件。
- *
+ * <p>
  * 主要功能：
  * 1. 根据配置属性控制是否启用 Endpoint 功能
  * 2. 仅在 Web 环境下生效
  * 3. 在 Servlet 和 Reactive 配置后加载
  * 4. 创建预热组件用于应用启动时的性能优化
- *
+ * <p>
  * 使用多个条件注解确保在适当的环境下才会生效。
  *
  * @author dong4j
@@ -41,7 +42,7 @@ import org.springframework.context.annotation.Bean;
 @AutoConfiguration
 @ConditionalOnEnabled(value = EndpointProperties.PREFIX)
 @ConditionalOnWebApplication
-@AutoConfigureAfter({
+@AutoConfigureAfter(value = {
     ServletStartInfoAutoConfiguration.class,
     ReactiveStartInfoAutoConfiguration.class
 })
@@ -60,7 +61,7 @@ public class EndpointAutoConfiguration implements ZekaAutoConfiguration {
 
     /**
      * 创建预热组件
-     *
+     * <p>
      * 创建 PreloadComponent Bean，用于在应用启动完成后执行预热操作。
      * 使用 ObjectProvider 以支持可选的依赖注入，如果没有对应的
      * InitializationService 实现则传入 null。

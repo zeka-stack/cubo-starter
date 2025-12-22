@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.logging.log4j.core.async;
 
 import com.lmax.disruptor.EventHandler;
@@ -24,10 +25,7 @@ import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import java.util.Objects;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.AbstractLifeCycle;
@@ -36,6 +34,11 @@ import org.apache.logging.log4j.core.util.Log4jThread;
 import org.apache.logging.log4j.core.util.Log4jThreadFactory;
 import org.apache.logging.log4j.core.util.Throwables;
 import org.apache.logging.log4j.message.Message;
+
+import java.util.Objects;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * Helper class for async loggers: AsyncLoggerDisruptor handles the mechanics of working with the LMAX Disruptor, and
@@ -147,7 +150,7 @@ class AsyncLoggerDisruptor extends AbstractLifeCycle {
 
         LOGGER.debug(
             "[{}] Starting AsyncLogger disruptor for this context with ringbufferSize={}, waitStrategy={}, "
-                + "exceptionHandler={}...",
+            + "exceptionHandler={}...",
             contextName,
             disruptor.getRingBuffer().getBufferSize(),
             waitStrategy.getClass().getSimpleName(),
@@ -241,6 +244,7 @@ class AsyncLoggerDisruptor extends AbstractLifeCycle {
         }
         return (int) temp.getRingBuffer().remainingCapacity();
     }
+
     /**
      * Returns {@code true} if the specified disruptor is null.
      */
@@ -331,13 +335,13 @@ class AsyncLoggerDisruptor extends AbstractLifeCycle {
 
     private boolean synchronizeEnqueueWhenQueueFull() {
         return DisruptorUtil.ASYNC_LOGGER_SYNCHRONIZE_ENQUEUE_WHEN_QUEUE_FULL
-            // Background thread must never block
-            && backgroundThreadId != Thread.currentThread().getId()
-            // Threads owned by log4j are most likely to result in
-            // deadlocks because they generally consume events.
-            // This prevents deadlocks between AsyncLoggerContext
-            // disruptors.
-            && !(Thread.currentThread() instanceof Log4jThread);
+               // Background thread must never block
+               && backgroundThreadId != Thread.currentThread().getId()
+               // Threads owned by log4j are most likely to result in
+               // deadlocks because they generally consume events.
+               // This prevents deadlocks between AsyncLoggerContext
+               // disruptors.
+               && !(Thread.currentThread() instanceof Log4jThread);
     }
 
     private void logWarningOnNpeFromDisruptorPublish(final RingBufferLogEventTranslator translator) {
@@ -360,8 +364,8 @@ class AsyncLoggerDisruptor extends AbstractLifeCycle {
      * Returns whether it is allowed to store non-JDK classes in ThreadLocal objects for efficiency.
      *
      * @return whether AsyncLoggers are allowed to use ThreadLocal objects
-     * @since 2.5
      * @see <a href="https://issues.apache.org/jira/browse/LOG4J2-1172">LOG4J2-1172</a>
+     * @since 2.5
      */
     public boolean isUseThreadLocals() {
         return useThreadLocalTranslator;
@@ -375,8 +379,8 @@ class AsyncLoggerDisruptor extends AbstractLifeCycle {
      * </p>
      *
      * @param allow whether AsyncLoggers are allowed to use ThreadLocal objects
-     * @since 2.5
      * @see <a href="https://issues.apache.org/jira/browse/LOG4J2-1172">LOG4J2-1172</a>
+     * @since 2.5
      */
     public void setUseThreadLocals(final boolean allow) {
         useThreadLocalTranslator = allow;

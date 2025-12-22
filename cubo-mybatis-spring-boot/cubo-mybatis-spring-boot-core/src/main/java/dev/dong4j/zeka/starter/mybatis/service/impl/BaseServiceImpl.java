@@ -4,6 +4,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+
+import org.apache.ibatis.cursor.Cursor;
+import org.apache.ibatis.session.SqlSession;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;
 import dev.dong4j.zeka.kernel.common.base.BaseQuery;
@@ -11,43 +21,36 @@ import dev.dong4j.zeka.starter.mybatis.base.BaseDao;
 import dev.dong4j.zeka.starter.mybatis.injector.MybatisSqlMethod;
 import dev.dong4j.zeka.starter.mybatis.service.BaseService;
 import dev.dong4j.zeka.starter.mybatis.support.Condition;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import org.apache.ibatis.cursor.Cursor;
-import org.apache.ibatis.session.SqlSession;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 基础服务实现类
- *
+ * <p>
  * 该类提供了 BaseService 接口的默认实现，继承自 MyBatis Plus 的 ServiceImpl。
  * 主要功能包括：
- *
+ * <p>
  * 1. 扩展插入操作：
- *    - saveIgnore：插入时忽略重复数据
- *    - saveReplace：替换插入操作
- *    - 支持批量操作，提高性能
- *
+ * - saveIgnore：插入时忽略重复数据
+ * - saveReplace：替换插入操作
+ * - 支持批量操作，提高性能
+ * <p>
  * 2. 通用查询操作：
- *    - 支持分页查询（带/不带总数统计）
- *    - 支持列表查询
- *    - 支持流式查询，防止大数据量 OOM
- *    - 支持计数查询
- *
+ * - 支持分页查询（带/不带总数统计）
+ * - 支持列表查询
+ * - 支持流式查询，防止大数据量 OOM
+ * - 支持计数查询
+ * <p>
  * 3. 批量操作优化：
- *    - 使用批量 SQL 会话提高性能
- *    - 支持自定义批次大小
- *    - 自动事务管理
- *
+ * - 使用批量 SQL 会话提高性能
+ * - 支持自定义批次大小
+ * - 自动事务管理
+ * <p>
  * 4. 查询条件处理：
- *    - 自动处理时间范围查询
- *    - 支持动态分页参数
- *    - 参数校验和异常处理
+ * - 自动处理时间范围查询
+ * - 支持动态分页参数
+ * - 参数校验和异常处理
  *
  * @param <DAO> 数据访问对象类型，继承自 BaseDao
- * @param <PO> 持久化对象类型
+ * @param <PO>  持久化对象类型
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"

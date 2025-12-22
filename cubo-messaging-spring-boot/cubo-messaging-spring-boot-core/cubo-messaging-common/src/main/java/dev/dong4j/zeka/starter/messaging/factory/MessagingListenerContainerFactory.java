@@ -22,7 +22,7 @@ public interface MessagingListenerContainerFactory {
     /**
      * 注册消息监听容器
      *
-     * @param adapter 消息监听适配器
+     * @param adapter    消息监听适配器
      * @param annotation MessagingListener 注解实例
      */
     void registerContainer(AbstractMessagingListenerAdapter adapter, MessagingListener annotation);

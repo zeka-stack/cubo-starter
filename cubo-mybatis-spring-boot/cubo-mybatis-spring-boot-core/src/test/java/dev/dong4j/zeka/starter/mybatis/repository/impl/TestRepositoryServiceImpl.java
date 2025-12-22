@@ -1,12 +1,13 @@
 package dev.dong4j.zeka.starter.mybatis.repository.impl;
 
+import org.springframework.stereotype.Service;
+
 import dev.dong4j.zeka.starter.mybatis.converter.TestServiceConverter;
 import dev.dong4j.zeka.starter.mybatis.dao.TestDao;
 import dev.dong4j.zeka.starter.mybatis.entity.dto.TestDTO;
 import dev.dong4j.zeka.starter.mybatis.entity.po.Test;
 import dev.dong4j.zeka.starter.mybatis.repository.TestRepositoryService;
 import dev.dong4j.zeka.starter.mybatis.service.impl.ExchangeServiceImpl;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>Description:  </p>

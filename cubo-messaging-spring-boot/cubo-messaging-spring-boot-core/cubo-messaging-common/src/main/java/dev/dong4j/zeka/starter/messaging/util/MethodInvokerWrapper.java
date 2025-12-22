@@ -33,9 +33,9 @@ public class MethodInvokerWrapper implements InvocationHandler {
     /**
      * 构造方法
      *
-     * @param targetBean 目标Bean
+     * @param targetBean   目标Bean
      * @param targetMethod 目标方法
-     * @param invoker 方法调用器
+     * @param invoker      方法调用器
      */
     public MethodInvokerWrapper(Object targetBean, Method targetMethod, MethodInvoker invoker) {
         this.targetBean = targetBean;
@@ -68,7 +68,7 @@ public class MethodInvokerWrapper implements InvocationHandler {
             targetMethod.getDeclaringClass().getClassLoader(),
             interfaces,
             this
-        );
+                                     );
     }
 
     /**

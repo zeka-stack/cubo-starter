@@ -1,7 +1,10 @@
 package dev.dong4j.zeka.starter.rest.xss;
 
 import com.google.common.collect.Maps;
-import dev.dong4j.zeka.kernel.common.util.StringPool;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,37 +13,35 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dev.dong4j.zeka.kernel.common.util.StringPool;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * HTML filtering utility for protecting against XSS (Cross Site Scripting).
+ * HTML 过滤工具, 用于防止 XSS(跨站脚本攻击).
  * <p>
- * This code is licensed LGPLv3
+ * 此代码采用 LGPLv3 许可.
  * <p>
- * This code is a Java port of the original work in PHP by Cal Hendersen.
+ * 此代码是 Cal Hendersen 在 PHP 中的原始工作的 Java 端口.
  * http://code.iamcal.com/php/lib_filter/
  * <p>
- * The trickiest part of the translation was handling the differences in regex handling
- * between PHP and Java.  These resources were helpful in the process:
+ * 翻译中最棘手的部分是处理 PHP 和 Java 之间的正则表达式处理差异.
+ * 这些资源在此过程中很有帮助:
  * <p>
  * http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html
  * http://us2.php.net/manual/en/reference.pcre.pattern.modifiers.php
  * http://www.regular-expressions.info/modifiers.html
  * <p>
- * A note on naming conventions: instance variables are prefixed with a "v"; global
- * constants are in all caps.
+ * 关于命名约定: 实例变量以“v”前缀; 全局常量全部大写.
  * <p>
- * Sample use:
+ * 示例用法:
  * String input = ...
- * String clean = new HtmlFilter().filter( input );
+ * String clean = new HtmlFilter().filter(input);
  * <p>
- * The class is not thread safe. Create a new instance if in doubt.
+ * 该类不是线程安全的. 如有疑问, 请创建一个新实例.
  * <p>
- * If you find bugs or have suggestions on improvement (especially regarding
- * performance), please contact us.  The latest version of this
- * source, and our contact details, can be found at http://xss-html-filter.sf.net
+ * 如果您发现错误或有关改进 (特别是性能方面) 的建议, 请联系我们.
+ * 最新版本的源代码和我们的联系方式可以在 http://xss-html-filter.sf.net 找到.
  *
  * @author Joseph O'Connell
  * @version 1.0.0
@@ -52,169 +53,266 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings(value = {"ALL"})
 public final class HtmlFilter {
 
-    /**
-     * regex flag union representing /si modifiers in php
-     */
+    /** regex flag union representing /si modifiers in PHP */
     private static final int REGEX_FLAGS_SI = Pattern.CASE_INSENSITIVE | Pattern.DOTALL;
-    /** P_COMMENTS */
+    /** 匹配 HTML 注释的正则表达式模式 */
     private static final Pattern P_COMMENTS = Pattern.compile("<!--(.*?)-->", Pattern.DOTALL);
-    /** P_COMMENT */
+    /**
+     * 匹配 HTML 注释内容的正则表达式模式
+     * 用于识别形如 <!--...--> 的注释内容
+     */
     private static final Pattern P_COMMENT = Pattern.compile("^!--(.*)--$", REGEX_FLAGS_SI);
-    /** P_TAGS */
+    /**
+     * 匹配 HTML 标签的正则表达式模式
+     * 用于识别输入字符串中的所有 HTML 标签
+     */
     private static final Pattern P_TAGS = Pattern.compile("<(.*?)>", Pattern.DOTALL);
-    /** P_END_TAG */
+    /**
+     * 匹配结束标签的正则表达式模式, 用于识别 HTML 结束标签 (如 &lt;/div&gt;).
+     * <p>
+     * 该模式使用了 {@link Pattern.CASE_INSENSITIVE} 和 {@link Pattern.DOTALL} 标志,
+     * 以实现不区分大小写和匹配跨行内容.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_END_TAG = Pattern.compile("^/([a-z0-9]+)", REGEX_FLAGS_SI);
-    /** P_START_TAG */
+    /**
+     * 匹配 HTML 开始标签的正则表达式模式.
+     * 该模式用于识别 HTML 开始标签, 如 "tag" 或 "tag attr="value"".
+     * 正则表达式使用了忽略大小写和点号匹配所有字符的标志.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_START_TAG = Pattern.compile("^([a-z0-9]+)(.*?)(/?)$", REGEX_FLAGS_SI);
-    /** P_QUOTED_ATTRIBUTES */
+    /**
+     * 匹配带引号的属性, 用于解析 HTML 标签中的属性值.
+     * <p>
+     * 正则表达式格式为:([a-z0-9]+)=([\"'])(.*?)\\2, 其中:
+     * - ([a-z0-9]+) 匹配属性名
+     * - ([\"']) 匹配引号 (双引号或单引号)
+     * - (.*?) 匹配属性值
+     * - \\2 匹配与第二个分组相同的引号, 确保引号闭合
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_QUOTED_ATTRIBUTES = Pattern.compile("([a-z0-9]+)=([\"'])(.*?)\\2", REGEX_FLAGS_SI);
-    /** P_UNQUOTED_ATTRIBUTES */
+    /**
+     * 匹配未加引号的属性
+     * <p>
+     * 该正则表达式用于识别 HTML 标签中未加引号的属性, 例如:name=value
+     * <p>
+     * 正则表达式结构说明:
+     * - ([a-z0-9]+): 匹配属性名, 由字母和数字组成
+     * - (=): 匹配等号
+     * - ([^\"\\s]+): 匹配属性值, 跳过双引号, 空格和反斜杠
+     * <p>
+     * 该模式使用了 REGEX_FLAGS_SI 标志, 表示不区分大小写且匹配所有行
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_UNQUOTED_ATTRIBUTES = Pattern.compile("([a-z0-9]+)(=)([^\"\\s']+)", REGEX_FLAGS_SI);
-    /** P_PROTOCOL */
+    /**
+     * 正则表达式模式, 用于匹配协议部分
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_PROTOCOL = Pattern.compile("^([^:]+):", REGEX_FLAGS_SI);
-    /** P_ENTITY */
+    /**
+     * 定义用于匹配 HTML 实体的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_ENTITY = Pattern.compile("&#(\\d+);?");
-    /** P_ENTITY_UNICODE */
+    /**
+     * 表示十六进制实体的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_ENTITY_UNICODE = Pattern.compile("&#x([0-9a-f]+);?");
-    /** P_ENCODE */
+    /**
+     * 编码模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_ENCODE = Pattern.compile("%([0-9a-f]{2});?");
-    /** P_VALID_ENTITIES */
+    /**
+     * 匹配有效的 HTML 实体.
+     * <p>
+     * 此正则表达式用于匹配有效的 HTML 实体, 实体以 '&' 开始, 并且后面跟随一个或多个非 '&' 和 ';' 的字符,
+     * 直到遇到 ';' 或 '&' 或字符串结束.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_VALID_ENTITIES = Pattern.compile("&([^&;]*)(?=(;|&|$))");
-    /** P_VALID_QUOTES */
+    /**
+     * 匹配有效的引号内容.
+     * <p>
+     * 此正则表达式用于匹配以 '>' 或字符串开头, 并以 '<' 或字符串结尾的内容.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_VALID_QUOTES = Pattern.compile("(>|^)([^<]+?)(<|$)", Pattern.DOTALL);
-    /** P_END_ARROW */
+    /**
+     * 匹配以 '>' 开头的字符串模式.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_END_ARROW = Pattern.compile("^>");
-    /** P_BODY_TO_END */
+    /**
+     * 匹配 HTML 标签的内容部分, 直到下一个标签或字符串结尾.
+     * <p>
+     * 此正则表达式用于提取 HTML 标签中的内容部分, 适用于在标签之间查找文本.
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_BODY_TO_END = Pattern.compile("<([^>]*?)(?=<|$)");
-    /** P_XML_CONTENT */
+    /**
+     * 匹配 XML 内容的正则表达式模式
+     * 用于识别 HTML 中的 XML 内容部分
+     */
     private static final Pattern P_XML_CONTENT = Pattern.compile("(^|>)([^<]*?)(?=>)");
-    /** P_STRAY_LEFT_ARROW */
+    /** 匹配孤立的左箭头 (即未正确闭合的 '<' 符号) */
     private static final Pattern P_STRAY_LEFT_ARROW = Pattern.compile("<([^>]*?)(?=<|$)");
-    /** P_STRAY_RIGHT_ARROW */
+    /**
+     * 匹配并处理孤立的右箭头 (即 ">") 的正则表达式模式.
+     * 该模式用于识别字符串中可能出现在 ">" 前的字符内容.
+     */
     private static final Pattern P_STRAY_RIGHT_ARROW = Pattern.compile("(^|>)([^<]*?)(?=>)");
-    /** P_AMP */
+    /** 匹配 HTML 中的 & 符号的正则表达式模式. */
     private static final Pattern P_AMP = Pattern.compile("&");
-    /** P_QUOTE */
+    /**
+     * 匹配小于号的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_QUOTE = Pattern.compile("<");
-    /** P_LEFT_ARROW */
+    /**
+     * 匹配左尖括号 "<" 的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_LEFT_ARROW = Pattern.compile("<");
-    /** P_RIGHT_ARROW */
+    /**
+     * 匹配右箭头符号的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_RIGHT_ARROW = Pattern.compile(">");
-    /** P_BOTH_ARROWS */
+    /**
+     * 表示同时包含左右箭头的正则表达式模式
+     *
+     * @since 1.0.0
+     */
     private static final Pattern P_BOTH_ARROWS = Pattern.compile("<>");
 
 
-    /** P_REMOVE_PAIR_BLANKS */
+    /**
+     * 存储用于移除成对空白标签的正则表达式模式的缓存.
+     *
+     * @since 1.0.0
+     */
     private static final ConcurrentMap<String, Pattern> P_REMOVE_PAIR_BLANKS = new ConcurrentHashMap<>();
-    /** P_REMOVE_SELF_BLANKS */
+    /**
+     * 用于存储需要移除的自闭合标签的正则表达式模式的映射
+     * 键为标签名称, 值为对应的正则表达式模式
+     */
     private static final ConcurrentMap<String, Pattern> P_REMOVE_SELF_BLANKS = new ConcurrentHashMap<>();
 
-    /**
-     * set of allowed html elements, along with allowed attributes for each element
-     */
-    private final Map<String, List<String>> vAllowed;
-    /**
-     * counts of open tags for each (allowable) html element
-     */
-    private final Map<String, Integer> vTagCounts = Maps.newHashMap();
+    /** 允许的 HTML 元素集合, 以及每个元素允许的属性 */
+    private final Map<String, List<String>> allowed;
+    /** 记录每个允许的 HTML 元素当前打开的标签数量 */
+    private final Map<String, Integer> tagCounts = Maps.newHashMap();
 
+    /** HTML 元素必须始终为自闭合元素 (例如 "<img/>") */
+    private final String[] selfClosingTags;
+    /** html elements which must always have separate opening and closing tags(e.g. "<b></b>") */
+    private final String[] needClosingTags;
+    /** 不允许的 HTML 元素集合 */
+    private final String[] disallowed;
+    /** 应该检查有效协议的属性 */
+    private final String[] protocolAtts;
     /**
-     * html elements which must always be self-closing (e.g. "<img />")
+     * 允许的协议列表.
+     *
+     * @since 1.0.0
      */
-    private final String[] vSelfClosingTags;
-    /**
-     * html elements which must always have separate opening and closing tags (e.g. "<b></b>")
-     */
-    private final String[] vNeedClosingTags;
-    /**
-     * set of disallowed html elements
-     */
-    private final String[] vDisallowed;
-    /**
-     * attributes which should be checked for valid protocols
-     */
-    private final String[] vProtocolAtts;
-    /**
-     * allowed protocols
-     */
-    private final String[] vAllowedProtocols;
-    /**
-     * tags which should be removed if they contain no content (e.g. "<b></b>" or "<b />")
-     */
-    private final String[] vRemoveBlanks;
-    /**
-     * entities allowed within html markup
-     */
-    private final String[] vAllowedEntities;
-    /**
-     * flag determining whether comments are allowed in input String.
-     */
+    private final String[] allowedProtocols;
+    /** 应该被移除的空内容的 HTML 标签 (例如 "<b></b>" 或 "<b/>") */
+    private final String[] removeBlanks;
+    /** 允许在 HTML 标记中的实体 */
+    private final String[] allowedEntities;
+    /** flag determining whether comments are allowed in input String. */
     private final boolean stripComment;
-    /** Encode quotes */
+    /** 是否对引号进行编码 */
     private final boolean encodeQuotes;
     /**
-     * flag determining whether to try to make tags when presented with "unbalanced"
-     * angle brackets.  If set to false,
-     * unbalanced angle brackets will be html escaped.
+     * 标志位, 用于确定在遇到“不平衡”的角括号时是否尝试生成标签. 如果设置为 false,
+     * 不平衡的角括号将被转义为 HTML 实体.
      */
     private final boolean alwaysMakeTags;
-    /** V debug */
-    private boolean vDebug = false;
+    /**
+     * V debug 标志, 用于控制是否启用调试模式. 当设置为 true 时, 会在日志中输出调试信息.
+     * 默认值为 false.
+     *
+     * @since 1.0.0
+     */
+    private boolean debug = false;
 
     /**
-     * Set debug flag to true. Otherwise use default settings. See the default constructor.
+     * 设置调试标志为 true. 否则使用默认设置. 请参见默认构造函数.
      *
-     * @param debug turn debug on with a true argument
+     * @param debug 通过传入 true 参数启用调试模式
      * @since 1.0.0
      */
     public HtmlFilter(boolean debug) {
         this();
-        this.vDebug = debug;
+        this.debug = debug;
 
     }
 
     /**
-     * Default constructor.
+     * 默认构造函数.
+     * 初始化 HTML 过滤器的默认配置, 包括允许的 HTML 标签, 属性, 协议等.
      *
      * @since 1.0.0
      */
     public HtmlFilter() {
-        this.vAllowed = Maps.newHashMapWithExpectedSize(6);
+        this.allowed = Maps.newHashMapWithExpectedSize(6);
 
         List<String> aAtts = new ArrayList<>();
         aAtts.add("href");
         aAtts.add("target");
-        this.vAllowed.put("a", aAtts);
+        this.allowed.put("a", aAtts);
 
         List<String> imgAtts = new ArrayList<>();
         imgAtts.add("src");
         imgAtts.add("width");
         imgAtts.add("height");
         imgAtts.add("alt");
-        this.vAllowed.put("img", imgAtts);
+        this.allowed.put("img", imgAtts);
 
         List<String> noAtts = new ArrayList<>();
-        this.vAllowed.put("b", noAtts);
-        this.vAllowed.put("strong", noAtts);
-        this.vAllowed.put("i", noAtts);
-        this.vAllowed.put("em", noAtts);
+        this.allowed.put("b", noAtts);
+        this.allowed.put("strong", noAtts);
+        this.allowed.put("i", noAtts);
+        this.allowed.put("em", noAtts);
 
-        this.vSelfClosingTags = new String[]{"img"};
-        this.vNeedClosingTags = new String[]{"a", "b", "strong", "i", "em"};
-        this.vDisallowed = new String[]{};
-        this.vAllowedProtocols = new String[]{"http", "mailto", "https"};
-        this.vProtocolAtts = new String[]{"src", "href"};
-        this.vRemoveBlanks = new String[]{"a", "b", "strong", "i", "em"};
-        this.vAllowedEntities = new String[]{"amp", "gt", "lt", "quot"};
+        this.selfClosingTags = new String[] {"img"};
+        this.needClosingTags = new String[] {"a", "b", "strong", "i", "em"};
+        this.disallowed = new String[] {};
+        this.allowedProtocols = new String[] {"http", "mailto", "https"};
+        this.protocolAtts = new String[] {"src", "href"};
+        this.removeBlanks = new String[] {"a", "b", "strong", "i", "em"};
+        this.allowedEntities = new String[] {"amp", "gt", "lt", "quot"};
         this.stripComment = true;
         this.encodeQuotes = true;
         this.alwaysMakeTags = true;
     }
 
     /**
-     * Map-parameter configurable constructor.
+     * Map 参数配置构造函数.
      *
-     * @param conf map containing configuration. keys match field names.
+     * @param conf 包含配置的映射. 键与字段名称匹配.
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
@@ -229,24 +327,24 @@ public final class HtmlFilter {
         assert conf.containsKey("vRemoveBlanks") : "configuration requires vRemoveBlanks";
         assert conf.containsKey("vAllowedEntities") : "configuration requires vAllowedEntities";
 
-        this.vAllowed = Collections.unmodifiableMap((Map<String, List<String>>) conf.get("vAllowed"));
-        this.vSelfClosingTags = (String[]) conf.get("vSelfClosingTags");
-        this.vNeedClosingTags = (String[]) conf.get("vNeedClosingTags");
-        this.vDisallowed = (String[]) conf.get("vDisallowed");
-        this.vAllowedProtocols = (String[]) conf.get("vAllowedProtocols");
-        this.vProtocolAtts = (String[]) conf.get("vProtocolAtts");
-        this.vRemoveBlanks = (String[]) conf.get("vRemoveBlanks");
-        this.vAllowedEntities = (String[]) conf.get("vAllowedEntities");
+        this.allowed = Collections.unmodifiableMap((Map<String, List<String>>) conf.get("vAllowed"));
+        this.selfClosingTags = (String[]) conf.get("vSelfClosingTags");
+        this.needClosingTags = (String[]) conf.get("vNeedClosingTags");
+        this.disallowed = (String[]) conf.get("vDisallowed");
+        this.allowedProtocols = (String[]) conf.get("vAllowedProtocols");
+        this.protocolAtts = (String[]) conf.get("vProtocolAtts");
+        this.removeBlanks = (String[]) conf.get("vRemoveBlanks");
+        this.allowedEntities = (String[]) conf.get("vAllowedEntities");
         this.stripComment = conf.containsKey("stripComment") ? (Boolean) conf.get("stripComment") : true;
         this.encodeQuotes = conf.containsKey("encodeQuotes") ? (Boolean) conf.get("encodeQuotes") : true;
         this.alwaysMakeTags = conf.containsKey("alwaysMakeTags") ? (Boolean) conf.get("alwaysMakeTags") : true;
     }
 
     /**
-     * Chr string.
+     * 将给定的十进制数转换为对应的字符.
      *
-     * @param decimal the decimal
-     * @return the string
+     * @param decimal 十进制数
+     * @return 对应的字符
      * @since 1.0.0
      */
     @NotNull
@@ -256,10 +354,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Html special chars string.
+     * 对字符串中的特殊 HTML 字符进行转义处理.
      *
-     * @param s the s
-     * @return the string
+     * @param s 需要处理的字符串
+     * @return 转义后的字符串
      * @since 1.0.0
      */
     public static String htmlSpecialChars(String s) {
@@ -276,8 +374,8 @@ public final class HtmlFilter {
      *
      * @param regexPattern regex pattern
      * @param replacement  replacement
-     * @param s            s
-     * @return the string
+     * @param s            input string
+     * @return the string after replacement
      * @since 1.0.0
      */
     private static String regexReplace(@NotNull Pattern regexPattern, String replacement, String s) {
@@ -286,11 +384,11 @@ public final class HtmlFilter {
     }
 
     /**
-     * In array boolean
+     * 判断字符串是否存在于数组中
      *
-     * @param s     s
-     * @param array array
-     * @return the boolean
+     * @param s     要查找的字符串
+     * @param array 字符串数组
+     * @return 如果字符串存在于数组中返回 true, 否则返回 false
      * @since 1.0.0
      */
     @Contract(pure = true)
@@ -306,32 +404,31 @@ public final class HtmlFilter {
     //---------------------------------------------------------------
 
     /**
-     * Reset
+     * 重置标签计数器
      *
      * @since 1.0.0
      */
     private void reset() {
-        this.vTagCounts.clear();
+        this.tagCounts.clear();
     }
 
     /**
-     * Debug *
+     * 输出调试信息
      *
-     * @param msg msg
+     * @param msg 调试信息
      * @since 1.0.0
      */
     private void debug(String msg) {
-        if (this.vDebug) {
+        if (this.debug) {
             log.info(msg);
         }
     }
 
     /**
-     * given a user submitted input String, filter out any invalid or restricted
-     * html.
+     * 根据用户提交的输入字符串, 过滤掉任何无效或受限的 HTML.
      *
-     * @param input text (i.e. submitted by a user) than may contain html
-     * @return "clean" version of input, with only valid, whitelisted html elements allowed
+     * @param input 用户提交的可能包含 HTML 的文本
+     * @return 过滤后的字符串, 仅包含有效的白名单中的 HTML 元素
      * @since 1.0.0
      */
     public String filter(String input) {
@@ -361,9 +458,9 @@ public final class HtmlFilter {
     }
 
     /**
-     * Is always make tags boolean.
+     * 判断是否始终生成标签
      *
-     * @return the boolean
+     * @return 是否始终生成标签
      * @since 1.0.0
      */
     @Contract(pure = true)
@@ -372,9 +469,9 @@ public final class HtmlFilter {
     }
 
     /**
-     * Is strip comments boolean.
+     * 获取是否剥离注释的标志
      *
-     * @return the boolean
+     * @return 是否剥离注释的布尔值
      * @since 1.0.0
      */
     @Contract(pure = true)
@@ -383,10 +480,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Escape comments string
+     * 对字符串中的 HTML 注释进行转义
      *
-     * @param s s
-     * @return the string
+     * @param s 需要处理的字符串
+     * @return 转义后的字符串
      * @since 1.0.0
      */
     @NotNull
@@ -403,10 +500,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Balance html string
+     * 平衡 HTML 字符串
      *
-     * @param s s
-     * @return the string
+     * @param s 输入字符串
+     * @return 处理后的字符串
      * @since 1.0.0
      */
     private String balanceHtml(String s) {
@@ -437,10 +534,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Check tags string
+     * 检查并处理 HTML 标签字符串
      *
-     * @param s s
-     * @return the string
+     * @param s 需要处理的原始字符串
+     * @return 处理后的字符串, 其中只包含允许的 HTML 标签
      * @since 1.0.0
      */
     @NotNull
@@ -461,8 +558,8 @@ public final class HtmlFilter {
         // (remember to reset before subsequent calls to filter method)
         StringBuilder sb = new StringBuilder(s);
 
-        for (String key : this.vTagCounts.keySet()) {
-            for (int ii = 0; ii < this.vTagCounts.get(key); ii++) {
+        for (String key : this.tagCounts.keySet()) {
+            for (int ii = 0; ii < this.tagCounts.get(key); ii++) {
                 sb.append("</").append(key).append(">");
             }
         }
@@ -471,15 +568,15 @@ public final class HtmlFilter {
     }
 
     /**
-     * Process remove blanks string
+     * 处理空白标签字符串
      *
-     * @param s s
-     * @return the string
+     * @param s 输入字符串
+     * @return 处理后的字符串, 移除了指定标签的空白内容
      * @since 1.0.0
      */
     private String processRemoveBlanks(String s) {
         String result = s;
-        for (String tag : this.vRemoveBlanks) {
+        for (String tag : this.removeBlanks) {
             if (!P_REMOVE_PAIR_BLANKS.containsKey(tag)) {
                 P_REMOVE_PAIR_BLANKS.putIfAbsent(tag, Pattern.compile("<" + tag + "(\\s[^>]*)?></" + tag + ">"));
             }
@@ -494,10 +591,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Process tag string
+     * 处理标签字符串
      *
-     * @param s s
-     * @return the string
+     * @param s 需要处理的原始字符串
+     * @return 处理后的字符串
      * @since 1.0.0
      */
     @NotNull
@@ -507,9 +604,9 @@ public final class HtmlFilter {
         if (m.find()) {
             String name = m.group(1).toLowerCase();
             if (this.allowed(name)) {
-                if (!inArray(name, this.vSelfClosingTags)) {
-                    if (this.vTagCounts.containsKey(name)) {
-                        this.vTagCounts.put(name, this.vTagCounts.get(name) - 1);
+                if (!inArray(name, this.selfClosingTags)) {
+                    if (this.tagCounts.containsKey(name)) {
+                        this.tagCounts.put(name, this.tagCounts.get(name) - 1);
                         return "</" + name + ">";
                     }
                 }
@@ -539,23 +636,23 @@ public final class HtmlFilter {
                     paramName = paramNames.get(ii).toLowerCase();
                     paramValue = paramValues.get(ii);
                     if (this.allowedAttribute(name, paramName)) {
-                        if (inArray(paramName, this.vProtocolAtts)) {
+                        if (inArray(paramName, this.protocolAtts)) {
                             paramValue = this.processParamProtocol(paramValue);
                         }
                         params.append(" ").append(paramName).append("=\"").append(paramValue).append("\"");
                     }
                 }
-                if (inArray(name, this.vSelfClosingTags)) {
+                if (inArray(name, this.selfClosingTags)) {
                     ending = " /";
                 }
-                if (inArray(name, this.vNeedClosingTags)) {
+                if (inArray(name, this.needClosingTags)) {
                     ending = "";
                 }
                 if (ending == null || ending.length() < 1) {
-                    if (this.vTagCounts.containsKey(name)) {
-                        this.vTagCounts.put(name, this.vTagCounts.get(name) + 1);
+                    if (this.tagCounts.containsKey(name)) {
+                        this.tagCounts.put(name, this.tagCounts.get(name) + 1);
                     } else {
-                        this.vTagCounts.put(name, 1);
+                        this.tagCounts.put(name, 1);
                     }
                 } else {
                     ending = " /";
@@ -575,8 +672,8 @@ public final class HtmlFilter {
     /**
      * Process param protocol string
      *
-     * @param s s
-     * @return the string
+     * @param s the input string to process
+     * @return the processed string with protocol replaced if necessary
      * @since 1.0.0
      */
     private String processParamProtocol(String s) {
@@ -584,7 +681,7 @@ public final class HtmlFilter {
         Matcher m = P_PROTOCOL.matcher(s);
         if (m.find()) {
             String protocol = m.group(1);
-            if (!inArray(protocol, this.vAllowedProtocols)) {
+            if (!inArray(protocol, this.allowedProtocols)) {
                 // bad protocol, turn into local anchor link instead
                 s = "#" + s.substring(protocol.length() + 1);
                 if (s.startsWith(StringPool.DOUBLE_SLASH)) {
@@ -597,10 +694,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Decode entities string
+     * 解码实体字符串
      *
-     * @param s s
-     * @return the string
+     * @param s 要解码的字符串
+     * @return 解码后的字符串
      * @since 1.0.0
      */
     private String decodeEntities(String s) {
@@ -630,11 +727,11 @@ public final class HtmlFilter {
     }
 
     /**
-     * Gets string *
+     * 从匹配结果中获取处理后的字符串
      *
-     * @param buf buf
-     * @param m   m
-     * @return the string
+     * @param buf 用于存储处理结果的缓冲区
+     * @param m   正则表达式匹配器
+     * @return 处理后的字符串
      * @since 1.0.0
      */
     @NotNull
@@ -653,8 +750,8 @@ public final class HtmlFilter {
     /**
      * Validate entities string
      *
-     * @param s s
-     * @return the string
+     * @param s the input string to process
+     * @return the string with validated entities
      * @since 1.0.0
      */
     private String validateEntities(String s) {
@@ -673,10 +770,10 @@ public final class HtmlFilter {
     }
 
     /**
-     * Encode quotes string
+     * 对引号进行编码处理
      *
-     * @param s s
-     * @return the string
+     * @param s 需要处理的字符串
+     * @return 编码后的字符串
      * @since 1.0.0
      */
     private String encodeQuotes(String s) {
@@ -697,54 +794,54 @@ public final class HtmlFilter {
     }
 
     /**
-     * Check entity string
+     * 检查实体字符串
      *
-     * @param preamble preamble
-     * @param term     term
-     * @return the string
+     * @param preamble 实体前缀
+     * @param term     实体后缀
+     * @return 处理后的字符串
      * @since 1.0.0
      */
     @NotNull
     private String checkEntity(String preamble, String term) {
 
         return ";".equals(term)
-            && this.isValidEntity(preamble)
-            ? '&' + preamble
-            : "&amp;" + preamble;
+               && this.isValidEntity(preamble)
+               ? '&' + preamble
+               : "&amp;" + preamble;
     }
 
     /**
-     * Is valid entity boolean
+     * 判断实体是否有效
      *
-     * @param entity entity
-     * @return the boolean
+     * @param entity 实体字符串
+     * @return 如果实体在允许的实体列表中, 则返回 true, 否则返回 false
      * @since 1.0.0
      */
     @Contract(pure = true)
     private boolean isValidEntity(String entity) {
-        return inArray(entity, this.vAllowedEntities);
+        return inArray(entity, this.allowedEntities);
     }
 
     /**
-     * Allowed boolean
+     * 判断给定的 HTML 元素名称是否允许
      *
-     * @param name name
-     * @return the boolean
+     * @param name HTML 元素名称
+     * @return 是否允许该元素
      * @since 1.0.0
      */
     private boolean allowed(String name) {
-        return (this.vAllowed.isEmpty() || this.vAllowed.containsKey(name)) && !inArray(name, this.vDisallowed);
+        return (this.allowed.isEmpty() || this.allowed.containsKey(name)) && !inArray(name, this.disallowed);
     }
 
     /**
-     * Allowed attribute boolean
+     * 判断指定 HTML 元素是否允许指定属性
      *
-     * @param name      name
-     * @param paramName param name
-     * @return the boolean
+     * @param name      HTML 元素名称
+     * @param paramName 属性名称
+     * @return 如果允许该属性则返回 true, 否则返回 false
      * @since 1.0.0
      */
     private boolean allowedAttribute(String name, String paramName) {
-        return this.allowed(name) && (this.vAllowed.isEmpty() || this.vAllowed.get(name).contains(paramName));
+        return this.allowed(name) && (this.allowed.isEmpty() || this.allowed.get(name).contains(paramName));
     }
 }

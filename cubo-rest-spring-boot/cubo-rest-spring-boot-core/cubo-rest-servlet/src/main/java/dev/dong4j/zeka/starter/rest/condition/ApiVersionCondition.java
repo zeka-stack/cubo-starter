@@ -1,12 +1,14 @@
 package dev.dong4j.zeka.starter.rest.condition;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.servlet.mvc.condition.RequestCondition;
+
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.servlet.mvc.condition.RequestCondition;
 
 /**
  * <p>Description: 处理 优先匹配问题的 condition，目前暂时无法使用，路径为精确路径 /v1/demo/hello，不再是/{path:v\\d+}/demo/hello </p>

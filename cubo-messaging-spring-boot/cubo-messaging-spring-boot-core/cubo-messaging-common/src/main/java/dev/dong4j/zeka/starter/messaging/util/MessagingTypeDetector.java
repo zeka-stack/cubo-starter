@@ -1,8 +1,7 @@
 package dev.dong4j.zeka.starter.messaging.util;
 
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
-import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
+import org.springframework.core.env.Environment;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,8 +11,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 
 /**
  * 消息类型检测器
@@ -81,7 +83,9 @@ public class MessagingTypeDetector {
      * 执行消息类型检测（延迟初始化）
      */
     public synchronized void detectAvailableTypes() {
-        if (detectionCompleted) return;
+        if (detectionCompleted) {
+            return;
+        }
 
         // 加载自定义检测类配置
         loadCustomDetectionClasses();
@@ -122,7 +126,7 @@ public class MessagingTypeDetector {
                     defaultType = MessagingType.valueOf(defaultTypeConfig.toUpperCase());
                     if (!availableTypes.contains(defaultType)) {
                         log.warn("Configured default MQ type {} not available. Available types: {}",
-                            defaultType, availableTypes);
+                                 defaultType, availableTypes);
                         defaultType = null;
                     } else {
                         log.info("Using configured default MQ type: {}", defaultType);
@@ -191,14 +195,16 @@ public class MessagingTypeDetector {
      * @throws IllegalStateException 如果类型配置无效
      */
     public void validate(MessagingListener annotation) {
-        if (!detectionCompleted) detectAvailableTypes();
+        if (!detectionCompleted) {
+            detectAvailableTypes();
+        }
 
         MessagingType configuredType = annotation.type();
         if (configuredType == MessagingType.DEFAULT) {
             if (defaultType == null) {
                 throw new IllegalStateException(
                     "Multiple MQ implementations detected. Please explicitly specify 'type' in " +
-                        "@UnifiedMessageListener. Available types: " + availableTypes
+                    "@UnifiedMessageListener. Available types: " + availableTypes
                 );
             }
         } else if (!availableTypes.contains(configuredType)) {
@@ -289,7 +295,7 @@ public class MessagingTypeDetector {
     public boolean isAutoDetectEnabled() {
         return environment.getProperty(
             DEFAULT_CONFIG_PREFIX + ".auto-detect", Boolean.class, true
-        );
+                                      );
     }
 
     /**

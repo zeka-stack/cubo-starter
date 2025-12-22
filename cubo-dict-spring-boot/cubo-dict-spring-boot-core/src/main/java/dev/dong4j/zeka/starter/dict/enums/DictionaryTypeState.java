@@ -5,24 +5,37 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * <p> 字典类型表 枚举 </p>
+ * 数据字典类型状态枚举类
+ * <p> 表示数据字典类型的启用状态, 包含禁用和启用两种状态
  *
  * @author dong4j
  * @version 1.0.0
- * @email "mailto:dong4j@dong4j@gmail.com"
- * @date 2025.09.10 23:19
- * @since 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Getter
 @AllArgsConstructor
 public enum DictionaryTypeState implements SerializeEnum<Integer> {
-    /** DISABLED(0, "禁用"), */
+    /** 禁用状态 */
     DISABLED(0, "禁用"),
-    /** ENABLED(1, "启用"); */
+    /**
+     * 启用状态
+     * <p> 表示字典类型表枚举中的启用状态, 值为 1
+     *
+     * @see DictionaryTypeState
+     */
     ENABLED(1, "启用");
 
-    /** Value */
+    /**
+     * 枚举值对应的整数值
+     *
+     * @see DictionaryTypeState
+     */
     private final Integer value;
-    /** Desc */
+    /**
+     * 描述信息
+     * <p> 表示枚举项的描述文本, 例如“禁用”或“启用”</p>
+     */
     private final String desc;
 }

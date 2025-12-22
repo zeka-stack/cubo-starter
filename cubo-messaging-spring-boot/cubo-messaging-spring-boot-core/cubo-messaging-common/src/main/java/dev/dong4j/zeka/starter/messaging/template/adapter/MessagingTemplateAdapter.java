@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.messaging.template.adapter;
 
+import java.util.concurrent.CompletableFuture;
+
 import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
 import dev.dong4j.zeka.starter.messaging.template.model.SendResult;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 消息模板适配器接口

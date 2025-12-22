@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
+import org.apache.ibatis.reflection.MetaObject;
+
 import dev.dong4j.zeka.kernel.common.context.ExpandIds;
 import dev.dong4j.zeka.kernel.common.context.ExpandIdsContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.reflection.MetaObject;
 
 /**
  * <p>Description:  </p>

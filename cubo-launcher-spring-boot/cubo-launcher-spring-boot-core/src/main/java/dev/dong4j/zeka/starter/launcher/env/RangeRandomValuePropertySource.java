@@ -1,5 +1,13 @@
 package dev.dong4j.zeka.starter.launcher.env;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+import org.springframework.boot.env.RandomValuePropertySource;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.regex.Pattern;
+
 import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.exception.PropertiesException;
 import dev.dong4j.zeka.kernel.common.util.EnumUtils;
@@ -7,27 +15,21 @@ import dev.dong4j.zeka.kernel.common.util.NetUtils;
 import dev.dong4j.zeka.kernel.common.util.NumberUtils;
 import dev.dong4j.zeka.kernel.common.util.RandomUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
-import org.springframework.boot.env.RandomValuePropertySource;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * 扩展的随机值属性源，提供更灵活的随机值生成功能
- *
+ * <p>
  * 该类扩展了 Spring Boot 的 RandomValuePropertySource，增加了以下功能：
  * 1. 支持范围随机整数：${range.random.int(min,max)}
  * 2. 支持自定义长度随机字符串：${range.random.key(length)}
  * 3. 自动处理端口冲突，在指定范围内查找可用端口
- *
+ * <p>
  * 主要应用场景：
  * 1. 随机端口分配，自动处理端口冲突
  * 2. 生成随机密钥或令牌
  * 3. 需要随机值的配置项
- *
+ * <p>
  * 与原生 ${random.*} 的区别：
  * 1. 支持范围限制的随机整数
  * 2. 支持自定义长度的随机字符串（包含大小写字母和数字）
@@ -56,7 +58,7 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
 
     /**
      * 范围类型枚举，定义支持的随机值类型
-     *
+     * <p>
      * 1. INT - 整数范围随机值
      * 2. KEY - 随机字符串
      *
@@ -115,7 +117,7 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
     private Object getRangeRandomValue(@NotNull String type) {
         RangeType rangeType = EnumUtils.of(RangeType.class, e -> type.toUpperCase().contains(e.name()))
             .orElseThrow(() -> new PropertiesException("目前只支持 range.random.int, range.random.int(min, max), "
-                + "range.random.key 和 range.random.key(size)"));
+                                                       + "range.random.key 和 range.random.key(size)"));
 
         String range = this.getRange(type, rangeType.name().toLowerCase());
 
@@ -238,7 +240,7 @@ public final class RangeRandomValuePropertySource extends RandomValuePropertySou
 
     /**
      * 随机端口内部类，处理端口范围内的随机端口获取
-     *
+     * <p>
      * 该类实现了以下功能：
      * 1. 在指定范围内生成随机端口
      * 2. 检查端口是否可用

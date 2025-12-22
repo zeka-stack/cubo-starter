@@ -1,15 +1,17 @@
 package dev.dong4j.zeka.starter.logsystem.spi;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.start.LauncherInitiation;
 import dev.dong4j.zeka.kernel.common.support.ChainMap;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
-import java.util.Map;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * 日志系统记录初始化器

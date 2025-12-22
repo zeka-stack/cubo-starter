@@ -1,14 +1,16 @@
 package dev.dong4j.zeka.starter.messaging.registry;
 
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
 import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import dev.dong4j.zeka.starter.messaging.factory.KafkaContainerFactoryProxy;
 import dev.dong4j.zeka.starter.messaging.factory.MessagingListenerContainerFactory;
 import dev.dong4j.zeka.starter.messaging.factory.RocketMQContainerFactoryProxy;
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 
 /**
  * 消息注册处理器
@@ -40,7 +42,7 @@ public class MessagingRegistrationHandler {
     /**
      * 构造方法
      *
-     * @param kafkaRegistry Kafka 监听器端点注册表
+     * @param kafkaRegistry    Kafka 监听器端点注册表
      * @param rocketmqRegistry RocketMQ 容器注册器
      */
     public MessagingRegistrationHandler(
@@ -57,7 +59,7 @@ public class MessagingRegistrationHandler {
     /**
      * 注册消息监听适配器
      *
-     * @param adapter 消息监听适配器
+     * @param adapter    消息监听适配器
      * @param annotation MessagingListener 注解实例
      * @throws IllegalArgumentException 如果消息类型不支持
      */

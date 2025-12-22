@@ -1,31 +1,32 @@
 package dev.dong4j.zeka.starter.openapi.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j.Knife4jAutoConfiguration;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j.Knife4jAutoConfiguration;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * OpenAPI自动配置类
- *
+ * <p>
  * 该类负责OpenAPI相关功能的自动配置，作为OpenAPI模块的主入口配置类。
  * 通过Spring Boot自动配置机制，在启用OpenAPI功能时自动配置相关组件。
- *
+ * <p>
  * 主要功能包括：
  * 1. 作为OpenAPI模块的自动配置入口
  * 2. 启用OpenAPI配置属性绑定
  * 3. 配置Knife4j自动配置的执行顺序
  * 4. 提供OpenAPI功能的统一管理
- *
+ * <p>
  * 使用场景：
  * - OpenAPI功能的自动启用
  * - API文档的自动配置
  * - 开发环境的文档工具配置
  * - 生产环境的API文档管理
- *
+ * <p>
  * 设计意图：
  * 通过自动配置类提供OpenAPI功能的开箱即用体验，
  * 简化开发人员的配置工作，提供标准化的API文档解决方案。
@@ -39,10 +40,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @Slf4j
 @AutoConfiguration
 @ConditionalOnEnabled(value = OpenAPIProperties.PREFIX)
-@AutoConfigureAfter({
+@AutoConfigureAfter(value = {
     Knife4jAutoConfiguration.class,
 })
 @EnableConfigurationProperties(OpenAPIProperties.class)
+@SuppressWarnings("PMD.ClassNamingShouldBeCamelRule")
 public class OpenAPIAutoConfiguration implements ZekaAutoConfiguration {
 
     /**

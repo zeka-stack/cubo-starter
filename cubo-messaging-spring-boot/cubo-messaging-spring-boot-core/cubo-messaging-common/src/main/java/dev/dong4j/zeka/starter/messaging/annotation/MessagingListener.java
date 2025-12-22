@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.messaging.annotation;
 
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
 
 /**
  * 消息监听注解，用于标记消息处理方法
@@ -25,10 +26,10 @@ import java.lang.annotation.Target;
  * @author dong4j
  * @version 1.0.0
  * @MessagingListener(topic = "test-topic", groupId = "test-group")
- * public void handleMessage(UnifiedMessage message) {
- * // 处理消息
- * }
- * }
+ *     public void handleMessage(UnifiedMessage message) {
+ *     // 处理消息
+ *     }
+ *     }
  * @email "mailto:dong4j@gmail.com"
  * @date 2023.05.15
  * @since 1.0.0

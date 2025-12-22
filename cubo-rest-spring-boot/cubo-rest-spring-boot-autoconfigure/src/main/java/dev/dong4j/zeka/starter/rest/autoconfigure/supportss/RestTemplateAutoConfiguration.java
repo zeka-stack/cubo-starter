@@ -1,24 +1,7 @@
 package dev.dong4j.zeka.starter.rest.autoconfigure.supportss;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
-import dev.dong4j.zeka.kernel.common.exception.LowestException;
-import dev.dong4j.zeka.kernel.common.ssl.DisableValidationTrustManager;
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.kernel.common.util.Charsets;
-import dev.dong4j.zeka.kernel.common.util.HttpsUtils;
-import dev.dong4j.zeka.kernel.web.jackson.MappingApiJackson2HttpMessageConverter;
-import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -34,6 +17,27 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
+import dev.dong4j.zeka.kernel.autoconfigure.condition.ConditionalOnEnabled;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
+import dev.dong4j.zeka.kernel.common.ssl.DisableValidationTrustManager;
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.kernel.common.util.Charsets;
+import dev.dong4j.zeka.kernel.common.util.HttpsUtils;
+import dev.dong4j.zeka.kernel.web.jackson.MappingApiJackson2HttpMessageConverter;
+import dev.dong4j.zeka.starter.rest.autoconfigure.RestProperties;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 
 /**
  * <p>Description: </p>
@@ -57,7 +61,7 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
 
     /**
      * 使用 okhttp, 忽略 https 证书
-     *
+     * <p>
      * 注意：在Spring Boot 3.x中，OkHttp3ClientHttpRequestFactory已被删除
      * 我们使用自定义的OkHttpClientHttpRequestFactory来替代
      * 支持连接池配置
@@ -75,7 +79,8 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
         // 使用自定义的OkHttpClientHttpRequestFactory，支持连接池配置
         // 注意：这里我们需要将SSL配置传递给自定义工厂
         return new OkHttpClientHttpRequestFactory(
-            baseClient,  // 传递SSL配置的OkHttpClient
+            // 传递SSL配置的OkHttpClient
+            baseClient,
             restProperties.getConnectTimeout(),
             restProperties.getReadTimeout(),
             restProperties.getWriteTimeout(),
@@ -86,10 +91,12 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Rest template
+     * 创建并配置 RestTemplate 实例
+     * <p> 该方法用于创建一个 RestTemplate 对象, 并使用提供的 ClientHttpRequestFactory 进行初始化, 同时添加自定义的消息转换器.</p>
      *
-     * @param clientHttpRequestFactory client http request factory
-     * @return the rest template
+     * @param clientHttpRequestFactory 用于创建 HTTP 请求的工厂
+     * @param objectMapper             用于序列化和反序列化 JSON 的对象映射器
+     * @return 配置好的 RestTemplate 实例
      * @since 1.0.0
      */
     @Bean
@@ -137,9 +144,12 @@ public class RestTemplateAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * 添加消息转换器
+     * 添加消息转换器到 RestTemplate
+     * <p> 该方法用于向 RestTemplate 添加自定义的消息转换器. 首先添加 UTF-8 编码的 StringHttpMessageConverter, 然后查找并移除已有的 MappingJackson2HttpMessageConverter,
+     * 最后添加基于提供的 ObjectMapper 的 MappingApiJackson2HttpMessageConverter.</p>
      *
-     * @param restTemplate agent template
+     * @param restTemplate 需要配置消息转换器的 RestTemplate 实例
+     * @param objectMapper 用于序列化和反序列化 JSON 的对象映射器
      * @since 1.0.0
      */
     private void converters(@NotNull RestTemplate restTemplate, ObjectMapper objectMapper) {

@@ -15,13 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p> 字典类型表 服务接口实现类 </p>
+ * 字典类型服务实现类
+ * <p> 提供字典类型相关的业务逻辑处理, 包括字典类型的查询, 创建和更新等操作. 该类继承自 BaseServiceImpl, 实现了 DictionaryTypeService 接口, 用于操作字典类型数据.
  *
  * @author dong4j
  * @version 1.0.0
- * @email "mailto:dong4j@dong4j@gmail.com"
- * @date 2025.09.10 23:19
- * @since 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Slf4j
 @Service
@@ -30,9 +31,10 @@ public class DictionaryTypeServiceImpl extends BaseServiceImpl<DictionaryTypeMap
 
     /**
      * 根据 ID 获取详细信息
+     * <p> 通过给定的主键 ID 查找字典类型, 并返回对应的字典类型 DTO 对象. 如果字典类型不存在, 则抛出异常.</p>
      *
      * @param id 主键
-     * @return 实体对象
+     * @return 字典类型 DTO 对象
      * @since 1.0.0
      */
     @Override
@@ -43,9 +45,10 @@ public class DictionaryTypeServiceImpl extends BaseServiceImpl<DictionaryTypeMap
     }
 
     /**
-     * 新增数据
+     * 新增字典类型数据
+     * <p> 将传入的表单数据转换为实体对象, 并插入到数据库中. 若插入失败则抛出异常.</p>
      *
-     * @param form 参数实体
+     * @param form 参数实体, 包含需要插入的字典类型数据
      * @since 1.0.0
      */
     @Override
@@ -57,10 +60,10 @@ public class DictionaryTypeServiceImpl extends BaseServiceImpl<DictionaryTypeMap
     }
 
     /**
-     * 更新数据
+     * 更新字典类型数据
+     * <p> 根据传入的表单参数更新对应的字典类型记录, 若更新行数不为 1 则抛出异常 </p>
      *
-     * @param form 参数实体
-     * @since 1.0.0
+     * @param form 字典类型表单参数, 包含需要更新的数据
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

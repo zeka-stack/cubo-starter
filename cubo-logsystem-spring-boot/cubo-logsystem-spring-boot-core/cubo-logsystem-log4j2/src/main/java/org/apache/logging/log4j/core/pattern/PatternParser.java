@@ -371,13 +371,13 @@ public final class PatternParser {
                         case '0':
                             // a '0' directly after the % sign indicates zero-padding
                             formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
-                                formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(), true);
+                                                                formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(), true);
                             break;
 
                         case '-':
                             formattingInfo = new FormattingInfo(true, formattingInfo.getMinLength(),
-                                formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
-                                formattingInfo.isZeroPad());
+                                                                formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
+                                                                formattingInfo.isZeroPad());
                             break;
 
                         case '.':
@@ -388,13 +388,13 @@ public final class PatternParser {
 
                             if (c >= '0' && c <= '9') {
                                 formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), c - '0',
-                                    formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
-                                    formattingInfo.isZeroPad());
+                                                                    formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
+                                                                    formattingInfo.isZeroPad());
                                 state = ParserState.MIN_STATE;
                             } else {
                                 i = this.finalizeConverter(c, pattern, i, currentLiteral, formattingInfo, this.converterRules,
-                                    patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi,
-                                    convertBackslashes);
+                                                           patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi,
+                                                           convertBackslashes);
 
                                 // Next pattern is assumed to be a literal.
                                 state = ParserState.LITERAL_STATE;
@@ -411,14 +411,14 @@ public final class PatternParser {
                     if (c >= '0' && c <= '9') {
                         // Multiply the existing value and add the value of the number just encountered.
                         formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), formattingInfo.getMinLength()
-                            * DECIMAL + c - '0',
-                            formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
-                            formattingInfo.isZeroPad());
+                                                                                            * DECIMAL + c - '0',
+                                                            formattingInfo.getMaxLength(), formattingInfo.isLeftTruncate(),
+                                                            formattingInfo.isZeroPad());
                     } else if (c == '.') {
                         state = ParserState.DOT_STATE;
                     } else {
                         i = this.finalizeConverter(c, pattern, i, currentLiteral, formattingInfo, this.converterRules,
-                            patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi, convertBackslashes);
+                                                   patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi, convertBackslashes);
                         state = ParserState.LITERAL_STATE;
                         formattingInfo = FormattingInfo.getDefault();
                         currentLiteral.setLength(0);
@@ -431,18 +431,18 @@ public final class PatternParser {
                     switch (c) {
                         case '-':
                             formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
-                                formattingInfo.getMaxLength(), false, formattingInfo.isZeroPad());
+                                                                formattingInfo.getMaxLength(), false, formattingInfo.isZeroPad());
                             break;
 
                         default:
 
                             if (c >= '0' && c <= '9') {
                                 formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
-                                    c - '0', formattingInfo.isLeftTruncate(), formattingInfo.isZeroPad());
+                                                                    c - '0', formattingInfo.isLeftTruncate(), formattingInfo.isZeroPad());
                                 state = ParserState.MAX_STATE;
                             } else {
                                 LOGGER.error("Error occurred in position " + i + ".\n Was expecting digit, instead got char \"" + c
-                                    + "\".");
+                                             + "\".");
 
                                 state = ParserState.LITERAL_STATE;
                             }
@@ -456,11 +456,11 @@ public final class PatternParser {
                     if (c >= '0' && c <= '9') {
                         // Multiply the existing value and add the value of the number just encountered.
                         formattingInfo = new FormattingInfo(formattingInfo.isLeftAligned(), formattingInfo.getMinLength(),
-                            formattingInfo.getMaxLength() * DECIMAL + c - '0',
-                            formattingInfo.isLeftTruncate(), formattingInfo.isZeroPad());
+                                                            formattingInfo.getMaxLength() * DECIMAL + c - '0',
+                                                            formattingInfo.isLeftTruncate(), formattingInfo.isZeroPad());
                     } else {
                         i = this.finalizeConverter(c, pattern, i, currentLiteral, formattingInfo, this.converterRules,
-                            patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi, convertBackslashes);
+                                                   patternConverters, formattingInfos, disableAnsi, noConsoleNoAnsi, convertBackslashes);
                         state = ParserState.LITERAL_STATE;
                         formattingInfo = FormattingInfo.getDefault();
                         currentLiteral.setLength(0);
@@ -550,7 +550,7 @@ public final class PatternParser {
                     parms[i] = this.config;
                 } else {
                     LOGGER.error("Unknown parameter type " + clazz.getName() + " for static newInstance method of "
-                        + converterClass.getName());
+                                 + converterClass.getName());
                     errors = true;
                 }
                 ++i;
@@ -619,7 +619,7 @@ public final class PatternParser {
         i = extractOptions(pattern, i, options);
 
         PatternConverter pc = this.createConverter(converterId, currentLiteral, rules, options, disableAnsi,
-            noConsoleNoAnsi);
+                                                   noConsoleNoAnsi);
 
         if (pc == null) {
             StringBuilder msg;

@@ -2,18 +2,21 @@ package dev.dong4j.zeka.starter.rest.support;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.MethodParameter;
+import org.springframework.core.convert.converter.ConverterFactory;
+import org.springframework.http.HttpInputMessage;
+
+import java.io.IOException;
+
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
 import dev.dong4j.zeka.kernel.common.exception.LowestException;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.kernel.common.util.ReflectionUtils;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.rest.annotation.RequestAbstractForm;
-import java.io.IOException;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.converter.ConverterFactory;
-import org.springframework.http.HttpInputMessage;
 
 /**
  * <p>Description: 处理 @RequestAbstractForm, 用于接口接收抽象类, 此注解将自动转换为对应子类 </p>
@@ -72,7 +75,7 @@ public class RequestAbstractFormMethodArgumentResolver extends AbstractMethodArg
         if (!SerializeEnum.class.isAssignableFrom(subClass)) {
             throw new LowestException(
                 StringUtils.format("参数转换失败, [{}] 需要实现 SerializeEnum 接口. "
-                    + "RequestAbstractForm.value: [{}]", subClass.getSimpleName(), subClass));
+                                   + "RequestAbstractForm.value: [{}]", subClass.getSimpleName(), subClass));
         }
         Object[] parse = new Object[1];
         ReflectionUtils.doWithFields(parameter.getParameter().getType(), field -> {

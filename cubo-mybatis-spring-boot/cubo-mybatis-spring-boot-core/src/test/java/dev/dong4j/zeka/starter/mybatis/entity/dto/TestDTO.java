@@ -1,7 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.entity.dto;
 
-import dev.dong4j.zeka.kernel.common.base.BaseDTO;
 import java.util.Date;
+
+import dev.dong4j.zeka.kernel.common.base.BaseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

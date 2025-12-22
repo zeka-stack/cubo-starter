@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.common.entity.vo;
 
+import java.io.Serial;
+
 import dev.dong4j.zeka.kernel.common.base.BaseVO;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

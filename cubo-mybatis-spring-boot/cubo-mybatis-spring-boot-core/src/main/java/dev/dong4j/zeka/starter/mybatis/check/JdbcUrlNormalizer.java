@@ -13,6 +13,7 @@ import java.util.List;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@SuppressWarnings("PMD.UndefineMagicConstantRule")
 public final class JdbcUrlNormalizer {
 
     /**

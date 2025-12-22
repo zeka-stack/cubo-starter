@@ -1,26 +1,29 @@
 package dev.dong4j.zeka.starter.rest.converter;
 
 import com.google.common.collect.Maps;
-import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
-import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
-import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
+import dev.dong4j.zeka.kernel.common.enums.serialize.EntityEnumDeserializer;
+
 /**
  * 全局枚举转换器工厂
- *
+ * <p>
  * 该类用于在 Spring MVC 中处理枚举类型的参数转换。
  * 由于前端传入的都是 String 类型，该工厂将 String 类型转换为对应的枚举类型。
- *
+ * <p>
  * 支持的转换值包括：
  * 1. 枚举的 value 值（优先级最高）
  * 2. 枚举的 name 名称
  * 3. 枚举的序列号（ordinal）
- *
+ * <p>
  * 与 JSON 格式的枚举转换优先级保持一致，使用 {@link EntityEnumDeserializer} 的策略。
- *
+ * <p>
  * 使用方式：在 {@link dev.dong4j.zeka.starter.rest.autoconfigure.servlet.ServletWebAutoConfiguration#addFormatters} 中注册。
  *
  * @author dong4j
@@ -36,11 +39,11 @@ public class GlobalEnumConverterFactory implements ConverterFactory<String, Seri
 
     /**
      * 获取枚举转换器
-     *
+     * <p>
      * 为指定的枚举类型返回一个从 String 到该枚举类型的转换器。
      * 使用缓存机制避免重复创建转换器，提高性能。
      *
-     * @param <T> 需要被转换的枚举类型，必须实现 SerializeEnum 接口
+     * @param <T>        需要被转换的枚举类型，必须实现 SerializeEnum 接口
      * @param targetType 目标枚举类型
      * @return 对应的转换器实例
      * @since 1.0.0
@@ -61,7 +64,7 @@ public class GlobalEnumConverterFactory implements ConverterFactory<String, Seri
 
     /**
      * 全局枚举转换器实现类
-     *
+     * <p>
      * 该类实现了具体的枚举转换逻辑，将 String 类型的参数转换为指定的枚举类型。
      * 转换优先级：value > name > ordinal，与 JSON 格式的枚举转换保持一致。
      *
@@ -80,7 +83,7 @@ public class GlobalEnumConverterFactory implements ConverterFactory<String, Seri
 
         /**
          * 构造方法，建立枚举值与枚举实例的映射关系
-         *
+         * <p>
          * 遍历指定枚举类型的所有定义枚举，将其 getValue() 值与枚举实例建立映射关系。
          * 由于前端传过来的都是 String 类型的参数，因此将 getValue() 转为 String 进行存储。
          *
@@ -99,12 +102,12 @@ public class GlobalEnumConverterFactory implements ConverterFactory<String, Seri
 
         /**
          * 执行枚举转换逻辑
-         *
+         * <p>
          * 转换优先级：
          * 1. 优先匹配枚举的 getValue() 值
          * 2. 其次匹配枚举的 name() 名称
          * 3. 最后匹配枚举的 ordinal() 序列号
-         *
+         * <p>
          * 该优先级与 JSON 格式的枚举转换保持一致，参考 {@link EntityEnumDeserializer}。
          *
          * @param source 要转换的字符串参数

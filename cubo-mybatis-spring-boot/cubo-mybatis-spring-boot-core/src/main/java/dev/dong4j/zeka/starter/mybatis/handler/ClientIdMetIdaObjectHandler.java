@@ -1,10 +1,11 @@
 package dev.dong4j.zeka.starter.mybatis.handler;
 
+import org.apache.ibatis.reflection.MetaObject;
+
 import dev.dong4j.zeka.kernel.common.context.ExpandIds;
 import dev.dong4j.zeka.kernel.common.util.Jsons;
 import dev.dong4j.zeka.starter.mybatis.base.BasePO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.reflection.MetaObject;
 
 /**
  * <p>Description: 处理新增和更新的基础数据填充,配合 BaseEntity 和 MyBatisPlusConfig 使用 </p>
@@ -30,8 +31,8 @@ public class ClientIdMetIdaObjectHandler extends AbstractDataIdMetaObjectHandler
     protected void setFieldValue(MetaObject metaObject, ExpandIds expandIds) {
         if (log.isDebugEnabled()) {
             log.debug("自动写入 clientId, originalObject: [{}], clientId: [{}]",
-                Jsons.toJson(metaObject.getOriginalObject()),
-                expandIds.getClientId().orElse(null));
+                      Jsons.toJson(metaObject.getOriginalObject()),
+                      expandIds.getClientId().orElse(null));
         }
         this.setFieldValByName("clientId", expandIds.getClientId().orElse(""), metaObject);
     }

@@ -1,12 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.support;
 
-import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -14,19 +7,28 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import lombok.Getter;
+
 /**
  * 消息处理方法封装类
- *
+ * <p>
  * 该类封装了消息处理方法的调用逻辑，包括：
  * 1. 方法参数解析
  * 2. 方法调用
  * 3. 异常处理
- *
+ * <p>
  * 核心功能：
  * 1. 支持多种参数类型(UnifiedMessage, MessagingContext, String payload)
  * 2. 支持SpEL表达式解析参数
  * 3. 提供统一的异常处理机制
- *
+ * <p>
  * 使用场景：
  * 1. 消息监听适配器中调用业务方法
  * 2. 统一处理消息方法调用
@@ -112,7 +114,7 @@ public class MessagingHandlerMethod {
      * 使用表达式解析参数
      *
      * @param parameter 方法参数
-     * @param context 消息上下文
+     * @param context   消息上下文
      * @return 解析后的参数值
      * @throws IllegalStateException 如果表达式解析失败
      */
@@ -133,7 +135,7 @@ public class MessagingHandlerMethod {
     /**
      * 处理方法调用异常
      *
-     * @param ex 目标异常
+     * @param ex      目标异常
      * @param context 消息上下文
      * @throws RuntimeException 如果异常未被处理
      */
@@ -176,7 +178,7 @@ public class MessagingHandlerMethod {
         /**
          * 获取参数解析配置
          *
-         * @param method 处理方法
+         * @param method    处理方法
          * @param parameter 方法参数
          * @return 参数解析配置
          */
@@ -185,15 +187,15 @@ public class MessagingHandlerMethod {
         /**
          * 错误处理方法
          *
-         * @param ex 异常
+         * @param ex      异常
          * @param context 消息上下文
          */
         void onError(Throwable ex, MessagingContext context);
 
         /**
-                 * 参数解析配置类
-                 */
-                record ArgumentResolverConfig(String expression) {
+         * 参数解析配置类
+         */
+        record ArgumentResolverConfig(String expression) {
             /**
              * 构造方法
              *
@@ -202,15 +204,15 @@ public class MessagingHandlerMethod {
             public ArgumentResolverConfig {
             }
 
-                    /**
-                     * 获取表达式
-                     *
-                     * @return SpEL表达式
-                     */
-                    @Override
-                    public String expression() {
-                        return expression;
-                    }
-                }
+            /**
+             * 获取表达式
+             *
+             * @return SpEL表达式
+             */
+            @Override
+            public String expression() {
+                return expression;
+            }
+        }
     }
 }

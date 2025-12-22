@@ -1,26 +1,27 @@
 package dev.dong4j.zeka.starter.logsystem.autoconfigure;
 
-import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
-import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import dev.dong4j.zeka.kernel.common.start.ZekaAutoConfiguration;
+import dev.dong4j.zeka.starter.logsystem.LogPrintStream;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 日志系统自动配置类
- *
+ * <p>
  * 该类是日志系统的核心自动配置类，负责在Spring Boot应用启动时自动配置日志系统。
  * 主要功能包括：
  * 1. 根据条件自动装配日志系统相关组件
  * 2. 启用日志系统配置属性绑定
  * 3. 提供日志系统的基础配置支持
- *
+ * <p>
  * 使用场景：
  * - Spring Boot应用启动时的日志系统初始化
  * - 日志配置属性的自动绑定和验证
  * - 日志系统组件的条件装配
- *
+ * <p>
  * 设计意图：
  * 通过Spring Boot的自动配置机制，简化日志系统的配置和使用，
  * 让开发者无需手动配置即可使用完整的日志功能。

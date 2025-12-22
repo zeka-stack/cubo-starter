@@ -1,19 +1,7 @@
 package dev.dong4j.zeka.starter.rest.handler;
 
 import com.google.common.collect.Maps;
-import dev.dong4j.zeka.kernel.common.api.BaseCodes;
-import dev.dong4j.zeka.kernel.common.api.IResultCode;
-import dev.dong4j.zeka.kernel.common.api.R;
-import dev.dong4j.zeka.kernel.common.context.Trace;
-import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
-import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
-import dev.dong4j.zeka.kernel.common.exception.LowestException;
-import dev.dong4j.zeka.kernel.common.util.Exceptions;
-import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
-import jakarta.servlet.ServletException;
-import java.util.Iterator;
-import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -25,6 +13,21 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.api.BaseCodes;
+import dev.dong4j.zeka.kernel.common.api.IResultCode;
+import dev.dong4j.zeka.kernel.common.api.R;
+import dev.dong4j.zeka.kernel.common.context.Trace;
+import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
+import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.common.exception.LowestException;
+import dev.dong4j.zeka.kernel.common.util.Exceptions;
+import dev.dong4j.zeka.starter.rest.advice.RestGlobalExceptionHandler;
+import jakarta.servlet.ServletException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Servlet 环境下的自定义错误属性提取器
@@ -121,7 +124,8 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
      */
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Map<String, Object> errorAttributes = this.getErrorAttributes(webRequest, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
+        Map<String, Object> errorAttributes = this.getErrorAttributes(webRequest,
+                                                                      options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
         options.retainIncluded(errorAttributes);
         return errorAttributes;
     }
@@ -349,9 +353,9 @@ public class ZekaServletExceptionErrorAttributes extends DefaultErrorAttributes 
         }
         if (result.hasErrors()) {
             exceptionEntity.setErrorMessage("Validation failed for object='"
-                + result.getObjectName()
-                + "'. Error count: "
-                + result.getErrorCount());
+                                            + result.getObjectName()
+                                            + "'. Error count: "
+                                            + result.getErrorCount());
         } else {
             exceptionEntity.setErrorMessage("No errors");
         }

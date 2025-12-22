@@ -1,10 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.check;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JDBC 驱动冲突检测器
@@ -18,11 +17,8 @@ import java.util.List;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@Slf4j
 public final class JdbcDriverConflictDetector {
-
-    /** 日志记录器, 用于记录 JdbcDriverConflictDetector 类的相关日志信息 */
-    private static final Logger log =
-        LoggerFactory.getLogger(JdbcDriverConflictDetector.class);
 
     /**
      * 私有构造函数, 用于防止外部实例化该类
@@ -80,7 +76,6 @@ public final class JdbcDriverConflictDetector {
      *
      * @param driverClass JDBC 驱动类的全限定名称
      * @return 如果驱动类存在且可以加载则返回 true, 否则返回 false
-     * @throws ClassNotFoundException 如果指定的驱动类不存在
      */
     private static boolean present(String driverClass) {
         try {

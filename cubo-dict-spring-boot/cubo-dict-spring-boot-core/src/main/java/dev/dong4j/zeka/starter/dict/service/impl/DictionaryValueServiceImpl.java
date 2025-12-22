@@ -15,13 +15,20 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p> 字典值表 服务接口实现类 </p>
+ * 字典值服务实现类
+ * <p> 该类继承自 BaseServiceImpl, 并实现了 DictionaryValueService 接口. 提供了字典值的详细信息查询, 创建和编辑等功能.
+ * <p> 具体功能包括:
+ * <ul>
+ * <li> 通过给定的 ID 查询字典值的详细信息 </li>
+ * <li> 创建新的字典值记录 </li>
+ * <li> 编辑现有的字典值记录 </li>
+ * </ul>
  *
  * @author dong4j
  * @version 1.0.0
- * @email "mailto:dong4j@dong4j@gmail.com"
- * @date 2025.09.10 23:19
- * @since 1.0.0
+ * @email "mailto:dong4j@gmail.com"
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Slf4j
 @Service
@@ -30,10 +37,10 @@ public class DictionaryValueServiceImpl extends BaseServiceImpl<DictionaryValueM
 
     /**
      * 根据 ID 获取详细信息
+     * <p> 通过主键查询字典值表数据, 并转换为对应的 DTO 对象返回 </p>
      *
      * @param id 主键
-     * @return 实体对象
-     * @since 1.0.0
+     * @return 字典值对象
      */
     @Override
     public DictionaryValueDTO detail(Long id) {
@@ -44,8 +51,9 @@ public class DictionaryValueServiceImpl extends BaseServiceImpl<DictionaryValueM
 
     /**
      * 新增数据
+     * <p> 将字典值表的数据插入数据库中. 如果插入失败, 则回滚事务.</p>
      *
-     * @param form 参数实体
+     * @param form 包含新增数据的参数实体
      * @since 1.0.0
      */
     @Override
@@ -58,8 +66,9 @@ public class DictionaryValueServiceImpl extends BaseServiceImpl<DictionaryValueM
 
     /**
      * 更新数据
+     * <p> 根据传入的表单参数更新字典值表中的数据. 如果更新失败, 则回滚事务.</p>
      *
-     * @param form 参数实体
+     * @param form 包含更新数据的表单实体
      * @since 1.0.0
      */
     @Override

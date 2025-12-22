@@ -1,5 +1,14 @@
 package dev.dong4j.zeka.starter.rest.filter;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+
 import dev.dong4j.zeka.kernel.auth.constant.AuthConstant;
 import dev.dong4j.zeka.kernel.auth.entity.AuthorizationUser;
 import dev.dong4j.zeka.kernel.auth.util.JwtUtils;
@@ -11,81 +20,41 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 /**
- * 全局参数注入过滤器
- *
- * 该过滤器用于解析 HTTP 请求中的 JWT Token，并自动注入当前用户ID和租户ID参数。
- * 主要用于简化 Controller 方法中获取用户身份信息的过程，避免在每个方法中重复解析 Token。
- *
- * 主要功能：
- * 1. 自动解析 Authorization Header 中的 JWT Token
- * 2. 提取用户身份信息（用户ID、租户ID）
- * 3. 将身份信息作为请求参数注入，可在 Controller 方法中直接使用
- * 4. 支持通过参数名 "currentUserId" 和 "currentTenantId" 自动绑定
- *
- * 工作原理：
- * - 继承 OncePerRequestFilter，确保每次请求只执行一次
- * - 包装原始请求对象，增强参数获取能力
- * - 动态添加 currentUserId 和 currentTenantId 虚拟参数
- * - 在获取这些参数时自动解析 Token 并返回对应值
- *
- * 使用方式：
- * ```java
- * @GetMapping("/user/info")
- * public UserInfo getUserInfo(@RequestParam Long currentUserId,
- *                            @RequestParam Long currentTenantId) {
- *     // currentUserId 和 currentTenantId 会自动从 Token 中解析注入
- *     return userService.getUserInfo(currentUserId, currentTenantId);
- * }
- * ```
- *
- * 安全特性：
- * - Token 解析失败时抛出授权异常
- * - 支持多种 Token 传递方式（Authorization Header、X-Client-Token）
- * - 自动处理请求包装，支持多次读取请求体
- *
- * 注意事项：
- * - 过滤器优先级最低，在其他过滤器之后执行
- * - 依赖 CacheRequestEnhanceWrapper 实现请求体的可重复读取
- * - 仅在需要用户身份信息的接口中使用相关参数名
+ * 全局参数过滤器
+ * <p> 用于在请求处理过程中增强请求参数, 特别是添加当前用户 ID 和租户 ID 参数, 基于请求中的 Token 解析用户信息并注入到请求参数中, 以供后续业务逻辑使用.
+ * 该过滤器确保每个请求在处理前都会经过参数增强处理, 适用于需要基于 Token 认证的 Web 应用场景.
  *
  * @author dong4j
  * @version 1.0.0
  * @email "mailto:dong4j@gmail.com"
- * @date 2020.01.04 11:52
- * @since 1.0.0
+ * @date 2025.12.22
+ * @since 2.0.0
  */
 @Slf4j
 public class GlobalParameterFilter extends OncePerRequestFilter {
     /**
      * 过滤器核心处理方法
-     *
+     * <p>
      * 该方法是过滤器的入口点，负责包装原始请求对象并添加 Token 解析功能。
      * 根据请求对象的类型选择合适的包装策略，确保请求体可以被多次读取。
-     *
+     * <p>
      * 处理流程：
      * 1. 检查请求对象类型，确定是否已经被缓存包装
      * 2. 使用 TokenRequestWrapper 包装请求，增加 Token 解析能力
      * 3. 将包装后的请求传递给后续的过滤器链
-     *
+     * <p>
      * 包装策略：
      * - 如果请求已经是 CacheRequestEnhanceWrapper 类型，直接使用其缓存的请求包装器
      * - 否则创建新的 ContentCachingRequestWrapper 进行包装
      *
-     * @param request HTTP 请求对象
-     * @param response HTTP 响应对象
+     * @param request     HTTP 请求对象
+     * @param response    HTTP 响应对象
      * @param filterChain 过滤器链，用于继续处理请求
      * @throws ServletException 当 Servlet 处理发生异常时抛出
-     * @throws IOException 当 I/O 操作发生异常时抛出
+     * @throws IOException      当 I/O 操作发生异常时抛出
      * @since 1.0.0
      */
     @Override
@@ -104,24 +73,24 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
 
     /**
      * Token 参数解析请求包装器
-     *
+     * <p>
      * 该内部类继承自 CacheRequestEnhanceWrapper，增强了请求参数获取的能力。
      * 主要功能是在原有请求参数的基础上，动态添加从 JWT Token 中解析出的
      * 用户身份信息参数（currentUserId 和 currentTenantId）。
-     *
+     * <p>
      * 实现原理：
      * 1. 重写 getParameterNames() 方法，在有 Token 时动态添加虚拟参数名
      * 2. 重写 getParameterValues() 方法，在获取虚拟参数时解析 Token
      * 3. 支持多种 Token 传递方式（Authorization Header 和 X-Client-Token）
-     *
+     * <p>
      * 虚拟参数：
      * - currentUserId: 当前登录用户的 ID
      * - currentTenantId: 当前用户所属租户的 ID
-     *
+     * <p>
      * 错误处理：
      * - Token 不存在或解析失败时抛出授权异常
      * - 记录详细的错误日志，方便问题排查
-     *
+     * <p>
      * 使用场景：
      * 主要用于 Spring MVC 的参数绑定机制，当 Controller 方法参数为 POJO 类型时，
      * Spring 会遍历所有请求参数并对 POJO 属性进行赋值。
@@ -140,7 +109,7 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
 
         /**
          * 构造方法，初始化 Token 请求包装器
-         *
+         * <p>
          * 接收一个已经被内容缓存包装的请求对象，
          * 在其基础上添加 Token 解析和参数注入功能。
          *
@@ -153,16 +122,16 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
 
         /**
          * 获取所有请求参数名集合（包括虚拟参数）
-         *
+         * <p>
          * 该方法被 Spring MVC 用于参数绑定，特别是当 Controller 方法参数为 POJO 类型时。
          * Spring 会遍历所有参数名，并尝试对 POJO 的对应属性进行赋值。
-         *
+         * <p>
          * 增强功能：
          * 1. 获取原始请求中的所有参数名
          * 2. 检查是否存在有效的 JWT Token
          * 3. 如果 Token 存在，动态添加 currentUserId 和 currentTenantId 参数名
          * 4. 返回完整的参数名列表供 Spring 使用
-         *
+         * <p>
          * 注意事项：
          * - 只有在检测到有效 Token 时才会添加虚拟参数
          * - 返回的是不可修改的枚举对象，确保线程安全
@@ -197,21 +166,21 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
 
         /**
          * 获取指定参数的值数组（支持虚拟参数）
-         *
+         * <p>
          * 该方法是 Spring MVC 参数绑定的核心方法，当 Controller 方法需要获取参数值时会调用。
          * 对于虚拟参数（currentUserId 和 currentTenantId），会自动从 JWT Token 中解析。
-         *
+         * <p>
          * 处理逻辑：
          * 1. 检查是否为虚拟参数（currentUserId 或 currentTenantId）
          * 2. 如果是虚拟参数，获取并解析 JWT Token
          * 3. 从 Token 中提取用户信息，返回对应的用户ID或租户ID
          * 4. 如果不是虚拟参数，委托给父类处理
-         *
+         * <p>
          * 异常处理：
          * - Token 不存在时抛出“请求未授权”异常
          * - Token 解析失败时抛出“请求未授权”异常
          * - 记录详细的错误日志，包含请求路径和参数名
-         *
+         * <p>
          * 返回格式：
          * - 返回字符串数组，即使只有一个值也会封装成数组
          * - 这符合 Servlet API 的设计，支持多值参数
@@ -233,24 +202,24 @@ public class GlobalParameterFilter extends OncePerRequestFilter {
                     if (ObjectUtils.isNull(user)) {
                         // Token 解析失败，记录错误日志并抛出异常
                         log.error("[{}] 使用了 [{}] 或 [{}] 参数名, 但是解析 token 失败",
-                            this.cachingRequestWrapper.getPathInfo(),
-                            CURRENT_USER_ID,
-                            CURRENT_TENANT_ID);
+                                  this.cachingRequestWrapper.getPathInfo(),
+                                  CURRENT_USER_ID,
+                                  CURRENT_TENANT_ID);
                         throw new LowestException("B.A-40001", "请求未授权");
                     }
 
                     // 根据参数名返回对应的用户信息
                     if (CURRENT_USER_ID.equals(name)) {
-                        return new String[]{String.valueOf(user.getId())};
+                        return new String[] {String.valueOf(user.getId())};
                     } else {
-                        return new String[]{String.valueOf(user.getTenantId())};
+                        return new String[] {String.valueOf(user.getTenantId())};
                     }
                 } else {
                     // Token 不存在，记录错误日志并抛出异常
                     log.error("[{}] 使用了 [{}] 或 [{}] 参数名, 但是未获取到 token",
-                        this.cachingRequestWrapper.getPathInfo(),
-                        CURRENT_USER_ID,
-                        CURRENT_TENANT_ID);
+                              this.cachingRequestWrapper.getPathInfo(),
+                              CURRENT_USER_ID,
+                              CURRENT_TENANT_ID);
 
                     throw new LowestException("B.A-40001", "请求未授权");
                 }

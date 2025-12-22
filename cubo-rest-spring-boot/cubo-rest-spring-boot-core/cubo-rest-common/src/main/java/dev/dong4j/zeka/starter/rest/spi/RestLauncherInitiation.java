@@ -1,5 +1,14 @@
 package dev.dong4j.zeka.starter.rest.spi;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.io.File;
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
@@ -9,14 +18,7 @@ import dev.dong4j.zeka.kernel.common.util.FileUtils;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.logsystem.constant.LogSystem;
-import java.io.File;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.context.event.ApplicationStartingEvent;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * REST 模块启动器初始化类
@@ -47,11 +49,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
  */
 @Slf4j
 public abstract class RestLauncherInitiation implements LauncherInitiation {
-    // 格式化器：关闭格式化
+    // formatter:off
     /** Undertow 访问日志的默认格式模式，参考 io.undertow.server.handlers.accesslog.AccessLogHandler */
     @SuppressWarnings("checkstyle:LineLength")
-    private static final String LOG_DEFAULT_PATTERN = "[%{time,yyyy-MM-dd HH:mm:ss.SSS}] \"%r\" %s (%D ms) (%b bytes) %{i,X-Trace-Id} %{i,X-Agent-Api}_%{i,X-Agent-Version},%{i,User-Agent} %l %u %v";
-    // 格式化器：恢复格式化
+    private static final String LOG_DEFAULT_PATTERN =
+        "[%{time,yyyy-MM-dd HH:mm:ss.SSS}] \"%r\" %s (%D ms) (%b bytes) %{i,X-Trace-Id} %{i,X-Agent-Api}_%{i,X-Agent-Version},%{i,User-Agent} %l %u %v";
+    // formatter:on
 
     /**
      * 设置 REST 模块的默认配置属性
@@ -138,6 +141,7 @@ public abstract class RestLauncherInitiation implements LauncherInitiation {
      * @since 1.0.0
      */
     @Override
+    @SuppressWarnings("checkstyle:Regexp")
     public void after(ConfigurableApplicationContext context, @NotNull Boolean localLaunch) {
         log.debug("[{}] 容器启动完成, 开始注入自定义逻辑", getName());
         final ConfigurableEnvironment environment = context.getEnvironment();

@@ -30,6 +30,16 @@
         <dependency>
             <groupId>dev.dong4j</groupId>
             <artifactId>cubo-messaging-rocketmq</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-cli</artifactId>
+                    <groupId>commons-cli</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>zstd-jni</artifactId>
+                    <groupId>com.github.luben</groupId>
+                </exclusion>
+            </exclusions>
             <optional>true</optional>
         </dependency>
 

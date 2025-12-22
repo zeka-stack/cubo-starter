@@ -1,13 +1,5 @@
 package dev.dong4j.zeka.starter.messaging.autoconfigure;
 
-import dev.dong4j.zeka.kernel.common.util.Jsons;
-import dev.dong4j.zeka.kernel.test.ZekaTest;
-import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
-import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
-import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
-import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
-import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
-import jakarta.annotation.Resource;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.rocketmq.common.message.Message;
@@ -19,6 +11,15 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
+
+import dev.dong4j.zeka.kernel.common.util.Jsons;
+import dev.dong4j.zeka.kernel.test.ZekaTest;
+import dev.dong4j.zeka.starter.messaging.annotation.MessagingListener;
+import dev.dong4j.zeka.starter.messaging.enums.MessagingType;
+import dev.dong4j.zeka.starter.messaging.model.UnifiedMessage;
+import dev.dong4j.zeka.starter.messaging.template.MessagingTemplate;
+import dev.dong4j.zeka.starter.messaging.template.model.MessageKey;
+import jakarta.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,7 +77,7 @@ class MessagingIntegrationTest {
 
     @Test
     void shouldSendRocketMQMessage() {
-// 准备测试支付
+        // 准备测试支付
         Payment payment = new Payment("pay-456", 49.99);
         // 发送消息
         UnifiedMessage message = new UnifiedMessage("payments", "111111")

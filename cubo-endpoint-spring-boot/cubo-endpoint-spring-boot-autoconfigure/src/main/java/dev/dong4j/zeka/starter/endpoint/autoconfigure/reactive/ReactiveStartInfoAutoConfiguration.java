@@ -92,11 +92,11 @@ public class ReactiveStartInfoAutoConfiguration implements ZekaAutoConfiguration
             RequestPredicates.GET(LibraryEnum.START_URL),
             // 返回临时重定向响应，重定向到本地 Git 信息端点
             request -> ServerResponse.temporaryRedirect(URI.create("http://"
-                + NetUtils.getLocalHost()
-                + ":"
-                + ConfigKit.getPort()
-                + ConfigKit.getContextPath()
-                + "/git")).build());
+                                                                   + NetUtils.getLocalHost()
+                                                                   + ":"
+                                                                   + ConfigKit.getPort()
+                                                                   + ConfigKit.getContextPath()
+                                                                   + "/git")).build());
 
         // 创建健康检查路由，返回 "ok" 状态
         RouterFunction<ServerResponse> checkRoute = RouterFunctions.route(

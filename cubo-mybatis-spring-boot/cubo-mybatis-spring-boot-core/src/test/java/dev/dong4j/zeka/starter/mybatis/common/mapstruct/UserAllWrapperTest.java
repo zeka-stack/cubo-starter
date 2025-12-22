@@ -1,5 +1,8 @@
 package dev.dong4j.zeka.starter.mybatis.common.mapstruct;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.kernel.common.enums.DeletedEnum;
 import dev.dong4j.zeka.kernel.common.enums.EnabledEnum;
 import dev.dong4j.zeka.kernel.common.exception.LowestException;
@@ -9,8 +12,6 @@ import dev.dong4j.zeka.starter.mybatis.common.entity.enums.GenderEnum;
 import dev.dong4j.zeka.starter.mybatis.common.entity.po.User;
 import dev.dong4j.zeka.starter.mybatis.common.entity.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * <p>Description: </p>
@@ -37,10 +38,11 @@ class UserAllWrapperTest {
         User po = UserAllWrapper.INSTANCE.po(dto);
         log.info("po = [{}]", po);
         Assertions.assertEquals(po.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new));
+                                EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new));
         Assertions.assertEquals(po.getEnable(),
-            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new));
-        Assertions.assertEquals(po.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new));
+                                EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new));
+        Assertions.assertEquals(po.getDeleted(),
+                                EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new));
     }
 
     /**
@@ -54,10 +56,11 @@ class UserAllWrapperTest {
         UserVO vo = UserAllWrapper.INSTANCE.vo(dto);
         log.info("vo = [{}]", vo);
         Assertions.assertEquals(vo.getGender(),
-            EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new).getDesc());
+                                EnumUtils.of(GenderEnum.class, g -> g.getValue().equals(dto.getGender())).orElseThrow(LowestException::new).getDesc());
         Assertions.assertEquals(vo.getEnable(),
-            EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new).getDesc());
-        Assertions.assertEquals(vo.getDeleted(), EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new).getDesc());
+                                EnumUtils.of(EnabledEnum.class, g -> g.getValue().equals(dto.getEnable())).orElseThrow(LowestException::new).getDesc());
+        Assertions.assertEquals(vo.getDeleted(),
+                                EnumUtils.of(DeletedEnum.class, g -> g.getValue().equals(dto.getDeleted())).orElseThrow(LowestException::new).getDesc());
     }
 
     /**
@@ -96,7 +99,8 @@ class UserAllWrapperTest {
         UserVO vo = new UserVO().setGender("男");
         User po = UserAllWrapper.INSTANCE.po(vo);
         log.info("po = [{}]", po);
-        Assertions.assertEquals(po.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new));
+        Assertions.assertEquals(po.getGender(),
+                                EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new));
     }
 
     /**
@@ -109,7 +113,8 @@ class UserAllWrapperTest {
         UserVO vo = new UserVO().setGender("男");
         UserDTO dto = UserAllWrapper.INSTANCE.dto(vo);
         log.info("dto = [{}]", dto);
-        Assertions.assertEquals(dto.getGender(), EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new).getValue());
+        Assertions.assertEquals(dto.getGender(),
+                                EnumUtils.of(GenderEnum.class, g -> g.getDesc().equals(vo.getGender())).orElseThrow(LowestException::new).getValue());
     }
 
 }

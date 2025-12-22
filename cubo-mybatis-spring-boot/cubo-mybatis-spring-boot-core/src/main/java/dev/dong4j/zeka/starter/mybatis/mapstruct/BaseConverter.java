@@ -1,36 +1,35 @@
 package dev.dong4j.zeka.starter.mybatis.mapstruct;
 
+import java.io.Serializable;
+
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;
 import dev.dong4j.zeka.kernel.common.base.BaseVO;
 import dev.dong4j.zeka.starter.mybatis.base.BasePO;
-import java.io.Serializable;
 
 /**
  * 基础转换器接口
- *
+ * <p>
  * 该接口继承自 BaseWrapper，提供了对象转换的标准接口定义。
  * 主要用于 MapStruct 等映射工具的基础接口，简化转换器的定义。
- *
+ * <p>
  * 主要功能：
  * 1. 继承 BaseWrapper 的所有转换方法
  * 2. 为 MapStruct 转换器提供统一的接口规范
  * 3. 支持 VO、DTO、PO 之间的完整转换链路
  * 4. 提供类型安全的转换接口
- *
+ * <p>
  * 使用方式：
- * ```java
- * @Mapper(componentModel = "spring")
- * public interface UserConverter extends BaseConverter<UserVO, UserDTO, UserPO> {
- *     // MapStruct 会自动实现转换方法
+ * Mapper(componentModel = "spring")
+ * public interface UserConverter extends BaseConverter {
+ * // MapStruct 会自动实现转换方法
  * }
- * ```
- *
+ * <p>
  * 设计目的：
  * - 为 MapStruct 转换器提供统一的基础接口
  * - 减少重复的接口定义
  * - 确保转换方法的一致性
  * - 提供类型安全的转换操作
- *
+ * <p>
  * 注意：该接口已标记为废弃，建议使用更专业的转换接口：
  * - 使用 kernel 模块中的 ViewConverter 和 ServiceConverter
  * - 采用更细粒度的转换接口设计

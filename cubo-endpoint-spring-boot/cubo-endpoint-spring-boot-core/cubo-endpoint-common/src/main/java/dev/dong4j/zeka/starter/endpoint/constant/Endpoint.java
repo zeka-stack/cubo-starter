@@ -2,7 +2,7 @@ package dev.dong4j.zeka.starter.endpoint.constant;
 
 /**
  * Endpoint 模块常量定义类
- *
+ * <p>
  * 该类定义了 cubo-endpoint 模块中用于标识不同 Web 技术栈的模块名称常量。
  * 包含 Reactive 和 Servlet 两种不同的 Spring Boot Starter 模块名称，
  * 用于在自动配置和 SPI 机制中进行模块识别和加载。

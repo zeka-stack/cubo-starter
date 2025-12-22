@@ -1,8 +1,9 @@
 package dev.dong4j.zeka.starter.mybatis.check;
 
+import com.google.common.collect.Maps;
+
 import org.springframework.core.env.Environment;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Map;
  * @date 2025.12.14
  * @since 2.0.0
  */
+@SuppressWarnings("PMD.UndefineMagicConstantRule")
 public class P6SpyJdbcUrlProvider implements JdbcUrlProvider {
 
     /**
@@ -29,14 +31,11 @@ public class P6SpyJdbcUrlProvider implements JdbcUrlProvider {
      */
     @Override
     public Map<String, String> getJdbcUrls(Environment environment) {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = Maps.newHashMapWithExpectedSize(2);
 
         String url = environment.getProperty("spring.datasource.url");
         if (url != null && url.startsWith("jdbc:p6spy:")) {
-            result.put(
-                "p6spy",
-                url.replaceFirst("jdbc:p6spy:", "jdbc:")
-                      );
+            result.put("p6spy", url.replaceFirst("jdbc:p6spy:", "jdbc:"));
         }
 
         return result;

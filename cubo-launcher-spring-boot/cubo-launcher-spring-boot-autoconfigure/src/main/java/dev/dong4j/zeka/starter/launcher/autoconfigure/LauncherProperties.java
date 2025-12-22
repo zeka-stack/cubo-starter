@@ -1,13 +1,15 @@
 package dev.dong4j.zeka.starter.launcher.autoconfigure;
 
-import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
-import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
-import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.autoconfigure.ZekaProperties;
+import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 启动器配置属性类，定义与启动相关的配置项

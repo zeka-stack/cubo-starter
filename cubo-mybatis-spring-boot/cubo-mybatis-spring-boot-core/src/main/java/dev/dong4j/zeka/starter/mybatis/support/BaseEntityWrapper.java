@@ -2,26 +2,28 @@ package dev.dong4j.zeka.starter.mybatis.support;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 基础实体包装器抽象类
- *
+ * <p>
  * 该抽象类提供了实体对象和视图对象之间的转换功能，主要用于将
  * 数据库实体对象转换为前端展示的视图对象。
- *
+ * <p>
  * 主要功能：
  * 1. 分页数据转换：将分页的实体对象转换为分页的视图对象
  * 2. 列表数据转换：将实体对象列表转换为视图对象列表
  * 3. 单个对象转换：提供抽象方法供子类实现具体转换逻辑
- *
+ * <p>
  * 使用方式：
  * - 继承该抽象类并实现 entityVO 方法
  * - 定义具体的实体到视图的转换逻辑
  * - 利用提供的批量转换方法处理集合数据
- *
+ * <p>
  * 注意：该类已标记为废弃，建议使用更现代的转换方式：
  * - 使用 MapStruct 进行对象映射
  * - 使用 ViewConverter 或 ServiceConverter 接口

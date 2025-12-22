@@ -1,34 +1,35 @@
 package dev.dong4j.zeka.starter.mybatis.mapstruct;
 
+import java.io.Serializable;
+
 import dev.dong4j.zeka.kernel.common.base.BaseDTO;
 import dev.dong4j.zeka.kernel.common.base.BaseVO;
 import dev.dong4j.zeka.kernel.common.mapstruct.ServiceConverter;
 import dev.dong4j.zeka.kernel.common.mapstruct.ViewConverter;
 import dev.dong4j.zeka.starter.mybatis.base.BasePO;
-import java.io.Serializable;
 
 /**
  * 基础对象转换器接口
- *
+ * <p>
  * 该接口定义了 VO（视图对象）、DTO（数据传输对象）、PO（持久化对象）
  * 之间的相互转换方法，适用于单模块内对象能相互访问的场景。
- *
+ * <p>
  * 主要功能：
  * 1. VO 和 DTO 之间的双向转换
  * 2. DTO 和 PO 之间的双向转换
  * 3. VO 和 PO 之间的直接转换
  * 4. 提供完整的对象转换链路
- *
+ * <p>
  * 转换关系：
  * - VO ↔ DTO：前端展示层和业务传输层之间的转换
  * - DTO ↔ PO：业务传输层和数据持久层之间的转换
  * - VO ↔ PO：前端展示层和数据持久层之间的直接转换
- *
+ * <p>
  * 使用场景：
  * - 单模块应用，各层对象可以相互访问
  * - 需要灵活的对象转换机制
  * - 简单的分层架构应用
- *
+ * <p>
  * 注意：该接口已标记为废弃，建议使用更专业的转换接口：
  * - ViewConverter：专门处理视图层转换
  * - ServiceConverter：专门处理服务层转换

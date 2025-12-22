@@ -1,9 +1,10 @@
 package dev.dong4j.zeka.starter.openapi.autoconfigure;
 
+import org.junit.jupiter.api.Test;
+
 import dev.dong4j.zeka.kernel.test.ZekaTest;
 import dev.dong4j.zeka.starter.openapi.autoconfigure.knife4j.Knife4jAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 /**
  * 自动装配测试

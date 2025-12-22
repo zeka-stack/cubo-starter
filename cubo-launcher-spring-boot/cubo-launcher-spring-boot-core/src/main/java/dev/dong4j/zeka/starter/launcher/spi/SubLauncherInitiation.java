@@ -1,6 +1,15 @@
 package dev.dong4j.zeka.starter.launcher.spi;
 
 import com.google.common.collect.Maps;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.common.constant.ConfigDefaultValue;
 import dev.dong4j.zeka.kernel.common.constant.ConfigKey;
 import dev.dong4j.zeka.kernel.common.enums.SerializeEnum;
@@ -11,14 +20,8 @@ import dev.dong4j.zeka.kernel.common.util.CollectionUtils;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.processor.annotation.AutoService;
 import dev.dong4j.zeka.starter.launcher.constant.Launcher;
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Map;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * 子启动器初始化类，实现 LauncherInitiation 接口
@@ -52,7 +55,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
      */
     @SneakyThrows
     @Override
-    @SuppressWarnings({"rawtypes", "D"})
+    @SuppressWarnings(value = {"rawtypes", "D"})
     public void before(String appName) {
         if (CollectionUtils.isNotEmpty(SerializeEnumCache.SUB_ENUMS)) {
             for (Class<? extends SerializeEnum> enumClass : SerializeEnumCache.SUB_ENUMS) {
@@ -76,7 +79,7 @@ public class SubLauncherInitiation implements LauncherInitiation {
                             throw new IllegalArgumentException(String.format(
                                 "存在相同的枚举 value: [%s: %s.value = %s.value]",
                                 enumClass.getName(), constant, existing
-                            ));
+                                                                            ));
                         }
                     }
                 } catch (ReflectiveOperationException e) {

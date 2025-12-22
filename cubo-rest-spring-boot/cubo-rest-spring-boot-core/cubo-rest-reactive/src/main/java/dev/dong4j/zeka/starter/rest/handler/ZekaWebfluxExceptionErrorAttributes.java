@@ -1,14 +1,5 @@
 package dev.dong4j.zeka.starter.rest.handler;
 
-import dev.dong4j.zeka.kernel.common.api.BaseCodes;
-import dev.dong4j.zeka.kernel.common.api.R;
-import dev.dong4j.zeka.kernel.common.context.Trace;
-import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
-import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
-import dev.dong4j.zeka.kernel.common.util.Exceptions;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
@@ -21,6 +12,17 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Map;
+
+import dev.dong4j.zeka.kernel.common.api.BaseCodes;
+import dev.dong4j.zeka.kernel.common.api.R;
+import dev.dong4j.zeka.kernel.common.context.Trace;
+import dev.dong4j.zeka.kernel.common.exception.ExceptionInfo;
+import dev.dong4j.zeka.kernel.common.exception.GlobalExceptionHandler;
+import dev.dong4j.zeka.kernel.common.util.Exceptions;
 
 /**
  * WebFlux 环境下的自定义错误属性提取器
@@ -48,18 +50,18 @@ import org.springframework.web.server.ServerWebExchange;
  * 错误响应结构：
  * ```json
  * {
- *   "code": "错误码",
- *   "message": "错误消息",
- *   "success": false,
- *   "data": {
- *     "path": "请求路径",
- *     "method": "请求方法",
- *     "params": "请求参数",
- *     "headers": "请求头",
- *     "stackTrace": "堆栈跟踪（仅开发环境）",
- *     "traceId": "链路追踪ID",
- *     "hyperlink": "错误帮助链接"
- *   }
+ * "code": "错误码",
+ * "message": "错误消息",
+ * "success": false,
+ * "data": {
+ * "path": "请求路径",
+ * "method": "请求方法",
+ * "params": "请求参数",
+ * "headers": "请求头",
+ * "stackTrace": "堆栈跟踪（仅开发环境）",
+ * "traceId": "链路追踪ID",
+ * "hyperlink": "错误帮助链接"
+ * }
  * }
  * ```
  * <p>
@@ -119,7 +121,8 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
      */
     @Override
     public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
-        Map<String, Object> errorAttributes = this.getErrorAttributes(request, options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
+        Map<String, Object> errorAttributes = this.getErrorAttributes(request,
+                                                                      options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE));
         options.retainIncluded(errorAttributes);
         return errorAttributes;
     }
@@ -199,7 +202,7 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
             return HttpStatus.resolve(((ResponseStatusException) error).getStatusCode().value());
         }
         ResponseStatus responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.getClass(),
-            ResponseStatus.class);
+                                                                                   ResponseStatus.class);
         if (responseStatus != null) {
             return responseStatus.code();
         }
@@ -284,7 +287,7 @@ public class ZekaWebfluxExceptionErrorAttributes extends DefaultErrorAttributes 
             return ((ResponseStatusException) error).getReason();
         }
         ResponseStatus responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.getClass(),
-            ResponseStatus.class);
+                                                                                   ResponseStatus.class);
         if (responseStatus != null) {
             return responseStatus.reason();
         }

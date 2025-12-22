@@ -1,6 +1,11 @@
 package dev.dong4j.zeka.starter.logsystem.publisher;
 
 import com.google.common.collect.Maps;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+
 import dev.dong4j.zeka.kernel.auth.CurrentUser;
 import dev.dong4j.zeka.kernel.auth.util.AuthUtils;
 import dev.dong4j.zeka.kernel.auth.util.JwtUtils;
@@ -15,28 +20,26 @@ import dev.dong4j.zeka.starter.logsystem.entity.ApiLog;
 import dev.dong4j.zeka.starter.logsystem.event.ApiLogEvent;
 import dev.dong4j.zeka.starter.logsystem.util.LogRecordUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * API日志事件发布器
- *
+ * <p>
  * 该类负责发布API日志事件，用于记录REST API接口调用的详细信息。
  * 通过Spring事件机制异步处理API日志记录，提高系统性能。
- *
+ * <p>
  * 主要功能包括：
  * 1. 构建API日志实体对象
  * 2. 从请求中提取用户信息和请求参数
  * 3. 发布API日志事件供事件处理器处理
  * 4. 支持JWT token解析获取用户身份信息
- *
+ * <p>
  * 使用场景：
  * - REST API接口调用的日志记录
  * - 接口性能监控和分析
  * - 用户行为追踪
  * - 接口调用的审计和统计
- *
+ * <p>
  * 设计意图：
  * 通过事件发布机制实现API日志的异步处理，避免同步日志记录对接口性能的影响，
  * 提供统一的API日志记录标准和用户身份识别能力。
@@ -52,10 +55,10 @@ public class ApiLogPublisher {
 
     /**
      * 发布API日志事件
-     *
+     * <p>
      * 该方法用于发布API日志事件，构建包含接口调用信息的日志对象，
      * 并通过Spring事件机制异步处理日志记录。
-     *
+     * <p>
      * 处理流程：
      * 1. 从当前请求上下文中获取HttpServletRequest对象
      * 2. 构建ApiLog对象，设置基本信息和执行时间

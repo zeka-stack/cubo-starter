@@ -1,5 +1,12 @@
 package dev.dong4j.zeka.starter.messaging.registry;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.MethodParameter;
+
+import java.lang.reflect.Method;
+
 import dev.dong4j.zeka.starter.messaging.adapter.AbstractMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.adapter.KafkaMessagingListenerAdapter;
 import dev.dong4j.zeka.starter.messaging.adapter.RocketMQMessagingListenerAdapter;
@@ -8,11 +15,6 @@ import dev.dong4j.zeka.starter.messaging.context.MessagingContext;
 import dev.dong4j.zeka.starter.messaging.handler.MessagingMessageHandler;
 import dev.dong4j.zeka.starter.messaging.support.MessagingHandlerMethod;
 import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
-import java.lang.reflect.Method;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.MethodParameter;
 
 /**
  * 消息监听器注册表
@@ -72,7 +74,7 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
                 } catch (Exception e) {
                     // 处理注册异常
                     String errorMsg = String.format("Failed to register listener: %s.%s",
-                        bean.getClass().getName(), method.getName());
+                                                    bean.getClass().getName(), method.getName());
                     throw new BeanInitializationException(errorMsg, e);
                 }
             }
@@ -83,8 +85,8 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
     /**
      * 注册消息监听方法
      *
-     * @param bean 包含监听方法的 Bean 实例
-     * @param method 带有 @MessagingListener 注解的方法
+     * @param bean       包含监听方法的 Bean 实例
+     * @param method     带有 @MessagingListener 注解的方法
      * @param annotation MessagingListener 注解实例
      */
     public void registerMethod(Object bean, Method method, MessagingListener annotation) {
@@ -132,7 +134,7 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
     /**
      * 创建消息处理器
      *
-     * @param bean 包含处理方法的 Bean 实例
+     * @param bean   包含处理方法的 Bean 实例
      * @param method 处理方法
      * @return 消息处理器实例
      */
@@ -150,8 +152,8 @@ public class MessagingListenerRegistry implements BeanPostProcessor {
      * 创建监听器适配器
      *
      * @param handlerMethod 消息处理方法
-     * @param context 消息上下文
-     * @param method 监听方法
+     * @param context       消息上下文
+     * @param method        监听方法
      * @return 消息监听适配器实例
      * @throws IllegalArgumentException 如果消息类型不支持
      */

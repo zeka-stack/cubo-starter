@@ -77,7 +77,7 @@ import lombok.extern.slf4j.Slf4j;
 @AutoConfiguration
 @ConditionalOnEnabled(value = MybatisProperties.PREFIX)
 @ConditionalOnClass(MybatisPlusAutoConfiguration.class)
-@EnableConfigurationProperties( {MybatisProperties.class, DataSourceProperties.class})
+@EnableConfigurationProperties(value = {MybatisProperties.class, DataSourceProperties.class})
 public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
 
     /**
@@ -123,7 +123,7 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @ConditionalOnMissingBean(IllegalSQLInnerInterceptor.class)
     @Profile(value = {App.ENV_NOT_PROD})
     @ConditionalOnProperty(value = ConfigKey.MYBATIS_ENABLE_ILLEGAL_SQL_INTERCEPTOR,
-        havingValue = ConfigDefaultValue.TRUE_STRING)
+                           havingValue = ConfigDefaultValue.TRUE_STRING)
     public IllegalSQLInnerInterceptor illegalSqlInterceptor() {
         return new IllegalSQLInnerInterceptor();
     }
@@ -145,8 +145,8 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @ConditionalOnMissingBean(BlockAttackInnerInterceptor.class)
     @Profile(value = {App.ENV_NOT_PROD})
     @ConditionalOnProperty(value = ConfigKey.MYBATIS_ENABLE_SQL_EXPLAIN_INTERCEPTOR,
-        havingValue = ConfigDefaultValue.TRUE_STRING,
-        matchIfMissing = true)
+                           havingValue = ConfigDefaultValue.TRUE_STRING,
+                           matchIfMissing = true)
     public BlockAttackInnerInterceptor sqlExplainInterceptor() {
         return new BlockAttackInnerInterceptor();
     }
@@ -335,9 +335,12 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     }
 
     /**
-     * Data bind interceptor
+     * 创建数据绑定拦截器
+     * <p> 该拦截器用于处理数据绑定相关的逻辑, 通常用于将请求参数或数据源中的数据转换为业务对象.
+     * 该方法在检测到未配置 DataBindInterceptor 时创建一个实例, 并将其注入到 Spring 容器中.
      *
-     * @return the data bind interceptor
+     * @param dataBind 数据绑定器, 用于执行实际的数据绑定操作
+     * @return DataBindInterceptor 数据绑定拦截器实例
      * @since 2024.2.0
      */
     @Bean
@@ -395,7 +398,7 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
      * - 避免与 PerformanceInterceptor 功能重复
      * - 提供配置建议和警告信息
      *
-     * @return ObjectProvider<ZekaComponentBean> 组件 Bean 提供者，如果存在冲突则返回 null
+     * @return 组件 Bean 提供者，如果存在冲突则返回 null
      * @since 1.0.0
      */
     @Bean
@@ -407,7 +410,7 @@ public class MybatisAutoConfiguration implements ZekaAutoConfiguration {
     @ConditionalOnClass(name = "com.p6spy.engine.spy.P6SpyDriver")
     public ObjectProvider<ZekaComponentBean> mybatisZekaComponentBean() {
         log.warn("classpath 存在 p6spy 但是未使用, 忽略加载 PerformanceInterceptor, "
-            + "如不使用 p6spy 请删除相关依赖, 否则请正确配置 p6spy");
+                 + "如不使用 p6spy 请删除相关依赖, 否则请正确配置 p6spy");
         return null;
     }
 

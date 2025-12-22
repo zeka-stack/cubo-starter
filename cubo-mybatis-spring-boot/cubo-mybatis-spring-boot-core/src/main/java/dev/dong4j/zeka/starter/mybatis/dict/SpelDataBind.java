@@ -1,11 +1,5 @@
 package dev.dong4j.zeka.starter.mybatis.dict;
 
-import dev.dong4j.zeka.kernel.common.asserts.Assertions;
-import dev.dong4j.zeka.kernel.common.context.SpringContext;
-import dev.dong4j.zeka.kernel.common.util.StringPool;
-import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import java.util.List;
-import java.util.function.Supplier;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanExpressionContext;
@@ -13,6 +7,14 @@ import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.StandardBeanExpressionResolver;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+import dev.dong4j.zeka.kernel.common.asserts.Assertions;
+import dev.dong4j.zeka.kernel.common.context.SpringContext;
+import dev.dong4j.zeka.kernel.common.util.StringPool;
+import dev.dong4j.zeka.kernel.common.util.StringUtils;
 
 /**
  * 默认 spel 表达式
@@ -74,9 +76,10 @@ public class SpelDataBind implements IDataBind {
         private final Supplier<?> callback;
 
         /**
-         * Inner params expression context
+         * 内部参数表达式上下文
          *
-         * @param beanFactory bean factory
+         * @param beanFactory Spring 的 Bean 工厂
+         * @param params      用于回调的参数对象
          * @since 2024.2.0
          */
         InnerParamsExpressionContext(ConfigurableBeanFactory beanFactory, Object params) {

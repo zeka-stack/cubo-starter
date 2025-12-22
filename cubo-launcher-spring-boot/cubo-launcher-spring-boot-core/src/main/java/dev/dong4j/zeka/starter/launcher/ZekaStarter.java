@@ -1,5 +1,24 @@
 package dev.dong4j.zeka.starter.launcher;
 
+import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ConfigurationBuilder;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
+
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 import cn.hutool.core.util.ClassLoaderUtil;
 import dev.dong4j.zeka.ZekaStack;
 import dev.dong4j.zeka.kernel.common.asserts.Assertions;
@@ -11,24 +30,7 @@ import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
 import dev.dong4j.zeka.starter.launcher.annotation.RunningType;
 import dev.dong4j.zeka.starter.launcher.enums.ApplicationType;
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ConfigurationBuilder;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * Spring Boot 应用启动器基类，负责应用的初始化和生命周期管理
@@ -43,14 +45,11 @@ import org.springframework.core.annotation.AnnotationUtils;
  * 4. 支持服务型应用的守护线程管理
  * <p>
  * 使用方式：
- * ```java
- *
- * @author dong4j
- * @version 1.0.0
- * @SpringBootApplication public class MyApplication extends ZekaStarter {
+ * public class MyApplication extends ZekaStarter {
  * // 不需要编写 main 方法，继承即可
  * }
- * ```
+ *
+ * @author dong4j
  * @email "mailto:dong4j@gmail.com"
  * @date 2019.11.27 01:18
  * @since 1.0.0
@@ -105,19 +104,19 @@ public abstract class ZekaStarter implements CommandLineRunner {
     private static void check() {
         if (StringUtils.isBlank(applicationClassName)) {
             ConfigurationBuilder build = ConfigurationBuilder.build(ConfigDefaultValue.BASE_PACKAGES,
-                new SubTypesScanner(false));
+                                                                    new SubTypesScanner(false));
             build.setExpandSuperTypes(false);
             Reflections reflections = new Reflections(build);
 
             Set<Class<? extends ZekaStarter>> subTypesOf = reflections.getSubTypesOf(ZekaStarter.class);
             if (CollectionUtils.isEmpty(subTypesOf)) {
                 throw new IllegalStateException("""
-                    错误原因: 没有找到 ZekaStarter 的子类: 不能直接通过 ZekaStarter.main() 启动, 必须通过子类启动, 写法如下:
+                                                    错误原因: 没有找到 ZekaStarter 的子类: 不能直接通过 ZekaStarter.main() 启动, 必须通过子类启动, 写法如下:
 
-                    @SpringBootApplication
-                    public class DemoApplication extends ZekaStarter {
-                        // 不需要写 main()
-                    }""");
+                                                    @SpringBootApplication
+                                                    public class DemoApplication extends ZekaStarter {
+                                                        // 不需要写 main()
+                                                    }""");
             }
 
             if (subTypesOf.size() > 1) {
@@ -143,9 +142,9 @@ public abstract class ZekaStarter implements CommandLineRunner {
             Class<?> mainClass = ClassLoaderUtil.getClassLoader().loadClass(startClassName);
             boolean matched = Arrays.stream(mainClass.getAnnotations())
                 .anyMatch(m -> m.annotationType().getName()
-                    .matches(SPRING_BOOT_APPLICATION) ||
-                    m.annotationType().getName()
-                        .matches(ENABLE_AUTOCONFIGURATION));
+                                   .matches(SPRING_BOOT_APPLICATION) ||
+                               m.annotationType().getName()
+                                   .matches(ENABLE_AUTOCONFIGURATION));
             if (!matched) {
                 throw new StarterException("启动类必须使用 @SpringBootApplication 或者 @EnableAutoConfiguration 注解");
             }

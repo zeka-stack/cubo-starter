@@ -1,25 +1,27 @@
 package dev.dong4j.zeka.starter.launcher.banner;
 
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+import org.springframework.boot.SpringBootVersion;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
+
 import dev.dong4j.zeka.kernel.common.constant.App;
 import dev.dong4j.zeka.kernel.common.util.ConfigKit;
 import dev.dong4j.zeka.kernel.common.util.DateUtils;
 import dev.dong4j.zeka.kernel.common.util.StartUtils;
 import dev.dong4j.zeka.kernel.common.util.StringPool;
 import dev.dong4j.zeka.kernel.common.util.StringUtils;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-import org.springframework.boot.SpringBootVersion;
 
 /**
  * Zeka 框架的 Banner 实现类，负责格式化和输出自定义 Banner
- *
+ * <p>
  * 该类实现了 Banner 接口，提供了具体的 Banner 打印逻辑：
  * 1. 读取并格式化 Banner 文件内容
  * 2. 添加应用信息（名称、版本、环境）
@@ -37,7 +39,7 @@ public class ZekaBanner implements Banner {
 
     /**
      * 打印 Banner 信息
-     *
+     * <p>
      * 读取输入流中的 Banner 内容，并添加版本、环境和应用名称等信息，
      * 通过格式化处理后输出美观的启动 Banner。
      *
@@ -70,7 +72,7 @@ public class ZekaBanner implements Banner {
 
     /**
      * 打印 Banner 的具体行内容
-     *
+     * <p>
      * 该方法负责：
      * 1. 格式化并居中显示 Banner 内容
      * 2. 添加应用信息和启动时间
@@ -97,13 +99,13 @@ public class ZekaBanner implements Banner {
             devModel = "Started By " + System.getProperty(App.START_TYPE);
         }
         String startline = "::: "
-            + appName
-            + "("
-            + ConfigKit.getAppVersion()
-            + ")"
-            + " starting time: "
-            + DateUtils.formatDateTime(new Date())
-            + " start.model: " + devModel + " :::";
+                           + appName
+                           + "("
+                           + ConfigKit.getAppVersion()
+                           + ")"
+                           + " starting time: "
+                           + DateUtils.formatDateTime(new Date())
+                           + " start.model: " + devModel + " :::";
 
         startline = StringUtils.center(startline, underline.length(), StringPool.SPACE);
         int maxlength = 0;
