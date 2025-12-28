@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	templateRoot    = "templates"
+	templateRoot    = "cubo-spring-boot-templates"
 	outputRoot      = "."
 	dependenciesPom = "./cubo-boot-dependencies/pom.xml"
 	mainPom         = "./pom.xml"

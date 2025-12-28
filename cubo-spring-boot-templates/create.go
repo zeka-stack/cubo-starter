@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	templateRoot    = "templates"
+	templateRoot    = "cubo-spring-boot-templates"
 	outputRoot      = "."
 	dependenciesPom = "./cubo-boot-dependencies/pom.xml"
 	mainPom         = "./pom.xml"
@@ -219,18 +219,18 @@ func processSingleModule(reader *bufio.Reader, step int) {
 // 处理多模块创建
 func processMultiModule() {
 	printInfo("正在启动多模块生成工具...")
-	
+
 	// 获取当前脚本的路径
 	executable, err := os.Executable()
 	if err != nil {
 		printError("无法获取可执行文件路径")
 		log.Fatal(err)
 	}
-	
+
 	// 构建多模块脚本路径
 	scriptDir := filepath.Dir(executable)
 	multiScriptPath := filepath.Join(scriptDir, "creates")
-	
+
 	// 检查多模块脚本是否存在
 	if _, err := os.Stat(multiScriptPath); os.IsNotExist(err) {
 		// 如果可执行文件不存在，尝试 .exe 扩展名（Windows）
@@ -240,13 +240,13 @@ func processMultiModule() {
 			log.Fatal("请运行: go build -o creates creates.go")
 		}
 	}
-	
+
 	// 执行多模块脚本
 	cmd := exec.Command(multiScriptPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	
+
 	printInfo("启动多模块生成工具...")
 	if err := cmd.Run(); err != nil {
 		printError(fmt.Sprintf("多模块生成失败: %v", err))
