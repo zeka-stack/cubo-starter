@@ -69,15 +69,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RestAutoConfiguration implements ZekaAutoConfiguration {
 
     /**
-     * 构造方法，记录自动配置类的加载信息
-     *
-     * 在类实例化时记录日志，便于跟踪和调试模块的加载过程。
-     * 可以帮助开发者了解哪些自动配置已经生效。
-     *
-     * @since 1.0.0
-     */
-
-    /**
      * 获取当前模块的库类型标识
      * <p>
      * 返回 REST 模块的类型标识，用于模块分类和管理。
