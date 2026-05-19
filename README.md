@@ -202,7 +202,7 @@ REST API 模块，提供完整的 RESTful API 开发支持。
 <dependency>
     <groupId>dev.dong4j</groupId>
     <artifactId>cubo-ssm-spring-boot-starter</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -212,7 +212,7 @@ REST API 模块，提供完整的 RESTful API 开发支持。
 <dependency>
     <groupId>dev.dong4j</groupId>
     <artifactId>cubo-framework-spring-boot-starter</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -222,7 +222,7 @@ REST API 模块，提供完整的 RESTful API 开发支持。
 <dependency>
     <groupId>dev.dong4j</groupId>
     <artifactId>cubo-mybatis-spring-boot-starter</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -349,7 +349,11 @@ public class UserController {
 
 ## 版本说明
 
-### 当前版本: 2.0.0-SNAPSHOT
+### 3.0.0-SNAPSHOT
+
+- AI Native 集成与开发
+
+### 2.0.0-SNAPSHOT
 
 **主要特性**:
 
