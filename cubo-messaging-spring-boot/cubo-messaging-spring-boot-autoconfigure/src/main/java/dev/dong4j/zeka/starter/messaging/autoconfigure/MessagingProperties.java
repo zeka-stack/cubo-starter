@@ -24,11 +24,11 @@ import lombok.Setter;
  * 5. 缓存配置
  * 6. 各消息中间件(Kafka/RocketMQ/TongHTP)的特定配置
  * <p>
- * 配置前缀：zeka.messaging
+ * 配置前缀：zeka-stack.messaging
  * <p>
  * 使用示例：
  * {@code
- * zeka.messaging:
+ * zeka-stack.messaging:
  * auto-detect: true
  * disabled-types: ROCKETMQ
  * default-type: KAFKA

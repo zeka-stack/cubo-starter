@@ -127,7 +127,7 @@ zeka-stack:
   mybatis:
     enable-log: true              # 是否启用 SQL 日志
     sql-format: true              # 是否格式化 SQL
-    perform-max-time: 1000       # SQL 执行最大时间（毫秒）
+    performmax-time: 1000       # SQL 执行最大时间（毫秒）
     max-length: 1000              # SQL 输出最大长度
 ```
 
@@ -278,10 +278,10 @@ public interface UserMapper extends BaseMapper<User> {
 }
 
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public User getUser(Long id) {
         // SQL 执行会被自动监控
@@ -329,7 +329,7 @@ zeka-stack:
   mybatis:
     enable-log: true              # 启用 SQL 日志
     sql-format: true              # 格式化 SQL
-    perform-max-time: 1000        # 慢查询阈值（毫秒）
+    performmax-time: 1000        # 慢查询阈值（毫秒）
     max-length: 2000              # SQL 输出最大长度
     append-sql-file: true         # 将超时 SQL 写入文件
 ```

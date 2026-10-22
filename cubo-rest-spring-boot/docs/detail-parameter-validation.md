@@ -116,10 +116,10 @@ public User createUser(@RequestBody @Valid UserCreateRequest request) {
 
 ```java
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
 
     public void validateUser(UserCreateRequest request) {
         Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(request);

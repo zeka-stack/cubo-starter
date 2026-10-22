@@ -81,7 +81,7 @@ Materials）使用，为其他模块提供统一的依赖版本控制。
     <!-- 引入具体的 Cubo Starter 模块 -->
     <dependency>
         <groupId>dev.dong4j</groupId>
-        <artifactId>cubo-rest-spring-boot-starter</artifactId>
+        <artifactId>cubo-rest-servlet-spring-boot-starter</artifactId>
     </dependency>
 
     <!-- 引入第三方依赖（版本由 BOM 管理） -->

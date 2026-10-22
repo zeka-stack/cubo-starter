@@ -4,55 +4,9 @@ published: 2022.05.09
 
 # 字典组件
 
-## 概述
+基于 MyBatis 与 Servlet 提供字典持久化、选项查询和缓存管理。业务直接注入自动配置的 DictionaryService，不复制 DictionaryServiceImpl，也不另造相同 Controller。
 
-`cubo-dict-spring-boot` 是 Zeka Stack 项目中的通用字典组件，提供了完整的字典数据管理功能。该组件支持字典类型和字典值的增删改查，提供了缓存机制和前端接口，大大简化了字典数据的使用。
-
-## 主要功能
-
-### 1. 字典管理
-
-- 字典类型的增删改查
-- 字典值的增删改查
-- 支持多租户和客户端隔离
-
-### 2. 缓存支持
-
-- 内存缓存（默认）
-- 无操作缓存（禁用缓存）
-- 支持缓存预热
-- 延迟双删策略保证数据一致性
-- Spring Event事件驱动缓存更新
-
-### 3. 前端接口
-
-- 提供字典选项接口供前端下拉框使用
-- 支持单个字典类型查询
-- 支持批量获取所有字典选项
-
-### 4. 配置灵活
-
-- 支持启用/禁用缓存
-- 支持缓存预热配置
-- 支持缓存过期时间配置
-
-## 模块结构
-
-```
-cubo-dict-spring-boot/
-├── cubo-dict-spring-boot-core/             # 核心功能模块
-│   ├── cache/                              # 缓存相关
-│   ├── controller/                         # 控制器
-│   ├── entity/                             # 实体类
-│   ├── service/                            # 服务层
-│   └── db/                                 # 数据库初始化脚本
-├── cubo-dict-spring-boot-autoconfigure/    # 自动配置模块
-└── cubo-dict-spring-boot-starter/          # 启动器模块
-```
-
-## 快速开始
-
-### 1. 引入依赖
+## 依赖和数据库
 
 ```xml
 <dependency>
@@ -61,179 +15,61 @@ cubo-dict-spring-boot/
 </dependency>
 ```
 
-### 2. 配置启用
+确认项目包含 Servlet 与数据库环境，使用组件 cubo-dict-spring-boot-core/db/init.sql 核对并通过项目数据库迁移流程准备 sys_dict_type / sys_dict_value。不要在启动时未经确认修改生产数据库。
+
+## 配置
 
 ```yaml
 zeka-stack:
   dict:
     enabled: true
-    enable-cache: true
-    preload-cache: true
     cache-type: memory
+    preload-cache: true
     cache-expire-time: 3600
-    table-prefix: sys_
     cache-refresh-delay: 100
-    enable-consistency-check: true
-    consistency-check-interval: 300
 ```
 
-### 3. 数据库初始化
+DictProperties 中 enable-cache / preload-cache 默认为 true，cache-type 默认 MEMORY，cache-expire-time 为 3600 秒，cache-refresh-delay 为 100ms。当前自动配置的缓存和预热条件没有 matchIfMissing，因此要显式配置 cache-type 和 preload-cache。enable-cache 字段本身不负责选择缓存 Bean；禁用缓存选 cache-type: none。没有 table-prefix 或一致性检查间隔配置。
 
-组件提供了数据库初始化脚本 `db/init.sql`，包含：
-
-- 字典类型表 `sys_dictionary_type`
-- 字典值表 `sys_dictionary_value`
-- 示例数据（性别字典）
-
-### 4. 使用示例
-
-#### 4.1 在Service中使用
+## 在业务中复用
 
 ```java
+import dev.dong4j.zeka.starter.dict.entity.dto.DictionaryOption;
+import dev.dong4j.zeka.starter.dict.service.DictionaryService;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+/** 复用组件服务，避免重复实现缓存和查询。 */
 @Service
-public class UserService {
+@AllArgsConstructor
+public class BusinessDictionaryQuery {
+    private final DictionaryService dictionaryService;
 
-    @Autowired
-    private DictionaryService dictionaryService;
-
-    public void createUser(User user) {
-        // 获取性别选项
-        List<DictionaryOption> genderOptions = dictionaryService.getDictionaryOptions("gender");
-        // 业务逻辑...
-    }
-
-    public String getGenderName(String genderCode) {
-        List<DictionaryValue> values = dictionaryService.getDictionaryValues("gender");
-        return values.stream()
-                .filter(v -> v.getCode().equals(genderCode))
-                .findFirst()
-                .map(DictionaryValue::getName)
-                .orElse("未知");
+    /** 返回指定类型的已定义选项。 */
+    public List<DictionaryOption> options(String typeCode) {
+        return this.dictionaryService.getDictionaryOptions(typeCode);
     }
 }
 ```
 
-#### 4.2 前端接口调用
+其他真实方法：getAllDictionaryOptions、getDictionaryType、listDictionaryTypes、saveDictionaryType、updateDictionaryType、deleteDictionaryType、saveDictionaryValue、updateDictionaryValue、deleteDictionaryValue、getDictionaryValue、refreshCache、refreshAllCache、clearCache、clearAllCache。不调用不存在的 getDictionaryValues。
 
-```javascript
-// 获取性别选项
-GET /api/dictionary/options/gender
+## HTTP 端点
 
-// 响应示例
-{
-  "code": "success",
-  "data": [
-    {
-      "value": "0",
-      "label": "未知",
-      "description": "性别未知",
-      "disabled": false,
-      "sortOrder": 1
-    },
-    {
-      "value": "1",
-      "label": "男",
-      "description": "男性",
-      "disabled": false,
-      "sortOrder": 2
-    },
-    {
-      "value": "2",
-      "label": "女",
-      "description": "女性",
-      "disabled": false,
-      "sortOrder": 3
-    }
-  ]
-}
+| 方法 | 路径 | 行为 |
+| --- | --- | --- |
+| GET | /dicts/options/{typeCode} | 单类选项 |
+| GET | /dicts/options | 全部选项 |
+| POST | /dicts/refresh/{typeCode} | 刷新单类缓存 |
+| POST | /dicts/refresh | 刷新全部缓存 |
+| POST | /dicts/clear/{typeCode} | 清空单类缓存 |
+| POST | /dicts/clear | 清空全部缓存 |
 
-// 获取所有字典选项
-GET /api/dictionary/options
+返回框架 Result，成功 code 为 2000；空值字段是否输出受项目 JSON 配置影响。刷新和清空端点需要项目的访问控制，不因使用框架注解就自动获得完整授权。
 
-// 刷新缓存
-POST /api/dictionary/refresh/gender
-POST /api/dictionary/refresh
-```
+## 扩展与限制
 
-## 配置说明
+DictAutoConfiguration 在缺少对应 Bean 时提供 DictionaryService、DictionaryCache、DictionaryEventListener 和（条件启用时）DictionaryCachePreloader；需要自定义时实现相应接口，按具体条件覆盖。MemoryDictionaryCache / NoOpDictionaryCache 由显式 cache-type 选择。
 
-| 属性名                                   | 类型                  | 默认值    | 说明                |
-|---------------------------------------|---------------------|--------|-------------------|
-| `zeka-stack.dict.enabled`             | boolean             | true   | 是否启用字典功能          |
-| `zeka-stack.dict.enable-cache`        | boolean             | true   | 是否启用缓存            |
-| `zeka-stack.dict.preload-cache`       | boolean             | true   | 是否启动时预热缓存         |
-| `zeka-stack.dict.cache-type`          | DictionaryCacheType | MEMORY | 缓存类型：MEMORY, NONE |
-| `zeka-stack.dict.cache-expire-time`   | long                | 3600   | 缓存过期时间（秒）         |
-| `zeka-stack.dict.cache-refresh-delay` | long                | 100    | 缓存刷新延迟时间（毫秒）      |
-
-## 缓存策略
-
-### 1. 缓存更新策略
-
-- **读操作**：先查缓存，缓存未命中则查数据库并更新缓存
-- **写操作**：先更新数据库，再删除缓存（延迟双删）
-- **最终一致性**：允许短暂的数据不一致，通过 TTL 和主动刷新保证最终一致
-- **事件驱动**：通过Spring Event机制发布字典更新事件，支持异步缓存更新
-
-### 2. 缓存类型
-
-- **MEMORY**：基于 ConcurrentHashMap 的内存缓存，支持过期清理
-- **NONE**：无操作缓存，禁用缓存功能
-
-## 扩展性
-
-### 1. 自定义缓存实现
-
-```java
-@Component
-@ConditionalOnProperty(prefix = "zeka-stack.dict", name = "cache-type", havingValue = "redis")
-public class RedisDictionaryCache implements DictionaryCache {
-    // 实现Redis缓存逻辑
-}
-```
-
-### 2. 自定义字典数据加载器
-
-```java
-@Component
-public class CustomDictionaryDataLoader implements DictionaryDataLoader {
-    @Override
-    public void loadInitialData() {
-        // 加载自定义字典数据
-    }
-}
-```
-
-### 3. 自定义字典事件监听器
-
-```java
-@Component
-public class CustomDictionaryEventListener {
-
-    @EventListener
-    @Async
-    public void handleDictionaryUpdateEvent(DictionaryUpdateEvent event) {
-        // 处理字典更新事件
-        log.info("收到字典更新事件: typeCode={}, operationType={}",
-                event.getTypeCode(), event.getOperationType());
-
-        // 可以在这里添加自定义逻辑，比如：
-        // - 发送通知
-        // - 更新其他系统
-        // - 记录审计日志
-    }
-}
-```
-
-## 注意事项
-
-1. **数据一致性**：字典数据采用最终一致性策略，允许短暂的数据不一致
-2. **缓存预热**：建议在生产环境启用缓存预热，提高首次访问性能
-3. **多租户支持**：组件支持多租户和客户端隔离，确保数据安全
-4. **性能优化**：大量字典数据时建议调整缓存过期时间和清理间隔
-
-## 相关链接
-
-- [[cubo-starter/index|Starter 组件]]
-- [Spring Boot 自动配置](https://docs.spring.io/spring-boot/docs/current/reference/html/auto-configuration-classes.html)
-- [MyBatis Plus 文档](https://baomidou.com/)
+不要将 tenantId / clientId 字段存在当成自动租户隔离保证；按实际查询和安全上下文验证。不假定内存缓存自动跨节点一致，跨节点刷新需要独立方案。

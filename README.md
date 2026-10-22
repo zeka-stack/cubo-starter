@@ -226,70 +226,24 @@ REST API 模块，提供完整的 RESTful API 开发支持。
 </dependency>
 ```
 
-### 2. 基础配置
+### 2. 基础配置与启动
 
-```yaml
-# 应用配置
-spring:
-  application:
-    name: "my-application"
-    version: "1.0.0"
-
-# 数据库配置
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/test
-    username: root
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-# Cubo 配置
-zeka-stack:
-  launcher:
-    enabled: true
-    refresh-scope:
-      enabled: true
-  mybatis:
-    enabled: true
-    single-page-limit: 500
-  rest:
-    enabled: true
-  openapi:
-    enabled: true
-    title: "API 文档"
-```
-
-### 3. 创建应用
+数据库使用实际项目的 spring.datasource 配置，组件参数使用 zeka-stack.app / rest / mybatis / logging / openapi / endpoint。版本与根包按业务 parent/BOM 和启动规范确认。
 
 ```java
+import dev.dong4j.zeka.starter.launcher.ZekaStarter;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/** 复用框架生命周期，不另建启动链。 */
 @SpringBootApplication
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
+public class Application extends ZekaStarter { }
 ```
 
-### 4. 创建 Controller
+### 3. 业务模块
 
-```java
-@RestController
-@RequestMapping("/api/users")
-@Api(tags = "用户管理")
-public class UserController {
+Controller 使用 @RestControllerWrapper 并继承 ServletController，构造注入 Service，直接返回 DTO，由框架包装 Result。DAO extends BaseDao，Service extends BaseService/BaseServiceImpl，对象转换使用 ExtendConverter。不创建 ApiResponse，不把 PO 暴露为业务接口模型。
 
-    @Autowired
-    private UserService userService;
-
-    @GetMapping("/{id}")
-    @ApiOperation(value = "根据ID获取用户")
-    public ApiResponse<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return ApiResponse.success(user);
-    }
-}
-```
+完整范例由 zeka demo 输出；工程规则由仓库根目录 arch.md 维护。SSM 已含 framework，不需要重复依赖。业务输入校验、权限和事务边界仍由业务项目定义。
 
 ## 配置说明
 
@@ -297,7 +251,7 @@ public class UserController {
 
 | 配置项                           | 默认值  | 说明          |
 |-------------------------------|------|-------------|
-| `zeka-stack.launcher.enabled` | true | 启用启动器       |
+| `zeka-stack.app.enabled` | true | 启用启动器       |
 | `zeka-stack.mybatis.enabled`  | true | 启用 MyBatis  |
 | `zeka-stack.rest.enabled`     | true | 启用 REST API |
 | `zeka-stack.openapi.enabled`  | true | 启用 API 文档   |
@@ -307,13 +261,13 @@ public class UserController {
 
 每个模块都有详细的配置选项，请参考各模块的 README 文档：
 
-- [[cubo-starter/cubo-launcher-spring-boot/index#配置属性|启动器配置]]
-- [[cubo-starter/cubo-logsystem-spring-boot/index#配置属性|日志系统配置]]
-- [[cubo-starter/cubo-messaging-spring-boot/index#配置属性|消息处理配置]]
-- [[cubo-starter/cubo-mybatis-spring-boot/index#配置属性|数据访问配置]]
-- [[cubo-starter/cubo-openapi-spring-boot/index#配置属性|API 文档配置]]
-- [[cubo-starter/cubo-rest-spring-boot/index#配置属性|REST API 配置]]
-- [[cubo-starter/cubo-endpoint-spring-boot/index#配置属性|端点管理配置]]
+- [[cubo-starter/cubo-launcher-spring-boot/index|启动器配置]]
+- [[cubo-starter/cubo-logsystem-spring-boot/index|日志系统配置]]
+- [[cubo-starter/cubo-messaging-spring-boot/index|消息处理配置]]
+- [[cubo-starter/cubo-mybatis-spring-boot/index|数据访问配置]]
+- [[cubo-starter/cubo-openapi-spring-boot/index|API 文档配置]]
+- [[cubo-starter/cubo-rest-spring-boot/index|REST API 配置]]
+- [[cubo-starter/cubo-endpoint-spring-boot/index|端点管理配置]]
 
 ## 示例项目
 

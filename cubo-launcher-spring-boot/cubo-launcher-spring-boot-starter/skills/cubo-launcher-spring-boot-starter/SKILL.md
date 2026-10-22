@@ -1,62 +1,16 @@
 ---
 name: cubo-launcher-spring-boot-starter
-description: 在使用 Zeka Stack 应用启动器编写 Spring Boot 应用时使用。
-license: Apache-2.0
+description: 使用 Zeka Stack 统一启动与生命周期 编写业务功能、选择 starter、配置和排查装配时使用。
+license: MIT
 ---
 
-# Cubo Launcher Spring Boot Starter
+# cubo-launcher-spring-boot-starter
 
-## 适用场景
+## 适用场景与组件定位
 
-当项目需要编写 Spring Boot 应用，并希望使用 Zeka Stack 统一的应用启动方式、生命周期钩子、应用类型管理和配置热更新时，使用本 Skill。
+ZekaStack 应用需要统一启动、运行类型识别及生命周期扩展。
 
-## 组件定位
-
-`cubo-launcher-spring-boot-starter` 是 Zeka Stack 的应用启动器模块。它封装了 Spring Boot 应用的启动流程，提供了：
-
-- 统一的 `ZekaStarter` 抽象基类，替代传统的 `SpringApplication.run()`
-- 应用类型自动检测和生命周期管理
-- 配置热更新能力（不依赖 Spring Cloud）
-- 启动时 SPI 扩展机制
-- Banner 显示和版本信息管理
-
-## 功能能力
-
-### 1. 统一启动基类 ZekaStarter
-
-继承 `ZekaStarter` 代替直接使用 `SpringApplication.run()`，自动获得：
-
-- 启动类自动检测和验证（确保只有一个 ZekaStarter 子类）
-- 应用类型自动推断（SERVLET / REACTIVE / NONE / SERVICE）
-- 生命周期钩子：`before()`、`run()`、`after()`
-- 服务类型应用的守护线程管理（防止启动完成后退出）
-- 启动参数处理（支持 `--start.class=` 指定启动类）
-
-### 2. 应用类型管理
-
-通过 `@RunningType` 注解或自动检测确定应用类型：
-
-| ApplicationType | 说明                    | 行为              |
-|-----------------|-----------------------|-----------------|
-| `SERVLET`       | 传统 Servlet Web 应用     | 启动 Web 容器       |
-| `REACTIVE`      | WebFlux 响应式应用         | 启动响应式 Web 容器    |
-| `NONE`          | 非 Web 应用              | 启动完成后自动退出       |
-| `SERVICE`       | 非 Web 服务（如 Dubbo 提供者） | 启动完成后不退出，守护线程阻塞 |
-
-### 3. 配置热更新
-
-通过 `RefreshScopeAutoConfiguration` 提供不依赖 Spring Cloud 的配置热更新：
-
-- 监控 `application.yml` 及环境特定配置文件
-- 配置变更时精准刷新相关 Bean
-- 通过 `zeka-stack.app.refresh=false` 可禁用
-
-### 4. 注解扩展
-
-通过 `ExtendAutoConfiguration` 提供注解行为扩展：
-
-- `@Autowired` 注入的 Bean 可以为 null（默认启用）
-- `@Resource` 注入的 Bean 可以为 null（默认启用）
+当前入口 `cubo-launcher-spring-boot-starter` 直接依赖：`cubo-launcher-spring-boot-autoconfigure`, `cubo-launcher-spring-boot-core`。底层实现通过 starter 传递引入，不重复手动拼装。
 
 ## 依赖方式
 
@@ -67,207 +21,46 @@ license: Apache-2.0
 </dependency>
 ```
 
+## 选型
+
+| 入口 | 适用场景 |
+| --- | --- |
+| `cubo-launcher-spring-boot-starter` | ZekaStack 应用需要统一启动、运行类型识别及生命周期扩展。 |
+| `原生 Spring Boot` | 不需要 Zeka 工程约定 |
+
 ## 使用方式与最佳实践
 
-### 启动类写法
-
-继承 `ZekaStarter` 作为应用入口，不需要编写 `main()` 方法：
+依赖启动核心与自动配置；启动类继承 `dev.dong4j.zeka.starter.launcher.ZekaStarter`，加 `@SpringBootApplication`，默认不另写 main。可重写 `before()` / `run(String... args)` / `after()`，非 Web 用 `@RunningType(ApplicationType.SERVICE)`。
 
 ```java
+package dev.dong4j.zeka.demo;
+import dev.dong4j.zeka.starter.launcher.ZekaStarter;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+/** 进入框架统一生命周期。 */
 @SpringBootApplication
-public class DemoApplication extends ZekaStarter {
-
-    // 不需要写 main() 方法
-
-}
+public class DemoApplication extends ZekaStarter { }
 ```
 
-### 启动应用
+扫描根包默认 `dev.dong4j.zeka`，自定义包须在启动 JVM 前设 `-DPARENT_PACKAGE_NAME=com.example`。显式 API 可用 `ZekaStarter.run(DemoApplication.class, args)`；不要臆造 ZekaApplication 的重载。
 
-使用 `ZekaApplication.run()` 方法启动：
+启动类入口与构建生成的 start.class 一起验证。
 
-```java
-// 方式1：通过继承 ZekaStarter 启动
-// 直接运行 DemoApplication 即可
+## 通用编码约束
 
-// 方式2：在测试中启动内嵌应用
-ConfigurableApplicationContext context = ZekaApplication.run(DemoApplication.class, args);
+使用构造器注入，统一错误码 `BaseCodes` / `LowestExceptionAssert`，不新建重复响应或工具类。新增类与关键方法说明业务约束，先查询真实方法签名再调用。配置以属性类和自动装配条件为准；只有带 `@ConditionalOnMissingBean` 的具体 Bean 才能按其条件覆盖，不能通过返回 null 禁用。
 
-// 方式3：指定应用名称
-ConfigurableApplicationContext context = ZekaApplication.run("my-app", DemoApplication.class, args);
-```
-
-### 生命周期钩子
-
-在启动类的子类中重写生命周期方法：
-
-```java
-@SpringBootApplication
-public class DemoApplication extends ZekaStarter {
-
-    // Spring 容器启动前调用
-    @Override
-    protected void before() {
-        // 执行环境检查、资源预加载等
-    }
-
-    // 容器刷新完成后、after() 之前调用（实现 CommandLineRunner）
-    @Override
-    public void run(String... args) {
-        // 执行启动后的一键式初始化任务
-    }
-
-    // 应用完全启动后调用
-    @Override
-    protected void after() {
-        // 执行需要应用完全就绪后的操作
-    }
-}
-```
-
-### 指定应用类型
-
-通过 `@RunningType` 注解显式指定应用类型：
-
-```java
-@RunningType(ApplicationType.SERVICE)
-@SpringBootApplication
-public class DubboProviderApplication extends ZekaStarter {
-    // 显式指定为 SERVICE 类型
-}
-```
-
-## 编码规则
-
-- 启动类必须继承 `ZekaStarter`，不能直接实例化或调用 `ZekaStarter.main()`
-- 一个应用只能有一个 `ZekaStarter` 子类
-- 启动类必须使用 `@SpringBootApplication` 或 `@EnableAutoConfiguration` 注解
-- 生命周期钩子方法应避免长时间阻塞操作
-- 服务类型应用不需要守护线程管理，已由框架自动处理
+依赖版本由业务项目的 `cubo-boot-dependencies` BOM 管理，当前内容对应 3.0.0-SNAPSHOT；不同版本先核对 API。
 
 ## 配置规则
 
-### 基础配置
+`zeka-stack.app.enable-banner` 默认 false；`app.group/config-group/discovery-group/custom` 在 `zeka-stack` 下。`zeka-stack.extend.enable-autowired-is-null` / `enable-resource-is-null` 默认 false，不以允许缺失注入替代正确依赖。
 
-```yaml
-zeka-stack:
-  app:
-    enabled: true
-    enable-banner: false
-    group: default
-    config-group: default
-    discovery-group: default
-    refresh: true
-    custom:
-      key: value
-```
+配置热更新受 RefreshScope 相关类路径和自动配置条件控制；当前条件使用 `LauncherProperties.PREFIX + "refresh"`（没有分隔点），不可声称配置 `zeka-stack.app.refresh` 一定生效，需在所用版本验证。
 
-### 配置属性说明
+## 自动装配与自定义
 
-| 属性名                                          | 类型      | 默认值   | 说明                      |
-|----------------------------------------------|---------|-------|-------------------------|
-| `zeka-stack.app.enabled`                     | boolean | true  | 是否启用启动器功能               |
-| `zeka-stack.app.enable-banner`               | boolean | false | 是否禁用启动 Banner 显示        |
-| `zeka-stack.app.group`                       | String  | -     | 应用分组名称                  |
-| `zeka-stack.app.config-group`                | String  | -     | 配置中心分组名称                |
-| `zeka-stack.app.discovery-group`             | String  | -     | 服务发现分组名称                |
-| `zeka-stack.app.refresh`                     | boolean | true  | 是否启用配置热更新               |
-| `zeka-stack.app.custom`                      | Map     | -     | 自定义配置映射                 |
-| `zeka-stack.extend.enable-autowired-is-null` | boolean | true  | 是否允许 @Autowired 注入 null |
-| `zeka-stack.extend.enable-resource-is-null`  | boolean | true  | 是否允许 @Resource 注入 null  |
-
-## 自动装配的 Bean
-
-| Bean / 类型                              | 作用                    | 生效条件                            | 自定义方式         |
-|----------------------------------------|-----------------------|---------------------------------|---------------|
-| `RefreshScopeRegistry`                 | 配置刷新范围注册表             | `refresh=true` 且无 Spring Cloud  | 声明同类型 Bean 覆盖 |
-| `DynamicConfigLoader`                  | 动态配置加载器               | `refresh=true` 且无 Spring Cloud  | 声明同类型 Bean 覆盖 |
-| `RefreshScopeRefresher`                | 精准刷新受影响的 Bean         | `refresh=true` 且无 Spring Cloud  | 声明同类型 Bean 覆盖 |
-| `ConfigFileWatcherRunner`              | 配置文件监听线程              | `refresh=true` 且无 Spring Cloud  | 声明同类型 Bean 覆盖 |
-| `AutowiredAnnotationBeanPostProcessor` | 允许 @Autowired 注入 null | `enable-autowired-is-null=true` | 配置属性开关        |
-| `CommonAnnotationBeanPostProcessor`    | 允许 @Resource 注入 null  | `enable-resource-is-null=true`  | 配置属性开关        |
-
-## 自定义与覆盖方式
-
-### 禁用配置热更新
-
-```yaml
-zeka-stack:
-  app:
-    refresh: false
-```
-
-### 禁用 null 注入扩展
-
-```yaml
-zeka-stack:
-  extend:
-    enable-autowired-is-null: false
-    enable-resource-is-null: false
-```
-
-### 自定义启动行为
-
-通过重写生命周期方法扩展：
-
-```java
-@SpringBootApplication
-public class CustomApplication extends ZekaStarter {
-
-    @Override
-    protected void before() {
-        // 自定义启动前逻辑
-    }
-
-    @Override
-    protected void after() {
-        // 自定义启动后逻辑
-    }
-}
-```
-
-### SPI 扩展
-
-实现 `LauncherInitiation` 接口，在应用启动的不同阶段插入自定义逻辑：
-
-```java
-public class CustomLauncherInitiation implements LauncherInitiation {
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    @Override
-    public void launcherWrapper(ConfigurableEnvironment environment,
-                               Properties defaultProperties,
-                               String appName,
-                               boolean isLocalLaunch) {
-        // 容器创建前执行
-    }
-
-    @Override
-    public void beforeWrapper(boolean isLocalLaunch) {
-        // main() 方法执行前、ZekaStarter 初始化前执行
-    }
-
-    @Override
-    public void after(ConfigurableApplicationContext context, boolean isLocalLaunch) {
-        // 容器启动完成后执行
-    }
-}
-```
-
-在 `META-INF/services/dev.dong4j.zeka.kernel.common.start.LauncherInitiation` 文件中注册：
-
-```
-com.example.CustomLauncherInitiation
-```
+LauncherAutoConfiguration 负责绑定启动属性。RefreshScopeRegistry、DynamicConfigLoader、RefreshScopeRefresher、ConfigFileWatcherRunner 在 RefreshScope 条件满足且缺少对应 Bean 时装配。配置监听器不是跨进程配置中心，不把本地文件变更视为分布式一致性。
 
 ## 不要这样做
 
-- 不要直接调用 `ZekaStarter.main()`，必须通过子类启动
-- 不要在一个应用中创建多个 `ZekaStarter` 子类
-- 不要在 `before()` 或 `after()` 中执行长时间阻塞操作，这会影响应用启动/关闭
-- 不要禁用生产环境的配置热更新功能，除非有特殊原因
-- 不要在非必要情况下禁用 `@Autowired` null 注入扩展，这可能导致现有代码行为变更
+不虚构配置键、注解属性、方法和 Bean 覆盖条件；不把选型对照中的另一种技术栈当成本 starter 的能力；不通过新建基础设施绕过框架已有封装。返回的成功与异常结构必须与业务项目协议一致。修改后通过实际应用上下文或接口测试确认行为，静态扫描不能证明运行时装配成功。

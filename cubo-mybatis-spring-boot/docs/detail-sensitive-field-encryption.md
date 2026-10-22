@@ -337,10 +337,10 @@ public class User {
 }
 
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public void createUser(User user) {
         // 写入时自动加密敏感字段
@@ -387,10 +387,10 @@ public class User {
 
 ```java
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public void batchCreateUsers(List<User> users) {
         // 批量插入时，每个对象的敏感字段都会自动加密

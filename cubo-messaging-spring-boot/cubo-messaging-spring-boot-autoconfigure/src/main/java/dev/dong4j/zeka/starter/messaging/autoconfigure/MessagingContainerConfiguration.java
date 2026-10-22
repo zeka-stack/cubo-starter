@@ -31,7 +31,7 @@ import dev.dong4j.zeka.starter.messaging.util.MessagingTypeDetector;
  * 2. 集成多种消息中间件(Kafka, RocketMQ)
  * 3. 提供统一的注册管理机制
  * <p>
- * 配置属性前缀：zeka.messaging
+ * 配置属性前缀：zeka-stack.messaging
  *
  * @author dong4j
  * @version 1.0.0

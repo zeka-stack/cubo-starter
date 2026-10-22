@@ -127,8 +127,7 @@ SELECT * FROM user WHERE id = 1 AND status = 1;
 @Profile(value = {App.ENV_NOT_PROD})
 @ConditionalOnProperty(
     value = "zeka-stack.mybatis.enable-sql-explain-interceptor",
-    havingValue = "true",
-    matchIfMissing = true
+    havingValue = "true"
 )
 public BlockAttackInnerInterceptor sqlExplainInterceptor() {
     return new BlockAttackInnerInterceptor();
@@ -205,10 +204,10 @@ public interface UserMapper extends BaseMapper<User> {
 }
 
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public Page<User> getUsers(int page, int size) {
         Page<User> pageParam = new Page<>(page, size);
@@ -313,10 +312,10 @@ public interface UserMapper extends BaseMapper<User> {
 }
 
 @Service
+@lombok.RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public Page<User> getUsers(int page, int size) {
         Page<User> pageParam = new Page<>(page, size);
